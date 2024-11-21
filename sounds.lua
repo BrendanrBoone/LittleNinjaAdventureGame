@@ -19,36 +19,12 @@ function Sounds:load()
 
     -- clear profiles necessary => {name, source}
     self.bgmLevels = {
-        levelPreTutorial = {
+        level1 = {
             name = "OathHeart",
             source = self.bgm.OathHeart
-        },
-        levelTutorial = {
-            name = "OathHeart",
-            source = self.bgm.OathHeart
-        },
-        level2 = {
-            name = "OathHeart",
-            source = self.bgm.OathHeart
-        },
-        level3 = {
-            name = "OathHeart",
-            source = self.bgm.OathHeart
-        },
-        level4 = {
-            name = "NakamaNoShirushi",
-            source = self.bgm.NakamaNoShirushi
-        },
-        levelLighthouse = {
-            name = "NakamaNoShirushi",
-            source = self.bgm.NakamaNoShirushi
-        },
-        levelLighthouse2 = {
-            name = "NakamaNoShirushi",
-            source = self.bgm.NakamaNoShirushi
         }
     }
-    self.currentlyPlayingBgm = self.bgmLevels["levelTutorial"]
+    self.currentlyPlayingBgm = self.bgmLevels["level1"]
     self.currentlyPlayingBgm.source:play()
 
     if self.soundToggle then

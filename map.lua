@@ -1,77 +1,31 @@
 local Map = {}
 local STI = require("sti")
-local Enemy = require("enemy")
-local Spike = require("spike")
-local Stone = require("stone")
-local Coin = require("coin")
 local Player = require("player")
-local Trampoline = require("trampoline")
 local Sounds = require("sounds")
 local Hitbox = require("hitbox")
-local NicoRobin = require("nicoRobin")
 local Portal = require("portal")
-local Anima = require("myTextAnima")
 local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
-local Sunny = require("sunny")
-local Platform = require("platform")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
 local redBackground = love.graphics.newImage("assets/redBackground.png")
+local blackBackground = love.graphics.newImage("assets/blackBackground.jpg")
 
 function Map:load()
-    self.backgroundLevels = { -- self.background["levelname"] == background for that level
-        levelTutorial = oceanHighBackground,
-        level2 = skyBlueBackground,
-        level3 = skyBlueBackground,
-        level4 = oceanHighBackground,
-        levelLighthouse = skyBlueBackground
-    }
-
     -- need to make some sort of way to make levels determinable by name
     self.allLevels = {
-        levelPreTutorial = {
-            next = "levelTutorial",
-            prev = nil,
-            background = oceanHighBackground
-        },
-        levelTutorial = {
-            next = "level2",
-            prev = "levelPreTutorial",
-            background = oceanHighBackground
-        },
-        level2 = {
-            next = "level3",
-            prev = "levelTutorial",
-            background = oceanHighBackground
-        },
-        level3 = {
-            next = "level4",
-            prev = "level2",
-            background = oceanHighBackground
-        },
-        level4 = {
-            next = nil,
-            prev = "level3",
-            background = oceanHighBackground
-        },
-        levelLighthouse = {
+        level1 = {
             next = nil,
             prev = nil,
-            background = redBackground
-        },
-        levelLighthouse2 = {
-            next = nil,
-            prev = nil,
-            background = redBackground
+            background = blackBackground
         }
     }
 
     World = love.physics.newWorld(0, 2000)
-    World:setCallbacks(beginContact, endContact, preSolve)
+    World:setCallbacks(beginContact, endContact)
 
-    self:init("levelLighthouse2")
+    self:init("level1")
 end
 
 function Map:init(destination)

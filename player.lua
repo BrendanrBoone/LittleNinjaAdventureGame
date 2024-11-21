@@ -4,9 +4,7 @@ local Explosion = require("explosion")
 local STI = require("sti")
 local Hitbox = require("hitbox")
 local Helper = require("helper")
-local BackgroundObject = require("backgroundObject")
 local Anima = require("myTextAnima")
-local Platform = require("platform")
 
 PlayerContacts = {} -- fixtures
 
@@ -85,7 +83,7 @@ function Player:load()
     Anima.new(self.physics.fixture, "interact (E)", "below", 0)
 
     self:loadAssets()
-    self:loadHitboxes()
+    --self:loadHitboxes()
 end
 
 function Player:loadAssets()
@@ -95,21 +93,21 @@ function Player:loadAssets()
     }
 
     self.animation.run = {
-        total = 8,
+        total = 6,
         current = 1,
         img = {}
     }
     for i = 1, self.animation.run.total do
-        self.animation.run.img[i] = love.graphics.newImage("assets/Franky/run/" .. i .. ".png")
+        self.animation.run.img[i] = love.graphics.newImage("assets/Naruto/run/" .. i .. ".png")
     end
 
     self.animation.idle = {
-        total = 4,
+        total = 6,
         current = 1,
         img = {}
     }
     for i = 1, self.animation.idle.total do
-        self.animation.idle.img[i] = love.graphics.newImage("assets/Franky/idle/" .. i .. ".png")
+        self.animation.idle.img[i] = love.graphics.newImage("assets/Naruto/idle/" .. i .. ".png")
     end
 
     self.animation.airRising = {
@@ -118,7 +116,7 @@ function Player:loadAssets()
         img = {}
     }
     for i = 1, self.animation.airRising.total do
-        self.animation.airRising.img[i] = love.graphics.newImage("assets/Franky/airRising/" .. i .. ".png")
+        self.animation.airRising.img[i] = love.graphics.newImage("assets/Naruto/airRising/" .. i .. ".png")
     end
 
     self.animation.airFalling = {
@@ -127,65 +125,7 @@ function Player:loadAssets()
         img = {}
     }
     for i = 1, self.animation.airFalling.total do
-        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Franky/airFalling/" .. i .. ".png")
-    end
-
-    self.animation.jump = {
-        total = 2,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.jump.total do
-        self.animation.jump.img[i] = love.graphics.newImage("assets/Franky/jump/" .. i .. ".png")
-    end
-
-    self.animation.dash = {
-        total = 2,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.dash.total do
-        self.animation.dash.img[i] = love.graphics.newImage("assets/Franky/dash/" .. i .. ".png")
-    end
-
-    self.animation.emote = {
-        total = 56,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.emote.total do
-        local current, stillFrame = i, 9 -- loop emote from 9
-        if current > stillFrame then
-            current = stillFrame
-        end
-        self.animation.emote.img[i] = love.graphics.newImage("assets/Franky/emote/" .. current .. ".png")
-    end
-
-    self.animation.forwardAir = {
-        total = 4,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.forwardAir.total do
-        self.animation.forwardAir.img[i] = love.graphics.newImage("assets/Franky/forwardAir/" .. i .. ".png")
-    end
-
-    self.animation.forwardAttack = {
-        total = 9,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.forwardAttack.total do
-        self.animation.forwardAttack.img[i] = love.graphics.newImage("assets/Franky/forwardAttack/" .. i .. ".png")
-    end
-
-    self.animation.rushAttack = {
-        total = 5,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.rushAttack.total do
-        self.animation.rushAttack.img[i] = love.graphics.newImage("assets/Franky/rushAttack/" .. i .. ".png")
+        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
     end
 
     self.animation.draw = self.animation.idle.img[1]
@@ -589,10 +529,10 @@ end
 
 -- reset cancellable animations
 function Player:resetAnimations()
-    self.animation.forwardAir.current = 1
+    --[[self.animation.forwardAir.current = 1
     self.animation.forwardAttack.current = 1
     self.animation.rushAttack.current = 1
-    self.animation.emote.current = 1
+    self.animation.emote.current = 1]]
 end
 
 function Player:resetHitboxes()
@@ -773,26 +713,6 @@ function Player:endContact(a, b, collision)
     end
 end
 
-function Player:preSolve(a, b, collision)
-    local isPlayer = Helper.checkFUD(a, b, "player")
-    local isPlatform = Helper.checkFUD(a, b, "platform")
-
-    if isPlatform and isPlayer then
-        for _, instance in ipairs(ActivePlatforms) do
-            if instance.physics.fixture == isPlatform then
-                if instance.playerLanded then return
-                elseif self.y + self.height > instance.y 
-                and self.y < instance.y then
-                    print("should land")
-                else
-                    print("should go through")
-                    instance.physics.fixture:setSensor(true)
-                end
-            end
-        end
-    end
-end
-
 function Player:draw()
     local scaleX = 1
     if self.direction == "left" then
@@ -803,7 +723,7 @@ function Player:draw()
     love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
     love.graphics.draw(self.animation.draw, self.x, self.y + self.FrankyOffsetY, 0, scaleX, 1, width, height)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
+    --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
 end
 
 return Player
