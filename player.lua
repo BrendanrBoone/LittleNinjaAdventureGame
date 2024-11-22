@@ -17,11 +17,11 @@ function Player:load()
     self.startY = self.y
     self.width = 30
     self.height = 50
-    self.xVel = 0 -- + goes right
-    self.yVel = 0 -- + goes down
+    self.xVel = 0            -- + goes right
+    self.yVel = 0            -- + goes down
     self.maxSpeed = 200
     self.acceleration = 4000 -- 200 / 4000 = 0.05 seconds to reach maxSpeed
-    self.friction = 3500 -- 200 / 3500 = 0.0571 seconds to stop from maxSpeed
+    self.friction = 3500     -- 200 / 3500 = 0.0571 seconds to stop from maxSpeed
     self.gravity = 1500
     self.jumpAmount = -500
     self.superJumpAmount = -2500
@@ -62,6 +62,7 @@ function Player:load()
     self.activeForwardAttack = false
     self.activeRushAttack = false
 
+    self.sealing = false
     self.emoting = false
     self.attacking = false
     self.dashing = false
@@ -71,13 +72,14 @@ function Player:load()
     self.grounded = false
     self.direction = "right"
     self.state = "idle"
+    self.seal = ""
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true) -- doesn't rotate
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
-    self.physics.body:setGravityScale(0) -- unaffected by world gravity
+    self.physics.body:setGravityScale(0)       -- unaffected by world gravity
     self.physics.fixture:setUserData("player") -- name fixture
 
     Anima.new(self.physics.fixture, "interact (E)", "below", 0)
@@ -128,9 +130,39 @@ function Player:loadAssets()
         self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
     end
 
+    self.animation.seal = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.seal.total do
+        local current = i
+        if current > 1 then current = 2 end
+        self.animation.seal.img[i] = love.graphics.newImage("assets/Naruto/seal/" .. current .. ".png")
+    end
+
     self.animation.draw = self.animation.idle.img[1]
     self.animation.width = self.animation.draw:getWidth()
     self.animation.height = self.animation.draw:getHeight()
+
+    self:loadSealAssets()
+end
+
+function Player:loadSealAssets()
+    self.animation.seals = {}
+
+    self.animation.seals.fireSeal = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.seals.fireSeal.total do
+        self.animation.seals.fireSeal.img[i] = love.graphics.newImage("assets/fireSeal/" .. i .. ".png")
+    end
+
+    self.animation.seals.draw = self.animation.seals.fireSeal.img[1]
+    self.animation.seals.width = self.animation.seals.draw:getWidth()
+    self.animation.seals.height = self.animation.seals.draw:getHeight()
 end
 
 function Player:loadHitboxes()
@@ -142,7 +174,7 @@ end
 
 function Player:loadRushAttackHitbox()
     self.hitbox.rushAttack = {}
-    self.hitbox.rushAttack.map = STI("hitboxMap/rushAttack.lua", {"box2d"})
+    self.hitbox.rushAttack.map = STI("hitboxMap/rushAttack.lua", { "box2d" })
     self.hitbox.rushAttack.hitboxesLayer = self.hitbox.rushAttack.map.layers.hitboxes
     self.hitbox.rushAttack.mapWidth = self.hitbox.rushAttack.map.layers.ground.width * 16
     self.hitbox.rushAttack.mapHeight = self.hitbox.rushAttack.map.layers.ground.height * 16
@@ -150,7 +182,7 @@ function Player:loadRushAttackHitbox()
     self.hitbox.rushAttack.damage = 10
     self.hitbox.rushAttack.shakeSize = "medium"
 
-    self.hitbox.rushAttack.knockbackAtFrame = {{100, 0}, {100, 0}, {100, 0}, {500, -100}}
+    self.hitbox.rushAttack.knockbackAtFrame = { { 100, 0 }, { 100, 0 }, { 100, 0 }, { 500, -100 } }
 
     self.hitbox.rushAttack.targets = ActiveEnemys
 
@@ -179,7 +211,7 @@ end
 
 function Player:loadForwardAttackHitbox()
     self.hitbox.forwardAttack = {}
-    self.hitbox.forwardAttack.map = STI("hitboxMap/forwardAttack.lua", {"box2d"})
+    self.hitbox.forwardAttack.map = STI("hitboxMap/forwardAttack.lua", { "box2d" })
     self.hitbox.forwardAttack.hitboxesLayer = self.hitbox.forwardAttack.map.layers.hitboxes
     self.hitbox.forwardAttack.mapWidth = self.hitbox.forwardAttack.map.layers.ground.width * 16
     self.hitbox.forwardAttack.mapHeight = self.hitbox.forwardAttack.map.layers.ground.height * 16
@@ -218,7 +250,7 @@ end
 
 function Player:loadForwardAirHitbox()
     self.hitbox.forwardAir = {}
-    self.hitbox.forwardAir.map = STI("hitboxMap/forwardAir.lua", {"box2d"})
+    self.hitbox.forwardAir.map = STI("hitboxMap/forwardAir.lua", { "box2d" })
     self.hitbox.forwardAir.hitboxesLayer = self.hitbox.forwardAir.map.layers.hitboxes
     self.hitbox.forwardAir.mapWidth = self.hitbox.forwardAir.map.layers.ground.width * 16
     self.hitbox.forwardAir.mapHeight = self.hitbox.forwardAir.map.layers.ground.height * 16
@@ -361,6 +393,8 @@ function Player:setState()
             if self.xVel == 0 then
                 if self.emoting then
                     self.state = "emote"
+                elseif self.sealing then
+                    self.state = "seal"
                 else
                     self.state = "idle"
                 end
@@ -392,12 +426,26 @@ end
 -- updates the image
 function Player:setNewFrame()
     local anim = self.animation[self.state]
+    self:sealSetNewFrame()
     self:animEffects(anim)
     self.animation.draw = anim.img[anim.current]
     if anim.current < anim.total then
         anim.current = anim.current + 1
     else
         anim.current = 1
+    end
+end
+
+function Player:sealSetNewFrame()
+    if self.sealing then
+        local anim = self.animation.seals[self.seal]
+        self.animation.seals.draw = anim.img[anim.current]
+        if anim.current < anim.total then
+            anim.current = anim.current + 1
+        else
+            anim.current = 1
+        end
+        self:sealAnimEffects(anim)
     end
 end
 
@@ -409,6 +457,10 @@ function Player:animEffects(animation)
     self:dashEffects(animation)
 end
 
+function Player:sealAnimEffects(animation)
+    self:fireSealEffects(animation)
+end
+
 function Player:applyGravity(dt)
     if not self.grounded then
         self.yVel = self.yVel + self.gravity * dt
@@ -416,7 +468,7 @@ function Player:applyGravity(dt)
 end
 
 function Player:doingAction()
-    if self.emoting or self.attacking or self.talking or self.dashing then
+    if self.emoting or self.sealing or self.attacking or self.talking or self.dashing then
         return true
     end
     return false
@@ -634,12 +686,29 @@ function Player:cancelActiveActions()
     self.activeForwardAttack = false
     self.activeRushAttack = false
     self.emoting = false
+    self.sealing = false
     self.invincibility = false
     self.dashing = false
 end
 
+function Player:fireSeal(key)
+    if not self:doingAction() and key == "1" and self.grounded and self.xVel == 0 then
+        self.sealing = true
+        self.seal = "fireSeal"
+    end
+end
+
+function Player:fireSealEffects(anim)
+    if self.sealing then
+        if anim.current == anim.total and self.seal == "fireSeal" then
+            self:cancelActiveActions()
+            self.seal = ""
+        end
+    end
+end
+
 function Player:emote(key)
-    if false and not self:doingAction() and key == "e" and self.grounded and self.xVel == 0 then
+    if not self:doingAction() and key == "e" and self.grounded and self.xVel == 0 then
         Sounds.sfx.frankyEyeCatchTheme:setVolume(Sounds.sfx.maxSound)
         Sounds.playSound(Sounds.sfx.frankyEyeCatchTheme)
         self.emoting = true
@@ -647,11 +716,13 @@ function Player:emote(key)
 end
 
 function Player:emoteOwEffects(anim)
-    if anim.current < anim.total and self.emoting and self.animation.emote.current == 10 then
-        Sounds.playSound(Sounds.sfx.playerHit)
-        Explosion.new(self.x, self.y)
-    elseif anim.current == anim.total and self.emoting then
-        self.emoting = false
+    if self.emoting then
+        if anim.current < anim.total and self.emoting and self.animation.emote.current == 10 then
+            Sounds.playSound(Sounds.sfx.playerHit)
+            Explosion.new(self.x, self.y)
+        elseif anim.current == anim.total and self.emoting then
+            self.emoting = false
+        end
     end
 end
 
@@ -721,6 +792,11 @@ function Player:draw()
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+    if self.sealing then
+        local sealWidth = self.animation.seals.width / 2
+        local sealHeight = self.animation.seals.height / 2
+        love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, scaleX, 1, sealWidth, sealHeight)
+    end
     love.graphics.draw(self.animation.draw, self.x, self.y + self.FrankyOffsetY, 0, scaleX, 1, width, height)
     love.graphics.setColor(1, 1, 1)
     --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)

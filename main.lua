@@ -66,6 +66,7 @@ function love.keypressed(key)
         if Map.moveThroughPortal(key) then return end
         Player:jump(key)
         Player:fastFall(key)
+        Player:fireSeal(key)
     end
 
     Menu:Escape(key)
