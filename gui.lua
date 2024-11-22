@@ -117,14 +117,6 @@ function GUI:displayVolume()
     love.graphics.draw(self.volume.img, self.volume.x, self.volume.y, 0, self.volume.scale, self.volume.scale)
 end
 
---[[
-    self.sealDisplay.x - L:getWidth() - M:getWidth() / 2
-    self.sealDisplay.x - M:getWidth() / 2
-    self.sealDisplay.x + M:getWidth() / 2
-
-    self.sealDisplay.x - L:getWidth()
-    self.sealDisplay.x
-]]
 function GUI:displaySeals()
     local L = self.sealDisplay.scrollLImg
     local M = self.sealDisplay.scrollMImg
@@ -132,7 +124,9 @@ function GUI:displaySeals()
     local sealsNum = Player.sealSequence.current
     love.graphics.draw(L, self.sealDisplay.x - L:getWidth() - sealsNum * M:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
     for i=1,sealsNum do
+        local sealImg = love.graphics.newImage("assets/"..Player.sealSequence.sequence[i].."/3.png")
         love.graphics.draw(M, self.sealDisplay.x - sealsNum * M:getWidth() / 2 + (i - 1) * M:getWidth(), self.sealDisplay.y, 0, 1, 1)
+        love.graphics.draw(sealImg, self.sealDisplay.x - sealsNum * M:getWidth() / 2 + (i - 1) * M:getWidth() + (M:getWidth() / 2 - sealImg:getWidth() / 2), self.sealDisplay.y, 0, 1, 1)
     end
     love.graphics.draw(R, self.sealDisplay.x + sealsNum * M:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
 end
