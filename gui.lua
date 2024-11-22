@@ -53,8 +53,12 @@ function GUI:load()
     self.font = love.graphics.newFont("assets/ui/bit.ttf", 36)
 
     self.sealDisplay = {}
-    self.sealDisplay.x = 0
-    self.sealDisplay.y = 0
+    self.sealDisplay.x = love.graphics.getWidth() / 2
+    self.sealDisplay.y = 100
+    self.sealDisplay.fireSealImg = love.graphics.newImage("assets/fireSeal/3.png")
+    self.sealDisplay.scrollLImg = love.graphics.newImage("assets/ui/Scroll/scrollL.png")
+    self.sealDisplay.scrollRImg = love.graphics.newImage("assets/ui/Scroll/scrollR.png")
+    self.sealDisplay.scrollMImg = love.graphics.newImage("assets/ui/Scroll/scrollM.png")
 end
 
 function GUI:loadAssets()
@@ -77,6 +81,7 @@ function GUI:draw()
     GUI:displayCoinText()
     GUI:displayHearts()
     GUI:displayVolume()
+    GUI:displaySeals()
     GUI:displayArrowIndicator()
 end
 
@@ -84,7 +89,7 @@ function GUI:arrowAnimation(dt)
     if self.goNextLevelIndicator.animating then
         self.grace.time = self.grace.time - 1
         print("time: " .. self.grace.time)
-        print("modulus: "..self.grace.time % 2)
+        print("modulus: " .. self.grace.time % 2)
         if self.grace.time % 2 == 0 then
             self.goNextLevelIndicator.visible = not self.goNextLevelIndicator.visible
             print(tostring(self.goNextLevelIndicator.visible))
@@ -98,7 +103,8 @@ end
 
 function GUI:displayArrowIndicator()
     if self.goNextLevelIndicator.visible then
-        love.graphics.draw(self.goNextLevelIndicator.img, self.goNextLevelIndicator.x, self.goNextLevelIndicator.y, 0, 1, 1)
+        love.graphics.draw(self.goNextLevelIndicator.img, self.goNextLevelIndicator.x, self.goNextLevelIndicator.y, 0, 1,
+        1)
     end
 end
 
@@ -109,6 +115,14 @@ end
 
 function GUI:displayVolume()
     love.graphics.draw(self.volume.img, self.volume.x, self.volume.y, 0, self.volume.scale, self.volume.scale)
+end
+
+function GUI:displaySeals()
+    local L = self.sealDisplay.scrollLImg
+    local R = self.sealDisplay.scrollRImg
+    love.graphics.draw(L, self.sealDisplay.x + L:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
+    love.graphics.draw(self.sealDisplay.scrollMImg, self.sealDisplay.x - R:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
+    love.graphics.draw(R, self.sealDisplay.x - R:getWidth() - R:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
 end
 
 function GUI:displayHearts()
