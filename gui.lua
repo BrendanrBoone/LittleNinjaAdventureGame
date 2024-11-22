@@ -51,6 +51,10 @@ function GUI:load()
     }
 
     self.font = love.graphics.newFont("assets/ui/bit.ttf", 36)
+
+    self.sealDisplay = {}
+    self.sealDisplay.x = 0
+    self.sealDisplay.y = 0
 end
 
 function GUI:loadAssets()
@@ -94,15 +98,13 @@ end
 
 function GUI:displayArrowIndicator()
     if self.goNextLevelIndicator.visible then
-        love.graphics.draw(self.goNextLevelIndicator.img, self.goNextLevelIndicator.x, self.goNextLevelIndicator.y, 0,
-            1, 1)
+        love.graphics.draw(self.goNextLevelIndicator.img, self.goNextLevelIndicator.x, self.goNextLevelIndicator.y, 0, 1, 1)
     end
 end
 
 function GUI:displayStaminaBar()
     love.graphics.setColor(0, 1, 0)
-    love.graphics
-        .rectangle("fill", self.staminaBar.x, self.staminaBar.y, Player.stamina.current, self.staminaBar.height)
+    love.graphics.rectangle("fill", self.staminaBar.x, self.staminaBar.y, Player.stamina.current, self.staminaBar.height)
 end
 
 function GUI:displayVolume()

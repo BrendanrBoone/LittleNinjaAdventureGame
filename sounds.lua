@@ -38,7 +38,8 @@ end
 
 function Sounds:update(dt)
     if not self.currentlyPlayingBgm.source:isPlaying() then
-        self.playSound(self.currentlyPlayingBgm.source)
+        self.currentlyPlayingBgm.source:play()
+        print("repeat")
     end
     if self.soundToggle and self.currentVolume == 0 then
         self:maxSound(self.currentlyPlayingBgm.source)

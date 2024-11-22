@@ -46,6 +46,13 @@ function Player:load()
         max = 200,
         rate = 0.1
     }
+    self.sealSequence = {
+        current = 0,
+        max = 6,
+        graceTime = 0,
+        graceDuration = 2,
+        sequence = {}
+    }
 
     self.color = {
         red = 1,
@@ -61,6 +68,7 @@ function Player:load()
     self.activeForwardAir = false
     self.activeForwardAttack = false
     self.activeRushAttack = false
+    self.sealPerformed = false
 
     self.sealing = false
     self.emoting = false
@@ -414,6 +422,22 @@ function Player:decreaseGraceTime(dt)
             self.dash.graceTime = self.dash.graceDuration
         end
     end
+    if not self.sealing then
+        self.sealSequence.graceTime = self.sealSequence.graceTime - dt
+        self:checkSealSequence()
+    end
+end
+
+-- make this more efficient if everything works properly
+function Player:checkSealSequence()
+    if self.sealSequence.graceTime < 0 then
+        if #self.sealSequence.sequence > 0 then
+            --self.sealSequence.sequence = {} do this after the jutsu is performed
+            if not self.sealPerformed then
+                self:sealFailed()
+            end
+        end
+    end
 end
 
 -- called in main.keypressed()
@@ -473,6 +497,7 @@ function Player:resetAnimations()
     self.animation.rushAttack.current = 1
     self.animation.emote.current = 1]]
     self.animation.seals.fireSeal.current = 1
+    self:resetSeals()
 end
 
 function Player:resetHitboxes()
@@ -579,10 +604,32 @@ function Player:cancelActiveActions()
     self.dashing = false
 end
 
+-- start some sort of animation and clear sequence after
+function Player:sealFailed()
+    print("sealFailed")
+    self:resetSeals()
+end
+
+function Player:resetSeals()
+    self.sealSequence.current = 0
+    self.sealSequence.sequence = {}
+end
+
+function Player:addSealToSequence(seal)
+    self.sealSequence.graceTime = self.sealSequence.graceDuration
+    if not (self.sealSequence.current >= self.sealSequence.max) then
+        self.sealSequence.current = self.sealSequence.current + 1
+        self.sealSequence.sequence[self.sealSequence.current] = seal
+    else
+        self:sealFailed()
+    end
+end
+
 function Player:fireSeal(key)
     if not self:doingAction() and key == "1" and self.grounded and self.xVel == 0 then
         self.sealing = true
         self.seal = "fireSeal"
+        self:addSealToSequence(self.seal)
     end
 end
 
@@ -617,15 +664,6 @@ end
 function Player:superJump()
     self.yVel = self.superJumpAmount
     Sounds.playSound(Sounds.sfx.playerJump)
-end
-
-function Player:checkIfTargets(fixture1, fixture2)
-    for _, v in ipairs(self.hitbox.forwardAttack.targets) do
-        if v.physics.fixture == fixture1 or v.physics.fixture == fixture2 then
-            return true
-        end
-    end
-    return false
 end
 
 function Player:beginContact(a, b, collision)
@@ -683,11 +721,10 @@ function Player:draw()
     local sealWidth = self.animation.seals.width / 2
     local sealHeight = self.animation.seals.height / 2
     if self.sealing then
-        print("seal current: " .. self.animation.seals.fireSeal.current)
         love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, 1, 1, sealWidth, sealHeight)
     end
     --love.graphics.draw(self.animation.seals.fireSeal.img[self.animation.seals.fireSeal.current], sealWidth, sealHeight + 75, 0, 1, 1, sealWidth, sealHeight)
-    love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
+    --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
     love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     love.graphics.setColor(1, 1, 1)
 end
