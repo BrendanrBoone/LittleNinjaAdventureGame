@@ -11,12 +11,12 @@ PlayerContacts = {} -- fixtures
 function Player:load()
     self.x = 100
     self.y = 100
-    self.FrankyOffsetY = -5
+    self.offsetY = -12
     self.FrankyOffsetX = 3
     self.startX = self.x
     self.startY = self.y
-    self.width = 30
-    self.height = 50
+    self.width = 25
+    self.height = 40
     self.xVel = 0            -- + goes right
     self.yVel = 0            -- + goes down
     self.maxSpeed = 200
@@ -137,7 +137,9 @@ function Player:loadAssets()
     }
     for i = 1, self.animation.seal.total do
         local current = i
-        if current > 1 then current = 2 end
+        if current > 1 then
+            current = 2
+        end
         self.animation.seal.img[i] = love.graphics.newImage("assets/Naruto/seal/" .. current .. ".png")
     end
 
@@ -170,121 +172,6 @@ function Player:loadHitboxes()
     self:loadForwardAirHitbox()
     self:loadForwardAttackHitbox()
     self:loadRushAttackHitbox()
-end
-
-function Player:loadRushAttackHitbox()
-    self.hitbox.rushAttack = {}
-    self.hitbox.rushAttack.map = STI("hitboxMap/rushAttack.lua", { "box2d" })
-    self.hitbox.rushAttack.hitboxesLayer = self.hitbox.rushAttack.map.layers.hitboxes
-    self.hitbox.rushAttack.mapWidth = self.hitbox.rushAttack.map.layers.ground.width * 16
-    self.hitbox.rushAttack.mapHeight = self.hitbox.rushAttack.map.layers.ground.height * 16
-
-    self.hitbox.rushAttack.damage = 10
-    self.hitbox.rushAttack.shakeSize = "medium"
-
-    self.hitbox.rushAttack.knockbackAtFrame = { { 100, 0 }, { 100, 0 }, { 100, 0 }, { 500, -100 } }
-
-    self.hitbox.rushAttack.targets = ActiveEnemys
-
-    self.hitbox.rushAttack.type = "rushAttack"
-    local args = {
-        animTotal = self.animation.rushAttack.total,
-        hitboxType = self.hitbox.rushAttack.type,
-        layerObjects = self.hitbox.rushAttack.hitboxesLayer.objects,
-        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
-        hitboxMapHeight = self.hitbox.rushAttack.mapHeight,
-        playerImgWidth = self.animation.width,
-
-        srcFixture = self.physics.fixture,
-        targets = self.hitbox.rushAttack.targets,
-        width = self.width,
-        xOff = self.FrankyOffsetX,
-        height = self.height,
-        yOff = self.FrankyOffsetY,
-
-        damage = self.hitbox.rushAttack.damage,
-        knockbackAtFrame = self.hitbox.rushAttack.knockbackAtFrame,
-        shakeSize = self.hitbox.rushAttack.shakeSize
-    }
-    Hitbox.generateHitboxes(args)
-end
-
-function Player:loadForwardAttackHitbox()
-    self.hitbox.forwardAttack = {}
-    self.hitbox.forwardAttack.map = STI("hitboxMap/forwardAttack.lua", { "box2d" })
-    self.hitbox.forwardAttack.hitboxesLayer = self.hitbox.forwardAttack.map.layers.hitboxes
-    self.hitbox.forwardAttack.mapWidth = self.hitbox.forwardAttack.map.layers.ground.width * 16
-    self.hitbox.forwardAttack.mapHeight = self.hitbox.forwardAttack.map.layers.ground.height * 16
-
-    self.hitbox.forwardAttack.damage = 10
-    self.hitbox.forwardAttack.shakeSize = "large"
-
-    self.hitbox.forwardAttack.xVel = 500
-    self.hitbox.forwardAttack.yVel = -100
-
-    self.hitbox.forwardAttack.targets = ActiveEnemys
-
-    self.hitbox.forwardAttack.type = "forwardAttack"
-    local args = {
-        animTotal = self.animation.forwardAttack.total,
-        hitboxType = self.hitbox.forwardAttack.type,
-        layerObjects = self.hitbox.forwardAttack.hitboxesLayer.objects,
-        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
-        hitboxMapHeight = self.hitbox.forwardAttack.mapHeight,
-        playerImgWidth = self.animation.width,
-
-        srcFixture = self.physics.fixture,
-        targets = self.hitbox.forwardAttack.targets,
-        width = self.width,
-        xOff = self.FrankyOffsetX,
-        height = self.height,
-        yOff = self.FrankyOffsetY,
-
-        damage = self.hitbox.forwardAttack.damage,
-        xVel = self.hitbox.forwardAttack.xVel,
-        yVel = self.hitbox.forwardAttack.yVel,
-        shakeSize = self.hitbox.forwardAttack.shakeSize
-    }
-    Hitbox.generateHitboxes(args)
-end
-
-function Player:loadForwardAirHitbox()
-    self.hitbox.forwardAir = {}
-    self.hitbox.forwardAir.map = STI("hitboxMap/forwardAir.lua", { "box2d" })
-    self.hitbox.forwardAir.hitboxesLayer = self.hitbox.forwardAir.map.layers.hitboxes
-    self.hitbox.forwardAir.mapWidth = self.hitbox.forwardAir.map.layers.ground.width * 16
-    self.hitbox.forwardAir.mapHeight = self.hitbox.forwardAir.map.layers.ground.height * 16
-
-    self.hitbox.forwardAir.damage = 5
-    self.hitbox.forwardAir.shakeSize = "small"
-
-    self.hitbox.forwardAir.xVel = 500
-    self.hitbox.forwardAir.yVel = -100
-
-    self.hitbox.forwardAir.targets = ActiveEnemys
-
-    self.hitbox.forwardAir.type = "forwardAir"
-    local args = {
-        animTotal = self.animation.forwardAir.total,
-        hitboxType = self.hitbox.forwardAir.type,
-        layerObjects = self.hitbox.forwardAir.hitboxesLayer.objects,
-        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
-        hitboxMapHeight = self.hitbox.forwardAir.mapHeight,
-        playerImgWidth = self.animation.width,
-
-        srcFixture = self.physics.fixture,
-        targets = self.hitbox.forwardAir.targets,
-        width = self.width,
-        xOff = self.FrankyOffsetX,
-        height = self.height,
-        yOff = self.FrankyOffsetY,
-
-        damage = self.hitbox.forwardAir.damage,
-        xVel = self.hitbox.forwardAir.xVel,
-        yVel = self.hitbox.forwardAir.yVel,
-        shakeSize = self.hitbox.forwardAir.shakeSize
-    }
-    Hitbox.generateHitboxes(args)
 end
 
 function Player:takeDamage(amount)
@@ -428,24 +315,24 @@ function Player:setNewFrame()
     local anim = self.animation[self.state]
     self:sealSetNewFrame()
     self:animEffects(anim)
-    self.animation.draw = anim.img[anim.current]
     if anim.current < anim.total then
         anim.current = anim.current + 1
     else
         anim.current = 1
     end
+    self.animation.draw = anim.img[anim.current]
 end
 
 function Player:sealSetNewFrame()
     if self.sealing then
-        local anim = self.animation.seals[self.seal]
-        self.animation.seals.draw = anim.img[anim.current]
-        if anim.current < anim.total then
-            anim.current = anim.current + 1
+        local sanim = self.animation.seals[self.seal]
+        self:sealAnimEffects(sanim)
+        if sanim.current < sanim.total then
+            sanim.current = sanim.current + 1
         else
-            anim.current = 1
+            sanim.current = 1
         end
-        self:sealAnimEffects(anim)
+        self.animation.seals.draw = sanim.img[sanim.current]
     end
 end
 
@@ -585,6 +472,7 @@ function Player:resetAnimations()
     self.animation.forwardAttack.current = 1
     self.animation.rushAttack.current = 1
     self.animation.emote.current = 1]]
+    self.animation.seals.fireSeal.current = 1
 end
 
 function Player:resetHitboxes()
@@ -699,8 +587,8 @@ function Player:fireSeal(key)
 end
 
 function Player:fireSealEffects(anim)
-    if self.sealing then
-        if anim.current == anim.total and self.seal == "fireSeal" then
+    if self.seal == "fireSeal" then
+        if anim.current == anim.total then
             self:cancelActiveActions()
             self.seal = ""
         end
@@ -792,14 +680,131 @@ function Player:draw()
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+    local sealWidth = self.animation.seals.width / 2
+    local sealHeight = self.animation.seals.height / 2
     if self.sealing then
-        local sealWidth = self.animation.seals.width / 2
-        local sealHeight = self.animation.seals.height / 2
-        love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, scaleX, 1, sealWidth, sealHeight)
+        print("seal current: " .. self.animation.seals.fireSeal.current)
+        love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, 1, 1, sealWidth, sealHeight)
     end
-    love.graphics.draw(self.animation.draw, self.x, self.y + self.FrankyOffsetY, 0, scaleX, 1, width, height)
+    --love.graphics.draw(self.animation.seals.fireSeal.img[self.animation.seals.fireSeal.current], sealWidth, sealHeight + 75, 0, 1, 1, sealWidth, sealHeight)
+    love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
+    love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     love.graphics.setColor(1, 1, 1)
-    --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
+end
+
+function Player:loadRushAttackHitbox()
+    self.hitbox.rushAttack = {}
+    self.hitbox.rushAttack.map = STI("hitboxMap/rushAttack.lua", { "box2d" })
+    self.hitbox.rushAttack.hitboxesLayer = self.hitbox.rushAttack.map.layers.hitboxes
+    self.hitbox.rushAttack.mapWidth = self.hitbox.rushAttack.map.layers.ground.width * 16
+    self.hitbox.rushAttack.mapHeight = self.hitbox.rushAttack.map.layers.ground.height * 16
+
+    self.hitbox.rushAttack.damage = 10
+    self.hitbox.rushAttack.shakeSize = "medium"
+
+    self.hitbox.rushAttack.knockbackAtFrame = { { 100, 0 }, { 100, 0 }, { 100, 0 }, { 500, -100 } }
+
+    self.hitbox.rushAttack.targets = ActiveEnemys
+
+    self.hitbox.rushAttack.type = "rushAttack"
+    local args = {
+        animTotal = self.animation.rushAttack.total,
+        hitboxType = self.hitbox.rushAttack.type,
+        layerObjects = self.hitbox.rushAttack.hitboxesLayer.objects,
+        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
+        hitboxMapHeight = self.hitbox.rushAttack.mapHeight,
+        playerImgWidth = self.animation.width,
+
+        srcFixture = self.physics.fixture,
+        targets = self.hitbox.rushAttack.targets,
+        width = self.width,
+        xOff = self.FrankyOffsetX,
+        height = self.height,
+        yOff = self.FrankyOffsetY,
+
+        damage = self.hitbox.rushAttack.damage,
+        knockbackAtFrame = self.hitbox.rushAttack.knockbackAtFrame,
+        shakeSize = self.hitbox.rushAttack.shakeSize
+    }
+    Hitbox.generateHitboxes(args)
+end
+
+function Player:loadForwardAttackHitbox()
+    self.hitbox.forwardAttack = {}
+    self.hitbox.forwardAttack.map = STI("hitboxMap/forwardAttack.lua", { "box2d" })
+    self.hitbox.forwardAttack.hitboxesLayer = self.hitbox.forwardAttack.map.layers.hitboxes
+    self.hitbox.forwardAttack.mapWidth = self.hitbox.forwardAttack.map.layers.ground.width * 16
+    self.hitbox.forwardAttack.mapHeight = self.hitbox.forwardAttack.map.layers.ground.height * 16
+
+    self.hitbox.forwardAttack.damage = 10
+    self.hitbox.forwardAttack.shakeSize = "large"
+
+    self.hitbox.forwardAttack.xVel = 500
+    self.hitbox.forwardAttack.yVel = -100
+
+    self.hitbox.forwardAttack.targets = ActiveEnemys
+
+    self.hitbox.forwardAttack.type = "forwardAttack"
+    local args = {
+        animTotal = self.animation.forwardAttack.total,
+        hitboxType = self.hitbox.forwardAttack.type,
+        layerObjects = self.hitbox.forwardAttack.hitboxesLayer.objects,
+        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
+        hitboxMapHeight = self.hitbox.forwardAttack.mapHeight,
+        playerImgWidth = self.animation.width,
+
+        srcFixture = self.physics.fixture,
+        targets = self.hitbox.forwardAttack.targets,
+        width = self.width,
+        xOff = self.FrankyOffsetX,
+        height = self.height,
+        yOff = self.FrankyOffsetY,
+
+        damage = self.hitbox.forwardAttack.damage,
+        xVel = self.hitbox.forwardAttack.xVel,
+        yVel = self.hitbox.forwardAttack.yVel,
+        shakeSize = self.hitbox.forwardAttack.shakeSize
+    }
+    Hitbox.generateHitboxes(args)
+end
+
+function Player:loadForwardAirHitbox()
+    self.hitbox.forwardAir = {}
+    self.hitbox.forwardAir.map = STI("hitboxMap/forwardAir.lua", { "box2d" })
+    self.hitbox.forwardAir.hitboxesLayer = self.hitbox.forwardAir.map.layers.hitboxes
+    self.hitbox.forwardAir.mapWidth = self.hitbox.forwardAir.map.layers.ground.width * 16
+    self.hitbox.forwardAir.mapHeight = self.hitbox.forwardAir.map.layers.ground.height * 16
+
+    self.hitbox.forwardAir.damage = 5
+    self.hitbox.forwardAir.shakeSize = "small"
+
+    self.hitbox.forwardAir.xVel = 500
+    self.hitbox.forwardAir.yVel = -100
+
+    self.hitbox.forwardAir.targets = ActiveEnemys
+
+    self.hitbox.forwardAir.type = "forwardAir"
+    local args = {
+        animTotal = self.animation.forwardAir.total,
+        hitboxType = self.hitbox.forwardAir.type,
+        layerObjects = self.hitbox.forwardAir.hitboxesLayer.objects,
+        hitboxMapWidth = self.hitbox.forwardAir.mapWidth,
+        hitboxMapHeight = self.hitbox.forwardAir.mapHeight,
+        playerImgWidth = self.animation.width,
+
+        srcFixture = self.physics.fixture,
+        targets = self.hitbox.forwardAir.targets,
+        width = self.width,
+        xOff = self.FrankyOffsetX,
+        height = self.height,
+        yOff = self.FrankyOffsetY,
+
+        damage = self.hitbox.forwardAir.damage,
+        xVel = self.hitbox.forwardAir.xVel,
+        yVel = self.hitbox.forwardAir.yVel,
+        shakeSize = self.hitbox.forwardAir.shakeSize
+    }
+    Hitbox.generateHitboxes(args)
 end
 
 return Player
