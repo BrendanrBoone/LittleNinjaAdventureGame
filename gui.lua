@@ -56,9 +56,9 @@ function GUI:load()
     self.sealDisplay.x = love.graphics.getWidth() / 2
     self.sealDisplay.y = 100
     self.sealDisplay.fireSealImg = love.graphics.newImage("assets/fireSeal/3.png")
-    self.sealDisplay.scrollLImg = love.graphics.newImage("assets/ui/Scroll/scrollL.png")
-    self.sealDisplay.scrollRImg = love.graphics.newImage("assets/ui/Scroll/scrollR.png")
-    self.sealDisplay.scrollMImg = love.graphics.newImage("assets/ui/Scroll/scrollM.png")
+    self.sealDisplay.scrollLImg = love.graphics.newImage("assets/ui/Scroll/cut/scrollL.png")
+    self.sealDisplay.scrollRImg = love.graphics.newImage("assets/ui/Scroll/cut/scrollR.png")
+    self.sealDisplay.scrollMImg = love.graphics.newImage("assets/ui/Scroll/cut/scrollM.png")
 end
 
 function GUI:loadAssets()
@@ -117,12 +117,24 @@ function GUI:displayVolume()
     love.graphics.draw(self.volume.img, self.volume.x, self.volume.y, 0, self.volume.scale, self.volume.scale)
 end
 
+--[[
+    self.sealDisplay.x - L:getWidth() - M:getWidth() / 2
+    self.sealDisplay.x - M:getWidth() / 2
+    self.sealDisplay.x + M:getWidth() / 2
+
+    self.sealDisplay.x - L:getWidth()
+    self.sealDisplay.x
+]]
 function GUI:displaySeals()
     local L = self.sealDisplay.scrollLImg
+    local M = self.sealDisplay.scrollMImg
     local R = self.sealDisplay.scrollRImg
-    love.graphics.draw(L, self.sealDisplay.x + L:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
-    love.graphics.draw(self.sealDisplay.scrollMImg, self.sealDisplay.x - R:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
-    love.graphics.draw(R, self.sealDisplay.x - R:getWidth() - R:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
+    local sealsNum = Player.sealSequence.current
+    love.graphics.draw(L, self.sealDisplay.x - L:getWidth() - sealsNum * M:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
+    for i=1,sealsNum do
+        love.graphics.draw(M, self.sealDisplay.x - sealsNum * M:getWidth() / 2 + (i - 1) * M:getWidth(), self.sealDisplay.y, 0, 1, 1)
+    end
+    love.graphics.draw(R, self.sealDisplay.x + sealsNum * M:getWidth() / 2, self.sealDisplay.y, 0, 1, 1)
 end
 
 function GUI:displayHearts()
