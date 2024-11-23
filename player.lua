@@ -170,6 +170,24 @@ function Player:loadSealAssets()
         self.animation.seals.fireSeal.img[i] = love.graphics.newImage("assets/fireSeal/" .. i .. ".png")
     end
 
+    self.animation.seals.waterSeal = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.seals.waterSeal.total do
+        self.animation.seals.waterSeal.img[i] = love.graphics.newImage("assets/waterSeal/" .. i .. ".png")
+    end
+
+    self.animation.seals.windSeal = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.seals.windSeal.total do
+        self.animation.seals.windSeal.img[i] = love.graphics.newImage("assets/windSeal/" .. i .. ".png")
+    end
+
     self.animation.seals.draw = self.animation.seals.fireSeal.img[1]
     self.animation.seals.width = self.animation.seals.draw:getWidth()
     self.animation.seals.height = self.animation.seals.draw:getHeight()
@@ -354,6 +372,8 @@ end
 
 function Player:sealAnimEffects(animation)
     self:fireSealEffects(animation)
+    self:waterSealEffects(animation)
+    self:windSealEffects(animation)
 end
 
 function Player:applyGravity(dt)
@@ -497,6 +517,8 @@ function Player:resetAnimations()
     self.animation.rushAttack.current = 1
     self.animation.emote.current = 1]]
     self.animation.seals.fireSeal.current = 1
+    self.animation.seals.waterSeal.current = 1
+    self.animation.seals.windSeal.current = 1
     self:resetSeals()
 end
 
@@ -635,6 +657,40 @@ end
 
 function Player:fireSealEffects(anim)
     if self.seal == "fireSeal" then
+        if anim.current == anim.total then
+            self:cancelActiveActions()
+            self.seal = ""
+        end
+    end
+end
+
+function Player:waterSeal(key)
+    if not self:doingAction() and key == "2" and self.grounded and self.xVel == 0 then
+        self.sealing = true
+        self.seal = "waterSeal"
+        self:addSealToSequence(self.seal)
+    end
+end
+
+function Player:waterSealEffects(anim)
+    if self.seal == "waterSeal" then
+        if anim.current == anim.total then
+            self:cancelActiveActions()
+            self.seal = ""
+        end
+    end
+end
+
+function Player:windSeal(key)
+    if not self:doingAction() and key == "3" and self.grounded and self.xVel == 0 then
+        self.sealing = true
+        self.seal = "windSeal"
+        self:addSealToSequence(self.seal)
+    end
+end
+
+function Player:windSealEffects(anim)
+    if self.seal == "windSeal" then
         if anim.current == anim.total then
             self:cancelActiveActions()
             self.seal = ""

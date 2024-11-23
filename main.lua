@@ -67,6 +67,8 @@ function love.keypressed(key)
         Player:jump(key)
         Player:fastFall(key)
         Player:fireSeal(key)
+        Player:waterSeal(key)
+        Player:windSeal(key)
     end
 
     Menu:Escape(key)
