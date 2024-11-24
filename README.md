@@ -6,4 +6,4 @@ A little project to fulfill a request
 * player.lua: setNewFrame()
 
 ## Things to do
-* chargable chakra, seals used during charged state
+* jutsu recipes and activate jutsu
