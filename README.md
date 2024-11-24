@@ -7,3 +7,5 @@ A little project to fulfill a request
 
 ## Things to do
 * chargable chakra, seals used during charged state
+* seal animations need to be faster
+* seals not canceled when landing

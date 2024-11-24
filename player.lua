@@ -310,7 +310,7 @@ function Player:setState()
                 elseif self.sealing then
                     self.state = "seal"
                 else
-                    self.state = "idle"
+                    self.state = "idle" --idle
                 end
             else
                 self.state = "run"
@@ -504,7 +504,7 @@ function Player:jump(key)
 end
 
 function Player:fastFall(key)
-    if not self.grounded then
+    if not self.grounded and not self.sealing then
         if (key == "s") then
             self.yVel = -self.jumpAmount
         end
@@ -517,10 +517,12 @@ function Player:resetAnimations()
     self.animation.forwardAttack.current = 1
     self.animation.rushAttack.current = 1
     self.animation.emote.current = 1]]
+end
+
+function Player:sealResetAnimations()
     self.animation.seals.fireSeal.current = 1
     self.animation.seals.waterSeal.current = 1
     self.animation.seals.windSeal.current = 1
-    self:resetSeals()
 end
 
 function Player:resetHitboxes()
@@ -622,7 +624,6 @@ function Player:cancelActiveActions()
     self.activeForwardAttack = false
     self.activeRushAttack = false
     self.emoting = false
-    self.sealing = false
     self.invincibility = false
     self.dashing = false
 end
@@ -631,6 +632,8 @@ end
 function Player:sealFailed()
     print("sealFailed")
     self:resetSeals()
+    self.sealing = false
+    self.seal = ""
     Smoke.new(self.x, self.y)
 end
 
@@ -640,6 +643,7 @@ function Player:resetSeals()
 end
 
 function Player:addSealToSequence(seal)
+    Sounds:playSound(Sounds.sfx.seal)
     self.sealSequence.graceTime = self.sealSequence.graceDuration
     if not (self.sealSequence.current >= self.sealSequence.max) then
         self.sealSequence.current = self.sealSequence.current + 1
@@ -650,7 +654,8 @@ function Player:addSealToSequence(seal)
 end
 
 function Player:fireSeal(key)
-    if not self:doingAction() and key == "1" and self.grounded and self.xVel == 0 then
+    if (not self:doingAction() or self.sealing) and key == "1" then
+        self:sealResetAnimations()
         self.sealing = true
         self.seal = "fireSeal"
         self:addSealToSequence(self.seal)
@@ -660,14 +665,15 @@ end
 function Player:fireSealEffects(anim)
     if self.seal == "fireSeal" then
         if anim.current == anim.total then
-            self:cancelActiveActions()
+            self.sealing = false
             self.seal = ""
         end
     end
 end
 
 function Player:waterSeal(key)
-    if not self:doingAction() and key == "2" and self.grounded and self.xVel == 0 then
+    if (not self:doingAction() or self.sealing) and key == "2" then
+        self:sealResetAnimations()
         self.sealing = true
         self.seal = "waterSeal"
         self:addSealToSequence(self.seal)
@@ -677,14 +683,15 @@ end
 function Player:waterSealEffects(anim)
     if self.seal == "waterSeal" then
         if anim.current == anim.total then
-            self:cancelActiveActions()
+            self.sealing = false
             self.seal = ""
         end
     end
 end
 
 function Player:windSeal(key)
-    if not self:doingAction() and key == "3" and self.grounded and self.xVel == 0 then
+    if (not self:doingAction() or self.sealing) and key == "3" then
+        self:sealResetAnimations()
         self.sealing = true
         self.seal = "windSeal"
         self:addSealToSequence(self.seal)
@@ -694,7 +701,7 @@ end
 function Player:windSealEffects(anim)
     if self.seal == "windSeal" then
         if anim.current == anim.total then
-            self:cancelActiveActions()
+            self.sealing = false
             self.seal = ""
         end
     end

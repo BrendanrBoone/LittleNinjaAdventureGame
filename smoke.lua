@@ -2,6 +2,7 @@ local Smoke = {}
 Smoke.__index = Smoke
 
 ActiveSmokes = {}
+local Sounds = require("sounds")
 
 function Smoke.new(x, y)
     local instance = setmetatable({}, Smoke)
@@ -15,6 +16,7 @@ function Smoke.new(x, y)
     instance.animation.draw = instance.animation.smok.img[1]
 
     table.insert(ActiveSmokes, instance)
+    Sounds:playSound(Sounds.sfx.smoke)
 end
 
 function Smoke.loadAssets()
