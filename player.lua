@@ -2,6 +2,7 @@ local Player = {}
 local Sounds = require("sounds")
 local Explosion = require("explosion")
 local Smoke = require("smoke")
+local Aura = require("aura")
 local STI = require("sti")
 local Hitbox = require("hitbox")
 local Helper = require("helper")
@@ -45,7 +46,8 @@ function Player:load()
     self.chakra = {
         current = 200,
         max = 200,
-        rate = 10
+        rate = 10, -- spend rate
+        chargeRate = 20
     }
     self.sealSequence = {
         current = 0,
@@ -71,6 +73,7 @@ function Player:load()
     self.activeRushAttack = false
     self.sealPerformed = false
 
+    self.charging = false
     self.sealing = false
     self.emoting = false
     self.attacking = false
@@ -272,7 +275,24 @@ function Player:update(dt)
     self:decreaseGraceTime(dt)
     self:syncPhysics() -- sets character position
     self:move(dt)
+    self:chargeChakra(dt)
     self:applyGravity(dt)
+end
+
+function Player:chargeChakra(dt)
+    if love.keyboard.isDown("q")
+    and self.xVel == 0
+    and self.yVel == 0 then
+        if not self:doingAction() then
+            self.charging = true
+            Aura.new(self.x, self.y, self.physics.fixture)
+        end
+        self.chakra.current = math.min(self.chakra.current + dt * self.chakra.chargeRate, self.chakra.max)
+        print("charging: ".. self.chakra.current)
+    else
+        Aura.remove(self.physics.fixture)
+        self.charging = false
+    end
 end
 
 function Player:unTint(dt)
@@ -383,8 +403,14 @@ function Player:applyGravity(dt)
     end
 end
 
+-- this checks sealing, cancelActiveActions does not
 function Player:doingAction()
-    if self.emoting or self.sealing or self.attacking or self.talking or self.dashing then
+    if self.emoting
+    or self.sealing
+    or self.charging
+    or self.attacking
+    or self.talking
+    or self.dashing then
         return true
     end
     return false
@@ -633,6 +659,7 @@ function Player:cancelActiveActions()
     self.emoting = false
     self.invincibility = false
     self.dashing = false
+    self.charging = false
 end
 
 -- start some sort of animation and clear sequence after
