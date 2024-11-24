@@ -1,6 +1,7 @@
 local Player = {}
 local Sounds = require("sounds")
 local Explosion = require("explosion")
+local Smoke = require("smoke")
 local STI = require("sti")
 local Hitbox = require("hitbox")
 local Helper = require("helper")
@@ -452,7 +453,7 @@ end
 function Player:checkSealSequence()
     if self.sealSequence.graceTime < 0 then
         if #self.sealSequence.sequence > 0 then
-            --self.sealSequence.sequence = {} do this after the jutsu is performed
+            --self.sealSequence.sequence = {} do  this after the jutsu is performed
             if not self.sealPerformed then
                 self:sealFailed()
             end
@@ -630,6 +631,7 @@ end
 function Player:sealFailed()
     print("sealFailed")
     self:resetSeals()
+    Smoke.new(self.x, self.y)
 end
 
 function Player:resetSeals()
@@ -774,14 +776,16 @@ function Player:draw()
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
-    local sealWidth = self.animation.seals.width / 2
-    local sealHeight = self.animation.seals.height / 2
     if self.sealing then
+        local sealWidth = self.animation.seals.width / 2
+        local sealHeight = self.animation.seals.height / 2
         love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, 1, 1, sealWidth, sealHeight)
+        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
+    else
+        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     end
     --love.graphics.draw(self.animation.seals.fireSeal.img[self.animation.seals.fireSeal.current], sealWidth, sealHeight + 75, 0, 1, 1, sealWidth, sealHeight)
     --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
-    love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     love.graphics.setColor(1, 1, 1)
 end
 
