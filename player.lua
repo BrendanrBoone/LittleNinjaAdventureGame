@@ -45,7 +45,7 @@ function Player:load()
     self.chakra = {
         current = 200,
         max = 200,
-        rate = 0.1
+        rate = 10
     }
     self.sealSequence = {
         current = 0,
@@ -394,10 +394,8 @@ function Player:move(dt)
     -- sprint
     if love.keyboard.isDown("lshift") and self.chakra.current > 0 and self.xVel ~= 0 then
         self.maxSpeed = 400
-        -- self.chakra.current = math.max(self.chakra.current - self.chakra.rate * 2, 0)
     else
         self.maxSpeed = 200
-        self.chakra.current = math.min(self.chakra.current + self.chakra.rate, self.chakra.max)
     end
 
     -- left and right movement
@@ -618,6 +616,15 @@ function Player:forwardAirEffects(anim)
     end
 end
 
+function Player:spendChakra(amount)
+    local diff = self.chakra.current - amount
+    if diff < 0 then
+        self.chakra.current = 0
+    else
+        self.chakra.current = diff
+    end
+end
+
 function Player:cancelActiveActions()
     self.attacking = false
     self.activeForwardAir = false
@@ -631,6 +638,8 @@ end
 -- start some sort of animation and clear sequence after
 function Player:sealFailed()
     print("sealFailed")
+    self:spendChakra(self.chakra.rate * self.sealSequence.current)
+    print("chakra: "..self.chakra.current)
     self:resetSeals()
     self.sealing = false
     self.seal = ""
