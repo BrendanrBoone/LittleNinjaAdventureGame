@@ -1,6 +1,7 @@
 local GUI = {}
 local Player = require("player")
 local Sounds = require("sounds")
+local Colors = require("colors")
 
 function GUI:load()
     self.coins = {}
@@ -32,11 +33,11 @@ function GUI:load()
     self.volume.y = love.graphics.getHeight() - self.volume.height - 20
     self.volume.scale = 1
 
-    self.staminaBar = {
+    self.chakraBar = {
         x = self.hearts.spacing,
         y = self.hearts.y * 2 + self.hearts.height
     }
-    self.staminaBar.height = 30
+    self.chakraBar.height = 30
 
     self.goNextLevelIndicator = {}
     self.goNextLevelIndicator.img = love.graphics.newImage("assets/ui/rightArrow.png")
@@ -76,7 +77,7 @@ function GUI:update(dt)
 end
 
 function GUI:draw()
-    GUI:displayStaminaBar()
+    GUI:displaychakraBar()
     GUI:displayCoins()
     GUI:displayCoinText()
     GUI:displayHearts()
@@ -108,9 +109,9 @@ function GUI:displayArrowIndicator()
     end
 end
 
-function GUI:displayStaminaBar()
-    love.graphics.setColor(0, 1, 0)
-    love.graphics.rectangle("fill", self.staminaBar.x, self.staminaBar.y, Player.stamina.current, self.staminaBar.height)
+function GUI:displaychakraBar()
+    love.graphics.setColor(Colors.chakra)
+    love.graphics.rectangle("fill", self.chakraBar.x, self.chakraBar.y, Player.chakra.current, self.chakraBar.height)
 end
 
 function GUI:displayVolume()

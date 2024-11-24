@@ -42,7 +42,7 @@ function Player:load()
         current = 15,
         max = 15
     }
-    self.stamina = {
+    self.chakra = {
         current = 200,
         max = 200,
         rate = 0.1
@@ -252,14 +252,14 @@ function Player:incrementCoins()
 end
 
 function Player:pickUpItem(item)
-    if item == "staminaRefresh" then
-        self:staminaRefresh()
+    if item == "chakraRefresh" then
+        self:chakraRefresh()
     end
 end
 
-function Player:staminaRefresh()
+function Player:chakraRefresh()
     -- play a noise
-    self.stamina.current = self.stamina.max
+    self.chakra.current = self.chakra.max
 end
 
 function Player:update(dt)
@@ -392,12 +392,12 @@ end
 
 function Player:move(dt)
     -- sprint
-    if love.keyboard.isDown("lshift") and self.stamina.current > 0 and self.xVel ~= 0 then
+    if love.keyboard.isDown("lshift") and self.chakra.current > 0 and self.xVel ~= 0 then
         self.maxSpeed = 400
-        -- self.stamina.current = math.max(self.stamina.current - self.stamina.rate * 2, 0)
+        -- self.chakra.current = math.max(self.chakra.current - self.chakra.rate * 2, 0)
     else
         self.maxSpeed = 200
-        self.stamina.current = math.min(self.stamina.current + self.stamina.rate, self.stamina.max)
+        self.chakra.current = math.min(self.chakra.current + self.chakra.rate, self.chakra.max)
     end
 
     -- left and right movement
@@ -463,7 +463,7 @@ end
 
 -- called in main.keypressed()
 function Player:dashForward(key)
-    if not self:doingAction() and key == "lshift" and self.dash.cost <= self.stamina.current then
+    if not self:doingAction() and key == "lshift" and self.dash.cost <= self.chakra.current then
         self.dash.inputPressed = self.dash.inputPressed + 1
         if self.dash.inputPressed == self.dash.inputRequirment then
             self.dashing = true
@@ -476,7 +476,7 @@ function Player:dashForward(key)
                 v = -self.dash.amount
             end
             self.xVel = self.xVel + v
-            self.stamina.current = self.stamina.current - self.dash.cost
+            self.chakra.current = self.chakra.current - self.dash.cost
         end
     end
 end
