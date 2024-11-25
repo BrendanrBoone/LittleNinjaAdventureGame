@@ -6,18 +6,24 @@ local Helper = require("helper")
 
 function Recipes:load()
     self.jutsu = {
-        {name = "fireAttribute", sequence = {"fireSeal"}},
-        {name = "waterAttribute", sequence = {"waterSeal"}},
-        {name = "windAttribute", sequence = {"windSeal"}}
+        {name = "fireRelease", sequence = {"fireSeal"}},
+        {name = "waterRelease", sequence = {"waterSeal"}},
+        {name = "windRelease", sequence = {"windSeal"}}
     }
+end
+
+function Recipes:loadAssets()
+
+end
+
+function Recipes:loadHitboxes()
+
 end
 
 -- @param seq: array
 -- @return string | nil
 function Recipes:checkSequence(seq)
     for i=1, #self.jutsu do
-        print("seq: "..tostring(seq))
-        print("i jutsu: "..tostring(self.jutsu[i].sequence))
         if Helper.checkTablesAreEqual(seq, self.jutsu[i].sequence) then
             return self.jutsu[i].name
         end

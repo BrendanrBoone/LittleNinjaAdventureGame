@@ -7,6 +7,9 @@ A little project to fulfill a request
 
 ## Things to do
 * jutsu recipes and activate jutsu
+* fire release
+* water release
+* wind release
 * shadow clone jutsu
 * substitution jutsu
 * fireball jutsu

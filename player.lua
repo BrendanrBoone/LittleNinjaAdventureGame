@@ -65,6 +65,11 @@ function Player:load()
         speed = 3 -- speed to untint
     }
 
+    self.releaseGrace = {
+        time = 0,
+        duration = 6
+    }
+
     self.graceTime = 0
     self.graceDuration = 0.1 -- time to do a grounded jump after leaving the ground
 
@@ -72,17 +77,22 @@ function Player:load()
     self.activeForwardAir = false
     self.activeForwardAttack = false
     self.activeRushAttack = false
-    self.sealPerformed = false
+    self.activeFireRelease = false
+    self.activeWaterRelease = false
+    self.activeWindRelease = false
 
+    self.sealPerformed = false
     self.charging = false
     self.sealing = false
     self.emoting = false
     self.attacking = false
     self.dashing = false
     self.talking = false
+
     self.alive = true
     self.invincibility = false
     self.grounded = false
+
     self.direction = "right"
     self.state = "idle"
     self.seal = ""
@@ -98,7 +108,8 @@ function Player:load()
     Anima.new(self.physics.fixture, "interact (E)", "below", 0)
 
     self:loadAssets()
-    --self:loadHitboxes()
+    self:loadHitboxes()
+    self:loadRecipes()
 end
 
 function Player:loadAssets()
@@ -200,9 +211,16 @@ end
 
 function Player:loadHitboxes()
     self.hitbox = {}
-    self:loadForwardAirHitbox()
-    self:loadForwardAttackHitbox()
-    self:loadRushAttackHitbox()
+    --self:loadForwardAirHitbox()
+    --self:loadForwardAttackHitbox()
+    --self:loadRushAttackHitbox()
+end
+
+function Player:loadRecipes()
+    self.jutsuTable = {}
+    self.jutsuTable.fireRelease = self.fireRelease
+    --waterRelease
+    --windRelease
 end
 
 function Player:takeDamage(amount)
@@ -392,6 +410,7 @@ function Player:animEffects(animation)
     self:forwardAttackEffects(animation)
     self:rushAttackEffects(animation)
     self:dashEffects(animation)
+    self:fireReleaseEffects()
 end
 
 function Player:sealAnimEffects(animation)
@@ -460,9 +479,37 @@ end
 
 -- called in Player:update()
 function Player:decreaseGraceTime(dt)
+    self:decreaseJumpGrace(dt)
+    self:decreaseDashGrace(dt)
+    self:decreaseSealGrace(dt)
+    self:decreaseReleaseGrace(dt)
+end
+
+function Player:decreaseReleaseGrace(dt)
+    if self.activeFireRelease or self.activeWaterRelease or self.activeWindRelease then
+        self.releaseGrace.time = self.releaseGrace + dt
+        if self.releaseGrace.time > self.releaseGrace.duration then
+            self.activeFireRelease = false
+            self.activeWaterRelease = false
+            self.activeWindRelease = false
+        end
+    end
+end
+
+function Player:decreaseSealGrace(dt)
+    if not self.sealing then
+        self.sealSequence.graceTime = self.sealSequence.graceTime - dt
+        self:checkSealSequence()
+    end
+end
+
+function Player:decreaseJumpGrace(dt)
     if not self.grounded then
         self.graceTime = self.graceTime - dt
     end
+end
+
+function Player:decreaseDashGrace(dt)
     if self.dash.inputPressed ~= 0 then
         self.dash.graceTime = self.dash.graceTime - dt
         if self.dash.graceTime <= 0 then
@@ -470,18 +517,15 @@ function Player:decreaseGraceTime(dt)
             self.dash.graceTime = self.dash.graceDuration
         end
     end
-    if not self.sealing then
-        self.sealSequence.graceTime = self.sealSequence.graceTime - dt
-        self:checkSealSequence()
-    end
 end
 
 -- make this more efficient if everything works properly
 function Player:checkSealSequence()
     if self.sealSequence.graceTime < 0 then
         if #self.sealSequence.sequence > 0 then
-            --self.sealSequence.sequence = {} do  this after the jutsu is performed
-            if not self.sealPerformed then
+            if self.sealPerformed then
+                self.sealPerformed = false
+            else
                 self:sealFailed()
             end
         end
@@ -751,7 +795,9 @@ function Player:activateJutsu(key)
         local recipe = Recipes:checkSequence(self.sealSequence.sequence)
         if recipe then -- inventory mechanic for jutsus added here later
             self:resetSeals()
+            self.sealPerformed = true
             print("activated "..recipe)
+            self.jutsuTable[recipe]()
         else
             self:sealFailed()
         end
@@ -845,6 +891,24 @@ function Player:draw()
     --love.graphics.draw(self.animation.seals.fireSeal.img[self.animation.seals.fireSeal.current], sealWidth, sealHeight + 75, 0, 1, 1, sealWidth, sealHeight)
     --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
     love.graphics.setColor(1, 1, 1)
+end
+
+-- gives player fire attribute for a period of time
+function Player:fireRelease()
+    self.releaseGrace.time = 0
+    self.activeFireRelease = true
+    self.activeWaterRelease = false
+    self.activeWindRelease = false
+    self:tintRed()
+    --play sound
+end
+
+function Player:fireReleaseEffects()
+    if self.activeFireRelease
+    and not self.activeWaterRelease
+    and not self.activeWindRelease then
+        
+    end
 end
 
 function Player:loadRushAttackHitbox()
