@@ -266,6 +266,16 @@ function Player:tintRed()
     self.color.blue = 0
 end
 
+function Player:tintBlue()
+    self.color.green = 0
+    self.color.red = 0
+end
+
+function Player:tintGreen()
+    self.color.blue = 0
+    self.color.red = 0
+end
+
 function Player:die()
     print("Player Died")
     self.alive = false
@@ -490,12 +500,12 @@ end
 
 function Player:decreaseReleaseGrace(dt)
     if self.activeFireRelease or self.activeWaterRelease or self.activeWindRelease then
-        print("release on")
         self.releaseGrace.time = self.releaseGrace.time + dt
         if self.releaseGrace.time > self.releaseGrace.duration then
             self.activeFireRelease = false
             self.activeWaterRelease = false
             self.activeWindRelease = false
+            print("release off")
         end
     end
 end
@@ -883,11 +893,12 @@ function Player:draw()
     end
     local width = self.animation.width / 2
     local height = self.animation.height / 2
-    love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+    love.graphics.setColor(1, 1, 1)
     if self.sealing then
         local sealWidth = self.animation.seals.width / 2
         local sealHeight = self.animation.seals.height / 2
         love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, 1, 1, sealWidth, sealHeight)
+        love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
         love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     else
         love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
@@ -899,6 +910,7 @@ end
 
 -- gives player fire attribute for a period of time
 function Player:fireRelease()
+    print("fireRelease")
     self.releaseGrace.time = 0
     self.activeFireRelease = true
     self.activeWaterRelease = false
@@ -917,18 +929,38 @@ end
 
 -- gives player water attribute for a period of time
 function Player:waterRelease()
+    print("waterRelease")
     self.releaseGrace.time = 0
-    self.activeFireRelease = true
-    self.activeWaterRelease = false
+    self.activeFireRelease = false
+    self.activeWaterRelease = true
     self.activeWindRelease = false
-    self:tintRed()
+    self:tintBlue()
     --play sound
 end
 
 function Player:waterReleaseEffects()
-    if self.activeFireRelease
-    and not self.activeWaterRelease
+    if not self.activeFireRelease
+    and self.activeWaterRelease
     and not self.activeWindRelease then
+        
+    end
+end
+
+-- gives player water attribute for a period of time
+function Player:windRelease()
+    print("windRelease")
+    self.releaseGrace.time = 0
+    self.activeFireRelease = false
+    self.activeWaterRelease = false
+    self.activeWindRelease = true
+    self:tintGreen()
+    --play sound
+end
+
+function Player:windReleaseEffects()
+    if not self.activeFireRelease
+    and not self.activeWaterRelease
+    and self.activeWindRelease then
         
     end
 end
