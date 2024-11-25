@@ -7,3 +7,9 @@ A little project to fulfill a request
 
 ## Things to do
 * jutsu recipes and activate jutsu
+* shadow clone jutsu
+* substitution jutsu
+* fireball jutsu
+* rasengan jutsu
+* chidori jutsu
+* sexy jutsu

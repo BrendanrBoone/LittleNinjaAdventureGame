@@ -13,6 +13,7 @@ local Portal = require("portal")
 local Anima = require("myTextAnima")
 local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
+local Recipes = require("recipes")
 
 WorldPause = false
 
@@ -26,6 +27,7 @@ function love.load()
     Smoke.loadAssets()
     Aura.loadAssets()
     Menu:load()
+    Recipes:load()
 end
 
 -- menu screen toggle update to pause game
@@ -77,6 +79,7 @@ function love.keypressed(key)
         Player:fireSeal(key)
         Player:waterSeal(key)
         Player:windSeal(key)
+        Player:activateJutsu(key)
     end
 
     Menu:Escape(key)

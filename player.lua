@@ -7,6 +7,7 @@ local STI = require("sti")
 local Hitbox = require("hitbox")
 local Helper = require("helper")
 local Anima = require("myTextAnima")
+local Recipes = require("recipes")
 
 PlayerContacts = {} -- fixtures
 
@@ -507,7 +508,7 @@ function Player:dashForward(key)
     end
 end
 
-function Player:dashEffects(anim)
+function Player:dashEffects()
     if self.dashing and math.abs(self.xVel) <= self.maxSpeed then
         self:cancelActiveActions()
     end
@@ -741,6 +742,18 @@ function Player:windSealEffects(anim)
         if anim.current == anim.total then
             self.sealing = false
             self.seal = ""
+        end
+    end
+end
+
+function Player:activateJutsu(key)
+    if (not self:doingAction() or self.sealing) and key == "r" then
+        local recipe = Recipes:checkSequence(self.sealSequence.sequence)
+        if recipe then -- inventory mechanic for jutsus added here later
+            self:resetSeals()
+            print("activated "..recipe)
+        else
+            self:sealFailed()
         end
     end
 end

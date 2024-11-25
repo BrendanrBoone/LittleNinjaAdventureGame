@@ -8,6 +8,24 @@ function Helper.isInTable(tbl, val)
     return false
 end
 
+function Helper.checkTablesAreEqual(a, b)
+    if a == nil and b == nil then
+        return true
+    end
+    
+    if a == nil or b == nil or #a ~= #b then
+        return false
+    end
+
+    for i = 1, #a do
+        if a[i] ~= b[i] then
+            return false
+        end
+    end
+
+    return true
+end
+
 --Check Fixture User Data
 -- checks if one of the given fixtures is the given userDataType
 --@param a: table (fixture)
