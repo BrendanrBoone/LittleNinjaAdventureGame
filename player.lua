@@ -109,7 +109,6 @@ function Player:load()
 
     self:loadAssets()
     self:loadHitboxes()
-    self:loadRecipes()
 end
 
 function Player:loadAssets()
@@ -216,11 +215,15 @@ function Player:loadHitboxes()
     --self:loadRushAttackHitbox()
 end
 
-function Player:loadRecipes()
-    self.jutsuTable = {}
-    self.jutsuTable.fireRelease = self.fireRelease
-    --waterRelease
-    --windRelease
+--@param recipe: string (jutsu.name)
+function Player:performJutsu(recipe)
+    if recipe == "fireRelease" then
+        self:fireRelease()
+    elseif recipe == "waterRelease" then
+        self:waterRelease()
+    elseif recipe == "windRelease" then
+        self: windRelease()
+    end
 end
 
 function Player:takeDamage(amount)
@@ -487,7 +490,8 @@ end
 
 function Player:decreaseReleaseGrace(dt)
     if self.activeFireRelease or self.activeWaterRelease or self.activeWindRelease then
-        self.releaseGrace.time = self.releaseGrace + dt
+        print("release on")
+        self.releaseGrace.time = self.releaseGrace.time + dt
         if self.releaseGrace.time > self.releaseGrace.duration then
             self.activeFireRelease = false
             self.activeWaterRelease = false
@@ -797,7 +801,7 @@ function Player:activateJutsu(key)
             self:resetSeals()
             self.sealPerformed = true
             print("activated "..recipe)
-            self.jutsuTable[recipe]()
+            self:performJutsu(recipe)
         else
             self:sealFailed()
         end
@@ -904,6 +908,24 @@ function Player:fireRelease()
 end
 
 function Player:fireReleaseEffects()
+    if self.activeFireRelease
+    and not self.activeWaterRelease
+    and not self.activeWindRelease then
+        
+    end
+end
+
+-- gives player water attribute for a period of time
+function Player:waterRelease()
+    self.releaseGrace.time = 0
+    self.activeFireRelease = true
+    self.activeWaterRelease = false
+    self.activeWindRelease = false
+    self:tintRed()
+    --play sound
+end
+
+function Player:waterReleaseEffects()
     if self.activeFireRelease
     and not self.activeWaterRelease
     and not self.activeWindRelease then
