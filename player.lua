@@ -286,10 +286,12 @@ function Player:chargeChakra(dt)
         if not self:doingAction() then
             self.charging = true
             Aura.new(self.x, self.y, self.physics.fixture)
+            Sounds.repeatSound(Sounds.sfx.chargeLoop)
         end
         self.chakra.current = math.min(self.chakra.current + dt * self.chakra.chargeRate, self.chakra.max)
         print("charging: ".. self.chakra.current)
     else
+        Sounds.stopSound(Sounds.sfx.chargeLoop)
         Aura.remove(self.physics.fixture)
         self.charging = false
     end

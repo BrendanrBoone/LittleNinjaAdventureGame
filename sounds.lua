@@ -19,6 +19,8 @@ function Sounds:load()
     self.sfx.seal = love.audio.newSource("assets/sfx/NarutoSeal.mp3", "static")
     self.sfx.jutsu = love.audio.newSource("assets/sfx/NarutoJutsu.mp3", "static")
     self.sfx.smoke = love.audio.newSource("assets/sfx/NarutoSmoke.mp3", "static")
+    self.sfx.charge = love.audio.newSource("assets/sfx/NarutoCharge.mp3", "static")
+    self.sfx.chargeLoop = love.audio.newSource("assets/sfx/NarutoChargeLoopLong.mp3", "static")
 
     -- clear profiles necessary => {name, source}
     self.bgmLevels = {
@@ -86,6 +88,15 @@ function Sounds:playSound(sound)
         sound:stop()
         sound:play()
     end
+end
+
+function Sounds.stopSound(sound)
+    sound:stop()
+end
+
+function Sounds.repeatSound(sound)
+    sound:setLooping(true)
+    sound:play()
 end
 
 return Sounds
