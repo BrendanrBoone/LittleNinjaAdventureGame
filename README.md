@@ -6,10 +6,7 @@ A little project to fulfill a request
 * player.lua: setNewFrame()
 
 ## Things to do
-* jutsu recipes and activate jutsu
-* fire release
-* water release
-* wind release
+* open and close doors using seal releases
 * shadow clone jutsu
 * substitution jutsu
 * fireball jutsu
