@@ -5,7 +5,7 @@ ActivePortals = {}
 local Player = require("player")
 local Anima = require("myTextAnima")
 
-function Portal.new(x, y, destination, dX, dY)
+function Portal.new(x, y, destination, dX, dY, lock)
     local instance = setmetatable({}, Portal)
 
     instance.x = x
@@ -13,6 +13,7 @@ function Portal.new(x, y, destination, dX, dY)
     instance.destination = destination
     instance.dX = dX
     instance.dY = dY
+    instance.lock = lock
 
     instance.state = "idle"
     instance.idleTime = {
@@ -62,12 +63,17 @@ function Portal.removeAll()
     ActivePortals = {}
 end
 
-function Portal:setState(dt)
-
+function Portal:checkLock()
+    if (self.lock == "fire" and Player.activeFireRelease) 
+    or (self.lock == "water" and Player.activeWaterRelease)
+    or (self.lock == "wind" and Player.activeWindRelease)
+    or (self.lock == "") then
+        return true
+    end
+    return false
 end
 
 function Portal:update(dt)
-    self:setState(dt)
     self:animate(dt)
 end
 

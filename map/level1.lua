@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 5,
-  nextobjectid = 8,
+  nextobjectid = 11,
   properties = {},
   tilesets = {
     {
@@ -157,7 +157,26 @@ return {
       parallaxx = 1,
       parallaxy = 1,
       properties = {},
-      objects = {}
+      objects = {
+        {
+          id = 10,
+          name = "Portal",
+          type = "portal",
+          shape = "point",
+          x = 678.195,
+          y = 304,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["dX"] = 5,
+            ["dY"] = 5,
+            ["destination"] = "level1",
+            ["lock"] = "fire"
+          }
+        }
+      }
     },
     {
       type = "objectgroup",

@@ -19,6 +19,11 @@ function Map:load()
             next = nil,
             prev = nil,
             background = blackBackground
+        },
+        hinataRoom = {
+            next = nil,
+            prev = nil,
+            background = blackBackground
         }
     }
 
@@ -111,14 +116,14 @@ end
 
 function Map:clean()
     self.level:box2d_removeLayer("solid")
-    Coin.removeAll()
+    --[[Coin.removeAll()
     Spike.removeAll()
     Stone.removeAll()
     Enemy.removeAll()
     NicoRobin.removeAll()
-    Sunny.removeAll()
+    Sunny.removeAll()]]
     Portal.removeAll()
-    Trampoline.removeAll()
+    --Trampoline.removeAll()
     BackgroundObject.removeAll()
 end
 
@@ -146,7 +151,7 @@ function Map:spawnEntities()
         elseif v.type == "nicoRobin" then
             NicoRobin.new(v.x + v.width / 2, v.y + v.height / 2)
         elseif v.type == "portal" then
-            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY)
+            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock)
         elseif v.type == "pickupItem" then
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
         elseif v.type == "sunny" then
@@ -160,7 +165,7 @@ end
 function Map.moveThroughPortal(key)
     if key == "e" then
         for _, instance in ipairs(ActivePortals) do
-            if instance.destinationVisual then
+            if instance.destinationVisual and instance:checkLock() then
                 Map:toDestination(instance.destination, instance.dX, instance.dY)
                 return true
             end
