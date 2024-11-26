@@ -6,7 +6,7 @@ A little project to fulfill a request
 * player.lua: setNewFrame()
 
 ## Things to do
-* open and close doors using seal releases
+* gated portal visual aid of what release
 * shadow clone jutsu
 * substitution jutsu
 * fireball jutsu
