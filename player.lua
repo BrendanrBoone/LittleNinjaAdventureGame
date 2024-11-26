@@ -65,6 +65,13 @@ function Player:load()
         speed = 3 -- speed to untint
     }
 
+    self.releaseColor = {
+        red = 0,
+        green = 0,
+        blue = 0,
+        scale = 1.1 -- aura size scale, greater than character size
+    }
+
     self.releaseGrace = {
         time = 0,
         duration = 6
@@ -546,6 +553,16 @@ function Player:checkSealSequence()
     end
 end
 
+-- checks if release jutsu is active
+function Player:checkRelease()
+    if self.activeFireRelease
+    or self.activeWaterRelease
+    or self.activeWindRelease then
+        return true
+    end
+    return false
+end
+
 -- called in main.keypressed()
 function Player:dashForward(key)
     if not self:doingAction() and key == "lshift" and self.dash.cost <= self.chakra.current then
@@ -894,15 +911,24 @@ function Player:draw()
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(1, 1, 1)
+
+    --draw seal
     if self.sealing then
         local sealWidth = self.animation.seals.width / 2
         local sealHeight = self.animation.seals.height / 2
         love.graphics.draw(self.animation.seals.draw, self.x, self.y, 0, 1, 1, sealWidth, sealHeight)
-        love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
-        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
-    else
-        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     end
+
+    -- draw release aura
+    if self:checkRelease() then
+        love.graphics.setColor(self.releaseColor.red, self.releaseColor.green, self.releaseColor.blue)
+        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width * self.releaseColor.scale, height * self.releaseColor.scale)
+    end
+    
+    -- draw character
+    love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+    love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
+    
     --love.graphics.draw(self.animation.seals.fireSeal.img[self.animation.seals.fireSeal.current], sealWidth, sealHeight + 75, 0, 1, 1, sealWidth, sealHeight)
     --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
     love.graphics.setColor(1, 1, 1)
@@ -915,6 +941,9 @@ function Player:fireRelease()
     self.activeFireRelease = true
     self.activeWaterRelease = false
     self.activeWindRelease = false
+    self.releaseColor.red = 1
+    self.releaseColor.blue = 0
+    self.releaseColor.green = 0
     self:tintRed()
     --play sound
 end
@@ -934,6 +963,9 @@ function Player:waterRelease()
     self.activeFireRelease = false
     self.activeWaterRelease = true
     self.activeWindRelease = false
+    self.releaseColor.red = 0
+    self.releaseColor.blue = 1
+    self.releaseColor.green = 0
     self:tintBlue()
     --play sound
 end
@@ -953,6 +985,9 @@ function Player:windRelease()
     self.activeFireRelease = false
     self.activeWaterRelease = false
     self.activeWindRelease = true
+    self.releaseColor.red = 0
+    self.releaseColor.blue = 0
+    self.releaseColor.green = 1
     self:tintGreen()
     --play sound
 end
