@@ -173,7 +173,7 @@ return {
             ["dX"] = 5,
             ["dY"] = 5,
             ["destination"] = "level1",
-            ["lock"] = ""
+            ["lock"] = "null"
           }
         }
       }

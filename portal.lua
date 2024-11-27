@@ -64,10 +64,11 @@ function Portal.removeAll()
 end
 
 function Portal:checkLock()
+    print("lock '"..self.lock.."'")
     if (self.lock == "fire" and Player.activeFireRelease) 
     or (self.lock == "water" and Player.activeWaterRelease)
     or (self.lock == "wind" and Player.activeWindRelease)
-    or (self.lock == "") then
+    or (self.lock == "null") then
         return true
     end
     return false

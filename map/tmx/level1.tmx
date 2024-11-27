@@ -46,7 +46,7 @@
    <properties>
     <property name="dX" type="float" value="5"/>
     <property name="dY" type="float" value="5"/>
-    <property name="destination" value="level1"/>
+    <property name="destination" value="hinataRoom"/>
     <property name="lock" value="fire"/>
    </properties>
    <point/>

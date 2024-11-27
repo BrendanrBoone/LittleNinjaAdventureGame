@@ -172,7 +172,7 @@ return {
           properties = {
             ["dX"] = 5,
             ["dY"] = 5,
-            ["destination"] = "level1",
+            ["destination"] = "hinataRoom",
             ["lock"] = "fire"
           }
         }

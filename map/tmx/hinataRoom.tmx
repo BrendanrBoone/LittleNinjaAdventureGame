@@ -47,7 +47,7 @@
     <property name="dX" type="float" value="5"/>
     <property name="dY" type="float" value="5"/>
     <property name="destination" value="level1"/>
-    <property name="lock" value=""/>
+    <property name="lock" value="null"/>
    </properties>
    <point/>
   </object>

@@ -27,6 +27,10 @@ function Sounds:load()
         level1 = {
             name = "NarutoOst2",
             source = self.bgm.NarutoOst2
+        },
+        hinataRoom = {
+            name = "NarutoOst2",
+            source = self.bgm.NarutoOst2
         }
     }
     self.currentlyPlayingBgm = self.bgmLevels["level1"]
