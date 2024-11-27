@@ -32,8 +32,9 @@ function Portal.new(x, y, destination, dX, dY, lock)
     instance.animation.idle = {
         total = 4,
         current = 1,
-        img = Portal.idleAnim
+        img = Portal.blueAnim
     }
+    instance:updateImg()
     instance.animation.draw = instance.animation.idle.img[1]
 
     instance.physics = {}
@@ -46,13 +47,18 @@ function Portal.new(x, y, destination, dX, dY, lock)
 end
 
 function Portal.loadAssets()
-    Portal.idleAnim = {}
+    Portal.blueAnim = {}
     for i = 1, 4 do
-        Portal.idleAnim[i] = love.graphics.newImage("assets/portal/idle/" .. i .. ".png")
+        Portal.blueAnim[i] = love.graphics.newImage("assets/portal/blue/" .. i .. ".png")
     end
 
-    Portal.width = Portal.idleAnim[1]:getWidth()
-    Portal.height = Portal.idleAnim[1]:getHeight()
+    Portal.fireAnim = {}
+    for i = 1, 4 do
+        Portal.fireAnim[i] = love.graphics.newImage("assets/portal/fire/" .. i .. ".png")
+    end
+
+    Portal.width = Portal.blueAnim[1]:getWidth()
+    Portal.height = Portal.blueAnim[1]:getHeight()
 end
 
 function Portal.removeAll()
@@ -72,6 +78,15 @@ function Portal:checkLock()
         return true
     end
     return false
+end
+
+-- updates which portal asset to use based on the lock
+function Portal:updateImg()
+    if self.lock == "fire" then
+        self.animation.idle.img = Portal.fireAnim
+    else
+        self.animation.idle.img = Portal.blueAnim
+    end
 end
 
 function Portal:update(dt)
