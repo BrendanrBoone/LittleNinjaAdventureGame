@@ -7,6 +7,7 @@ local Anima = require("myTextAnima")
 local Dialogue = require("dialogue")
 local GUI = require("gui")
 local Helper = require("helper")
+local Categories = require("categories")
 
 --@param type: string "princess" or "nicoRobin"
 function NPC.new(x, y, type)
@@ -31,6 +32,7 @@ function NPC.new(x, y, type)
     instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
     instance.physics.fixture:setSensor(true) -- prevents collisions but can be sensed
+    instance.physics.fixture:setCategory(Categories.interactable)
     instance.physics.fixture:setUserData("npc")
 
     -- dialogue

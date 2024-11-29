@@ -78,12 +78,7 @@ function love.keypressed(key)
     if not WorldPause then
         if Map.moveThroughPortal(key) then return end
         if NPC.interact(key) then return end
-        Player:jump(key)
-        Player:fastFall(key)
-        Player:fireSeal(key)
-        Player:waterSeal(key)
-        Player:windSeal(key)
-        Player:activateJutsu(key)
+        Player:keypressed(key)
     end
 
     Menu:Escape(key)

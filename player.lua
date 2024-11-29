@@ -8,9 +8,7 @@ local Hitbox = require("hitbox")
 local Helper = require("helper")
 local Anima = require("myTextAnima")
 local Recipes = require("recipes")
-
-PlayerContacts = {} -- fixtures
-
+local Categories = require("categories")
 function Player:load()
     self.x = 100
     self.y = 100
@@ -110,6 +108,8 @@ function Player:load()
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)       -- unaffected by world gravity
+    self.physics.fixture:setCategory(Categories.player)
+    self.physics.fixture:setMask(Categories.ally) -- don't collide with allies
     self.physics.fixture:setUserData("player") -- name fixture
 
     self.interactText = Anima.new(self.physics.fixture, "interact (E)", "below", 0)
@@ -739,6 +739,15 @@ function Player:cancelActiveActions()
     self.invincibility = false
     self.dashing = false
     self.charging = false
+end
+
+function Player:keypressed(key)
+    self:jump(key)
+    self:fastFall(key)
+    self:fireSeal(key)
+    self:waterSeal(key)
+    self:windSeal(key)
+    self:activateJutsu(key)
 end
 
 -- start some sort of animation and clear sequence after

@@ -3,7 +3,7 @@ Portal.__index = Portal
 
 ActivePortals = {}
 local Player = require("player")
-local Anima = require("myTextAnima")
+local Categories = require("categories")
 
 function Portal.new(x, y, destination, dX, dY, lock)
     local instance = setmetatable({}, Portal)
@@ -42,7 +42,7 @@ function Portal.new(x, y, destination, dX, dY, lock)
     instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
     instance.physics.fixture:setSensor(true) -- prevents collisions but can be sensed
-
+    instance.physics.fixture:setCategory(Categories.interactable)
     table.insert(ActivePortals, instance)
 end
 

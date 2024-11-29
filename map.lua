@@ -7,6 +7,7 @@ local Portal = require("portal")
 local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
 local NPC = require("npc")
+local Categories = require("categories")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
@@ -38,15 +39,13 @@ function Map:init(destination)
     self.currentLevel = destination
     self.level = STI("map/" .. destination .. ".lua", {"box2d"})
     self.level:box2d_init(World)
+
     self.solidLayer = self.level.layers.solid
     self.groundLayer = self.level.layers.ground
     self.entityLayer = self.level.layers.entity
     self.spawnsLayer = self.level.layers.spawns
-    if self.level.layers.backgroundObjects then
-        self.bgoLayer = self.level.layers.backgroundObjects
-        self.bgoLayer.visible = false
-        self:spawnBgo()
-    end
+
+    self:setGroundFixtures()
 
     self.solidLayer.visible = false
     self.entityLayer.visible = false
@@ -57,6 +56,27 @@ function Map:init(destination)
     self:findSpawnPoints()
     self:spawnEntities()
     self:loadBgm()
+    self:checkBgo()
+end
+
+-- set the solid layer fixtures to the ground category because using the masking system
+-- requires every fixture to have a category
+function Map:setGroundFixtures()
+    local collision = self.level.box2d_collision
+    for i = #collision, 1, -1 do
+        local obj = collision[i]
+        if obj.object.layer == self.solidLayer then
+            obj.fixture:setCategory(Categories.ground)
+        end
+    end
+end
+
+function Map:checkBgo()
+    if self.level.layers.backgroundObjects then
+        self.bgoLayer = self.level.layers.backgroundObjects
+        self.bgoLayer.visible = false
+        self:spawnBgo()
+    end
 end
 
 -- change background according to what level
