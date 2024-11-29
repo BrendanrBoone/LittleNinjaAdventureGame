@@ -14,18 +14,19 @@ local Anima = require("myTextAnima")
 local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
 local Recipes = require("recipes")
-
+local NPC = require("npc")
 WorldPause = false
 
 function love.load()
     Sounds:load()
     Portal.loadAssets()
-    Map:load()
-    GUI:load()
-    Player:load()
     Explosion.loadAssets()
     Smoke.loadAssets()
     Aura.loadAssets()
+    NPC.loadAssets() -- rule of thumb: assets need to load before the map
+    Map:load()
+    GUI:load()
+    Player:load()
     Menu:load()
     Recipes:load()
 end
@@ -48,6 +49,7 @@ function love.update(dt)
         Hitbox.updateAll(dt)
         Anima.updateAll(dt)
         BackgroundObject.updateAll(dt)
+        NPC.updateAll(dt)
     end
 end
 
@@ -59,6 +61,7 @@ function love.draw()
     Map.level:draw(-Camera.x, -Camera.y, Camera.scale, Camera.scale)
     Explosion.drawAll()
     Portal.drawAll()
+    NPC.drawAll()
     Player:draw()
     PickupItem.drawAll()
     Aura.drawAll()
@@ -74,6 +77,7 @@ end
 function love.keypressed(key)
     if not WorldPause then
         if Map.moveThroughPortal(key) then return end
+        if NPC.interact(key) then return end
         Player:jump(key)
         Player:fastFall(key)
         Player:fireSeal(key)
@@ -93,16 +97,14 @@ end
 function beginContact(a, b, collision)
     if PickupItem.beginContact(a, b, collision) then return end
     if Hitbox.beginContact(a, b, collision) then return end
-    if Portal:beginContact(a, b, collision) then return end
+    if Portal.beginContact(a, b, collision) then return end
+    if NPC.beginContact(a, b, collision) then return end
     Player:beginContact(a, b, collision)
 end
 
 function endContact(a, b, collision)
     if Hitbox.endContact(a, b, collision) then return end
-    if Portal:endContact(a, b, collision) then return end
+    if Portal.endContact(a, b, collision) then return end
+    if NPC.endContact(a, b, collision) then return end
     Player:endContact(a, b, collision)
-end
-
-function preSolve(a, b, collision)
-    Player:preSolve(a, b, collision)
 end

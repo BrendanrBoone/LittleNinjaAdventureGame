@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 5,
-  nextobjectid = 6,
+  nextobjectid = 7,
   properties = {},
   tilesets = {
     {
@@ -174,6 +174,21 @@ return {
             ["dY"] = 5,
             ["destination"] = "level1",
             ["lock"] = "null"
+          }
+        },
+        {
+          id = 6,
+          name = "Princess",
+          type = "npc",
+          shape = "point",
+          x = 611.367,
+          y = 303.452,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "princess"
           }
         }
       }

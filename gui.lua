@@ -72,6 +72,11 @@ function GUI:loadAssets()
     self.hearts.spacing = self.hearts.width * self.hearts.scale + 30
 end
 
+function GUI:goNextLevelIndicatorAnimationStart()
+    self.goNextLevelIndicator.animating = true
+    self.grace.time = self.grace.totalDuration
+end
+
 function GUI:update(dt)
     GUI:arrowAnimation(dt)
 end
@@ -96,7 +101,6 @@ function GUI:arrowAnimation(dt)
             print(tostring(self.goNextLevelIndicator.visible))
         end
         if self.grace.time <= 0 then
-            self.grace.time = self.grace.totalDuration
             self.goNextLevelIndicator.animating = false
         end
     end

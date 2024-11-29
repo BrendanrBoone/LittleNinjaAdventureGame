@@ -6,6 +6,7 @@ local Hitbox = require("hitbox")
 local Portal = require("portal")
 local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
+local NPC = require("npc")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
@@ -30,7 +31,7 @@ function Map:load()
     World = love.physics.newWorld(0, 2000)
     World:setCallbacks(beginContact, endContact)
 
-    self:init("level1")
+    self:init("hinataRoom")
 end
 
 function Map:init(destination)
@@ -123,6 +124,7 @@ function Map:clean()
     NicoRobin.removeAll()
     Sunny.removeAll()]]
     Portal.removeAll()
+    NPC.removeAll()
     --Trampoline.removeAll()
     BackgroundObject.removeAll()
 end
@@ -138,26 +140,12 @@ end
 
 function Map:spawnEntities()
     for _, v in ipairs(self.entityLayer.objects) do
-        if v.type == "spike" then
-            Spike.new(v.x + v.width / 2, v.y + v.height / 2)
-        elseif v.type == "coin" then
-            Coin.new(v.x + v.width / 2, v.y + v.height / 2)
-        elseif v.type == "stone" then
-            Stone.new(v.x, v.y)
-        elseif v.type == "enemy" then
-            Enemy.new(v.x, v.y)
-        elseif v.type == "trampoline" then
-            Trampoline.new(v.x + v.width / 2, v.y + v.height / 2)
-        elseif v.type == "nicoRobin" then
-            NicoRobin.new(v.x + v.width / 2, v.y + v.height / 2)
+        if v.type == "npc" then
+            NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type)
         elseif v.type == "portal" then
             Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock)
         elseif v.type == "pickupItem" then
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
-        elseif v.type == "sunny" then
-            Sunny.new(v.x + v.width / 2, v.y + v.height / 2)
-        elseif v.type == "platform" then
-            Platform.new(v.x + v.width / 2, v.y + v.height / 2, v.width, v.height)
         end
     end
 end

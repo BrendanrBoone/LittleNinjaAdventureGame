@@ -57,6 +57,11 @@ function Portal.loadAssets()
         Portal.fireAnim[i] = love.graphics.newImage("assets/portal/fire/" .. i .. ".png")
     end
 
+    Portal.greenAnim = {}
+    for i = 1, 4 do
+        Portal.greenAnim[i] = love.graphics.newImage("assets/portal/green/" .. i .. ".png")
+    end
+
     Portal.width = Portal.blueAnim[1]:getWidth()
     Portal.height = Portal.blueAnim[1]:getHeight()
 end
@@ -84,6 +89,8 @@ end
 function Portal:updateImg()
     if self.lock == "fire" then
         self.animation.idle.img = Portal.fireAnim
+    elseif self.lock == "wind" then
+        self.animation.idle.img = Portal.greenAnim
     else
         self.animation.idle.img = Portal.blueAnim
     end
@@ -137,24 +144,24 @@ function Portal.drawAll()
     end
 end
 
-function Portal:beginContact(a, b, collision)
+function Portal.beginContact(a, b, collision)
     for i, instance in ipairs(ActivePortals) do
         if a == instance.physics.fixture or b == instance.physics.fixture then
             if a == Player.physics.fixture or b == Player.physics.fixture then
                 instance.destinationVisual = true
-                Anima.animationStart(Player.physics.fixture)
+                Player.interactText:animationStart()
                 return true
             end
         end
     end
 end
 
-function Portal:endContact(a, b, collision)
+function Portal.endContact(a, b, collision)
     for i, instance in ipairs(ActivePortals) do
         if a == instance.physics.fixture or b == instance.physics.fixture then
             if a == Player.physics.fixture or b == Player.physics.fixture then
                 instance.destinationVisual = false
-                Anima.animationEnd(Player.physics.fixture)
+                Player.interactText:animationEnd()
                 return true
             end
         end

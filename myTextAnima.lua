@@ -25,6 +25,7 @@ function Anima.new(trigger, text, location, speed)
     instance.animating = false
 
     table.insert(ActiveTextAnimas, instance)
+    return instance
 end
 
 function Anima:modifyAnimationRate(speed)
@@ -105,21 +106,30 @@ function Anima.drawAll()
     end
 end
 
-function Anima.animationStart(fixture)
+--[[function Anima.animationStart(fixture)
     for _, instance in ipairs(ActiveTextAnimas) do
         if instance.trigger == fixture then
             instance.animating = true
         end
     end
-end
+end]]
 
-function Anima.animationEnd(fixture)
+--[[function Anima.animationEnd(fixture)
     for _, instance in ipairs(ActiveTextAnimas) do
         if instance.trigger == fixture then
             instance.animating = false
             instance.currentlyAnimatedText = ""
         end
     end
+end]]
+
+function Anima:animationStart()
+    self.animating = true
+end
+
+function Anima:animationEnd()
+    self.animating = false
+    self.currentlyAnimatedText = ""
 end
 
 function Anima.findAnima(fixture)

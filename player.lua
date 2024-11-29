@@ -112,7 +112,7 @@ function Player:load()
     self.physics.body:setGravityScale(0)       -- unaffected by world gravity
     self.physics.fixture:setUserData("player") -- name fixture
 
-    Anima.new(self.physics.fixture, "interact (E)", "below", 0)
+    self.interactText = Anima.new(self.physics.fixture, "interact (E)", "below", 0)
 
     self:loadAssets()
     self:loadHitboxes()
