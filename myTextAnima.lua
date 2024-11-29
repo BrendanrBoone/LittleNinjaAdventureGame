@@ -15,7 +15,7 @@ function Anima.new(trigger, text, location, speed)
     instance.textLength = #text
     instance.currentlyAnimatedText = ""
 
-    local speed = speed or 0.1
+    speed = speed or 0.1
     instance.animation = {
         timer = 0,
         rate = speed
@@ -105,23 +105,6 @@ function Anima.drawAll()
         instance:draw()
     end
 end
-
---[[function Anima.animationStart(fixture)
-    for _, instance in ipairs(ActiveTextAnimas) do
-        if instance.trigger == fixture then
-            instance.animating = true
-        end
-    end
-end]]
-
---[[function Anima.animationEnd(fixture)
-    for _, instance in ipairs(ActiveTextAnimas) do
-        if instance.trigger == fixture then
-            instance.animating = false
-            instance.currentlyAnimatedText = ""
-        end
-    end
-end]]
 
 function Anima:animationStart()
     self.animating = true

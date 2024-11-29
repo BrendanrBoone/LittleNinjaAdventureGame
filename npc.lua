@@ -35,12 +35,13 @@ function NPC.new(x, y, type)
 
     -- dialogue
     instance.interactText = Anima.new(instance.physics.fixture, Dialogue[instance.type].message, "above")
+    instance.defaultNPCInteractText = tostring(instance.interactText.text)
     instance.dialogue = Dialogue[instance.type].sequence
-    instance.dialogueIndex = 0
+    instance.dialogueIndex = 1
     instance.dialogueGrace = { time = 2, duration = 2 }
-    instance.defaultNPCInteractText = instance.interactText.text
 
     table.insert(ActiveNPCs, instance)
+    return instance
 end
 
 function NPC.loadAssets()
@@ -68,6 +69,17 @@ function NPC.removeAll()
     end
 
     ActiveNPCs = {}
+end
+
+function NPC:removeActive()
+    for i, instance in ipairs(ActiveNPCs) do
+        if instance == self then
+            table.remove(ActiveNPCs, i)
+            instance.physics.body:destroy()
+            Anima.remove(instance.physics.fixture)
+            break
+        end
+    end
 end
 
 function NPC:setState(dt)
@@ -124,37 +136,61 @@ function NPC.updateAll(dt)
 end
 
 function NPC:runDialogue(dt)
-    if Player.talking and self.interactable then
-        if not Anima.currentlyAnimating() then
-            if self.dialogueGrace.time == self.dialogueGrace.duration then
-                local playerAnima = Player.interactText
-                playerAnima:modifyAnimationRate(0.1)
-                local npcAnima = self.interactText
+    if self.interactable and Player.talking and not Anima.currentlyAnimating() then
+        self:updateDialogueGrace(dt)
+    end
+end
 
-                self.dialogueIndex = self.dialogueIndex + 1
-                if self.dialogueIndex <= #self.dialogue then
-                    if self.dialogue[self.dialogueIndex][1] ~= "Player" then
-                        npcAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
-                    elseif self.dialogue[self.dialogueIndex][1] == "Player" then
-                        playerAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
-                    end
-                    print(self.dialogue[self.dialogueIndex][2])
-                end
+function NPC:updateDialogueGrace(dt)
+    if self.dialogueGrace.time == self.dialogueGrace.duration then
+        self:updateDialogue()
+    end
+    self.dialogueGrace.time = self.dialogueGrace.time - dt
+    if self.dialogueGrace.time <= 0 then
+        self.dialogueGrace.time = self.dialogueGrace.duration
+    end
+end
 
-                if self.dialogueIndex > #self.dialogue then
-                    self.dialogueIndex = 1
-                    playerAnima:modifyAnimationRate(0)
-                    playerAnima:newTypingAnimation(Player.defaultInteractText)
-                    npcAnima:newTypingAnimation(self.defaultNPCInteractText)
-                    Player.talking = false
-                    GUI:goNextLevelIndicatorAnimationStart()
-                end
-            end
-            self.dialogueGrace.time = self.dialogueGrace.time - dt
-            if self.dialogueGrace.time <= 0 then
-                self.dialogueGrace.time = self.dialogueGrace.duration
-            end
-        end
+function NPC:updateDialogue()
+    local playerAnima = Player.interactText
+    local npcAnima = self.interactText
+    playerAnima:modifyAnimationRate(0.1)
+
+    if self.dialogue[self.dialogueIndex][1] == self.type then
+        npcAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
+    elseif self.dialogue[self.dialogueIndex][1] == "Player" then
+        playerAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
+    end
+    print(self.dialogue[self.dialogueIndex][2])
+    self.dialogueIndex = self.dialogueIndex + 1
+
+    if self.dialogueIndex > #self.dialogue then
+        self.dialogueIndex = 1
+        playerAnima:modifyAnimationRate(0)
+        playerAnima:newTypingAnimation(Player.defaultInteractText)
+        npcAnima:newTypingAnimation(self.defaultNPCInteractText)
+        Player.talking = false
+        self.dialogueGrace.time = 0
+        self:dialogueEndEffects()
+    end
+end
+
+function NPC:dialogueEndEffects()
+    self:nicoRobinEndEffects()
+    self:princessEndEffects()
+end
+
+function NPC:nicoRobinEndEffects()
+    if self.type == "NicoRobin" then
+        GUI:goNextLevelIndicatorAnimationStart()
+    end
+end
+
+function NPC:princessEndEffects()
+    if self.type == "princess" then
+        self:removeActive()
+        -- end the player dialogue animation because endContact is not called on fixture removal
+        Player.interactText:animationEnd()
     end
 end
 
@@ -164,7 +200,7 @@ function NPC.interact(key)
             if instance.interactable then
                 Player.talking = true
                 Player.interactText:newTypingAnimation("")
-                Player:setPosition(instance.x - instance.width / 2, instance.y)
+                Player:setPosition(instance.x - instance.width / 2 + 5, instance.y)
                 Player.xVel = 0
                 Player.direction = "right"
                 Player:cancelActiveActions()
