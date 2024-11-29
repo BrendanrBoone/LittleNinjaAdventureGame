@@ -90,6 +90,7 @@ end
 function NPC:update(dt)
     self:setState(dt)
     self:animate(dt)
+    self:runDialogue(dt)
 end
 
 function NPC:animate(dt)
@@ -184,11 +185,9 @@ end
 function NPC.beginContact(a, b, collision)
     if Helper.checkFUD(a, b, "player") and Helper.checkFUD(a, b, "npc") then
         for i, instance in ipairs(ActiveNPCs) do
-            print("looking through NPCs")
             if a == instance.physics.fixture or b == instance.physics.fixture then
-                print("found the NPC")
                 if a == Player.physics.fixture or b == Player.physics.fixture then
-                    print("found the player")
+                    instance.interactable = true
                     instance.interactText:animationStart()
                     Player.interactText:animationStart()
                     return true
@@ -202,6 +201,7 @@ function NPC.endContact(a, b, collision)
     for i, instance in ipairs(ActiveNPCs) do
         if a == instance.physics.fixture or b == instance.physics.fixture then
             if a == Player.physics.fixture or b == Player.physics.fixture then
+                instance.interactable = false
                 instance.interactText:animationEnd()
                 Player.interactText:animationEnd()
                 return true
