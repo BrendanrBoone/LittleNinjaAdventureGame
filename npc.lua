@@ -38,6 +38,7 @@ function NPC.new(x, y, type)
     instance.dialogue = Dialogue[instance.type].sequence
     instance.dialogueIndex = 0
     instance.dialogueGrace = { time = 2, duration = 2 }
+    instance.defaultNPCInteractText = instance.interactText.text
 
     table.insert(ActiveNPCs, instance)
 end
@@ -127,11 +128,8 @@ function NPC:runDialogue(dt)
         if not Anima.currentlyAnimating() then
             if self.dialogueGrace.time == self.dialogueGrace.duration then
                 local playerAnima = Player.interactText
-                local originalPlayerAnimaText = playerAnima.text
                 playerAnima:modifyAnimationRate(0.1)
-    
                 local npcAnima = self.interactText
-                local originalNPCAnimaText = npcAnima.text
 
                 self.dialogueIndex = self.dialogueIndex + 1
                 if self.dialogueIndex <= #self.dialogue then
@@ -146,8 +144,8 @@ function NPC:runDialogue(dt)
                 if self.dialogueIndex > #self.dialogue then
                     self.dialogueIndex = 1
                     playerAnima:modifyAnimationRate(0)
-                    playerAnima:newTypingAnimation("interact (E)")
-                    npcAnima:newTypingAnimation("Hey Franky!")
+                    playerAnima:newTypingAnimation(Player.defaultInteractText)
+                    npcAnima:newTypingAnimation(self.defaultNPCInteractText)
                     Player.talking = false
                     GUI:goNextLevelIndicatorAnimationStart()
                 end
