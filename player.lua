@@ -9,6 +9,7 @@ local Helper = require("helper")
 local Anima = require("myTextAnima")
 local Recipes = require("recipes")
 local Categories = require("categories")
+
 function Player:load()
     self.x = 100
     self.y = 100

@@ -15,6 +15,8 @@ local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
 local Recipes = require("recipes")
 local NPC = require("npc")
+local Ally = require("ally")
+
 WorldPause = false
 
 function love.load()
@@ -38,6 +40,7 @@ function love.update(dt)
         Sounds:update(dt)
         Camera:setPosition(Player.x, Player.y)
         Player:update(dt)
+        Ally:update(dt)
         PickupItem.updateAll()
         GUI:update(dt)
         Portal.updateAll(dt)
@@ -62,6 +65,7 @@ function love.draw()
     Explosion.drawAll()
     Portal.drawAll()
     NPC.drawAll()
+    Ally:draw()
     Player:draw()
     PickupItem.drawAll()
     Aura.drawAll()
@@ -79,6 +83,7 @@ function love.keypressed(key)
         if Map.moveThroughPortal(key) then return end
         if NPC.interact(key) then return end
         Player:keypressed(key)
+        Ally.keypressed(key)
     end
 
     Menu:Escape(key)
@@ -95,6 +100,7 @@ function beginContact(a, b, collision)
     if Portal.beginContact(a, b, collision) then return end
     if NPC.beginContact(a, b, collision) then return end
     Player:beginContact(a, b, collision)
+    Ally:beginContact(a, b, collision)
 end
 
 function endContact(a, b, collision)
@@ -102,4 +108,5 @@ function endContact(a, b, collision)
     if Portal.endContact(a, b, collision) then return end
     if NPC.endContact(a, b, collision) then return end
     Player:endContact(a, b, collision)
+    Ally:endContact(a, b, collision)
 end

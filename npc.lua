@@ -193,7 +193,7 @@ function NPC:princessEndEffects()
         self:removeActive()
         -- end the player dialogue animation because endContact is not called on fixture removal
         Player.interactText:animationEnd()
-        Ally:new(self.x, self.y, "princess")
+        Ally:load(self.x, self.y, "princess")
     end
 end
 

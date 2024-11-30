@@ -7,7 +7,7 @@ local Categories = require("categories")
 local Player = require("player")
 local CharacterData = require("characterData")
 
-function Ally:new(x, y, type)
+function Ally:load(x, y, type)
     self.x = x
     self.y = y
     self.offsetY = -12
@@ -132,7 +132,7 @@ function Ally:tintGreen()
 end
 
 function Ally:update(dt)
-    if self.alive then
+    if Ally.alive then
         -- print(self.x..", "..self.y)
         self:unTint(dt)
         self:setState()
@@ -281,7 +281,9 @@ function Ally:decreaseJumpGrace(dt)
 end
 
 function Ally:keypressed(key)
-    self:jump(key)
+    if self.alive then
+        self:jump(key)
+    end
 end
 
 function Ally:jump(key)
@@ -344,7 +346,6 @@ function Ally:land(collision)
     self:cancelActiveActions()
 
     self:resetAnimations()
-    self:resetHitboxes()
 end
 
 function Ally:endContact(a, b, collision)
