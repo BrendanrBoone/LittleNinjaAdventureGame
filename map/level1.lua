@@ -170,8 +170,8 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["dX"] = 5,
-            ["dY"] = 5,
+            ["dX"] = 80,
+            ["dY"] = 304,
             ["destination"] = "dragonDen",
             ["displayText"] = "Dragon's Den",
             ["lock"] = "fire"

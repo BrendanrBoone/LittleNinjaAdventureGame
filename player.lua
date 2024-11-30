@@ -226,6 +226,7 @@ end
 
 --@param recipe: string (jutsu.name)
 function Player:performJutsu(recipe)
+    Sounds:playSound(Sounds.sfx.jutsu)
     if recipe == "fireRelease" then
         self:fireRelease()
     elseif recipe == "waterRelease" then

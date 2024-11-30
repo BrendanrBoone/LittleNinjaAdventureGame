@@ -54,7 +54,7 @@ function Ally:load(x, y, type)
     self.state = "idle"
     self.type = type
     self.chaseDistance = 30 -- distance to chase player
-    self.extremeDistance = 100 -- distance to reset position
+    self.extremeDistance = 300 -- distance to reset position
     self.jumpDesync = { time = 0, duration = 0.1 }
     self.teleportDesync = { time = 0, duration = 1 }
 
@@ -227,17 +227,23 @@ end
 
 -- move to player if too far away, reset position if extremely far, do nothing if in range
 function Ally:checkDistance(dt)
-    local distance = math.abs(self.x - Player.x)
-    if distance > self.chaseDistance and distance < self.extremeDistance then
-        self:moveWithPlayer(dt)
-    elseif distance > self.extremeDistance then
-        print("extreme distance")
-        self.visible = false
-        if self.teleportDesync.time <= 0 then
-            self.teleportDesync.time = self.teleportDesync.duration
+    if self.visible then
+        local distance = math.abs(self.x - Player.x)
+        if distance > self.chaseDistance and distance < self.extremeDistance then
+            self:moveWithPlayer(dt)
+        elseif distance > self.extremeDistance then
+            self:teleportToPlayer()
+        else
+            self:applyFriction(dt)
         end
-    else
-        self:applyFriction(dt)
+    end
+end
+
+-- starts the teleport desync. resetPosition() is called in decreaseTeleportDesync()
+function Ally:teleportToPlayer()
+    self.visible = false
+    if self.teleportDesync.time <= 0 then
+        self.teleportDesync.time = self.teleportDesync.duration
     end
 end
 

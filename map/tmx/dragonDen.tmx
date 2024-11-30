@@ -44,8 +44,8 @@
  <objectgroup color="#34ff07" id="3" name="entity">
   <object id="5" name="Portal" type="portal" x="80" y="304">
    <properties>
-    <property name="dX" type="float" value="5"/>
-    <property name="dY" type="float" value="5"/>
+    <property name="dX" type="float" value="678.2"/>
+    <property name="dY" type="float" value="304"/>
     <property name="destination" value="level1"/>
     <property name="displayText" value="Outside"/>
     <property name="lock" value="null"/>

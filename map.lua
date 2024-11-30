@@ -173,7 +173,7 @@ function Map.moveThroughPortal(key)
             if instance.destinationVisual and instance:checkLock() then
                 Map:toDestination(instance.destination, instance.dX, instance.dY)
                 if Ally.alive then
-                    Ally:resetPosition()
+                    Ally:teleportToPlayer()
                 end
                 return true
             end

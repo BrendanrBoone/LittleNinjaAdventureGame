@@ -170,8 +170,8 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["dX"] = 5,
-            ["dY"] = 5,
+            ["dX"] = 678.2,
+            ["dY"] = 304,
             ["destination"] = "level1",
             ["displayText"] = "Outside",
             ["lock"] = "null"
