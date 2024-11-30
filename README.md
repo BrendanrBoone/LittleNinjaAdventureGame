@@ -12,9 +12,9 @@ A little project to fulfill a request
 * ```escape``` -> pause
 
 ### Seal Sequences
-* ```1``` -> red release (functions as a key to a locked door)
-* ```2``` -> blue release (functions as a key to a locked door)
-* ```3``` -> green release (functions as a key to a locked door)
+* ```火``` -> red release (functions as a key to a locked door)
+* ```水``` -> blue release (functions as a key to a locked door)
+* ```風``` -> green release (functions as a key to a locked door)
 
 ## Things I fixed from the original platformer
 * sounds.lua: update()
