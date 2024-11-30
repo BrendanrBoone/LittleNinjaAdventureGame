@@ -6,6 +6,7 @@ local Dialogue = require("dialogue")
 local Categories = require("categories")
 local Player = require("player")
 local CharacterData = require("characterData")
+local Smoke = require("smoke")
 
 function Ally:load(x, y, type)
     self.x = x
@@ -55,7 +56,7 @@ function Ally:load(x, y, type)
     self.chaseDistance = 30 -- distance to chase player
     self.extremeDistance = 50 -- distance to reset position
     self.jumpDesync = { time = 0, duration = 0.1 }
-    self.teleportDesync = { time = 0, duration = 0.1 }
+    self.teleportDesync = { time = 0, duration = 1 }
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
@@ -108,8 +109,10 @@ end
 function Ally:resetPosition()
     if self.x < Player.x then
         self.physics.body:setPosition(Player.x - Player.width / 2 - 15, Player.y)
+        Smoke.new(Player.x - Player.width / 2 - 15, Player.y)
     else
         self.physics.body:setPosition(Player.x + Player.width / 2 + 15, Player.y)
+        Smoke.new(Player.x + Player.width / 2 + 15, Player.y)
     end
 end
 
@@ -229,7 +232,9 @@ function Ally:checkDistance(dt)
         self:moveWithPlayer(dt)
     elseif distance > self.extremeDistance then
         self.visible = false
-        self.teleportDesync.time = self.teleportDesync.duration
+        if self.teleportDesync.time <= 0 then
+            self.teleportDesync.time = self.teleportDesync.duration
+        end
     else
         self:applyFriction(dt)
     end
