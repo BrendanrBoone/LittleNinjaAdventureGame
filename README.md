@@ -8,3 +8,5 @@ A little project to fulfill a request
 * characterData.lua
 
 ## Things to do
+* animate dragon
+* fireball jutsu
