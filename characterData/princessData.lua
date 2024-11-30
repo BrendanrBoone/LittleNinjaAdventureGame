@@ -7,6 +7,8 @@ function PrincessData:load()
 end
 
 function PrincessData:loadAssets()
+    self.animation = {}
+
     self.animation.timer = {
         timer = 0,
         rate = 0.1
@@ -22,7 +24,7 @@ function PrincessData:loadAssets()
     end
 
     self.animation.idle = {
-        total = 6,
+        total = 4,
         current = 1,
         img = {}
     }

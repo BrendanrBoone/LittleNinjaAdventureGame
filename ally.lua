@@ -83,8 +83,6 @@ function Ally:loadAssets()
     self.animation.draw = self.animation.idle.img[1]
     self.animation.width = self.animation.draw:getWidth()
     self.animation.height = self.animation.draw:getHeight()
-
-    self:loadSealAssets()
 end
 
 function Ally:takeDamage(amount)
@@ -134,15 +132,17 @@ function Ally:tintGreen()
 end
 
 function Ally:update(dt)
-    -- print(self.x..", "..self.y)
-    self:unTint(dt)
-    self:setState()
-    self:setDirection()
-    self:animate(dt)
-    self:decreaseGraceTime(dt)
-    self:syncPhysics() -- sets character position
-    self:checkDistance(dt)
-    self:applyGravity(dt)
+    if self.alive then
+        -- print(self.x..", "..self.y)
+        self:unTint(dt)
+        self:setState()
+        self:setDirection()
+        self:animate(dt)
+        self:decreaseGraceTime(dt)
+        self:syncPhysics() -- sets character position
+        self:checkDistance(dt)
+        self:applyGravity(dt)
+    end
 end
 
 function Ally:unTint(dt)
@@ -280,6 +280,10 @@ function Ally:decreaseJumpGrace(dt)
     end
 end
 
+function Ally:keypressed(key)
+    self:jump(key)
+end
+
 function Ally:jump(key)
     if not self:doingAction() then
         if (key == "w" or key == "up" or key == "space") then
@@ -306,24 +310,26 @@ function Ally:cancelActiveActions()
 end
 
 function Ally:beginContact(a, b, collision)
-    if self.grounded == true then
-        return
-    end
-    if Helper.checkFUD(a, b, "hitbox") then
-        return
-    end
-    local __, ny = collision:getNormal()
-    if a == self.physics.fixture then
-        if ny > 0 then
-            self:land(collision)
-        elseif ny < 0 then
-            self.yVel = 0
+    if self.alive then
+        if self.grounded == true then
+            return
         end
-    elseif b == self.physics.fixture then
-        if ny < 0 then
-            self:land(collision)
-        elseif ny > 0 then
-            self.yVel = 0
+        if Helper.checkFUD(a, b, "hitbox") then
+            return
+        end
+        local __, ny = collision:getNormal()
+        if a == self.physics.fixture then
+            if ny > 0 then
+                self:land(collision)
+            elseif ny < 0 then
+                self.yVel = 0
+            end
+        elseif b == self.physics.fixture then
+            if ny < 0 then
+                self:land(collision)
+            elseif ny > 0 then
+                self.yVel = 0
+            end
         end
     end
 end
@@ -342,23 +348,27 @@ function Ally:land(collision)
 end
 
 function Ally:endContact(a, b, collision)
-    if a == self.physics.fixture or b == self.physics.fixture then
-        if self.currentGroundCollision == collision then
-            self.grounded = false
+    if self.alive then
+        if a == self.physics.fixture or b == self.physics.fixture then
+            if self.currentGroundCollision == collision then
+                self.grounded = false
+            end
         end
     end
 end
 
 function Ally:draw()
-    local scaleX = 1
-    if self.direction == self.data.oppositeDirection then
-        scaleX = -1
+    if self.alive then
+        local scaleX = 1
+        if self.direction == self.data.oppositeDirection then
+            scaleX = -1
+        end
+        local width = self.animation.width / 2
+        local height = self.animation.height / 2
+        -- draw character
+        love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
+        love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
     end
-    local width = self.animation.width / 2
-    local height = self.animation.height / 2
-    -- draw character
-    love.graphics.setColor(self.color.red, self.color.green, self.color.blue)
-    love.graphics.draw(self.animation.draw, self.x, self.y + self.offsetY, 0, scaleX, 1, width, height)
 end
 
 return Ally
