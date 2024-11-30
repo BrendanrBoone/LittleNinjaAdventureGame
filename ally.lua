@@ -47,7 +47,7 @@ function Ally:load(x, y, type)
     self.alive = true
     self.invincibility = false
     self.grounded = false
-
+    self.visible = true
     self.data = CharacterData[type]
     self.direction = self.data.direction -- the direction to adjust
     self.state = "idle"
@@ -55,6 +55,7 @@ function Ally:load(x, y, type)
     self.chaseDistance = 30 -- distance to chase player
     self.extremeDistance = 50 -- distance to reset position
     self.jumpDesync = { time = 0, duration = 0.1 }
+    self.teleportDesync = { time = 0, duration = 0.1 }
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
@@ -106,9 +107,9 @@ end
 -- hard reset position. use when ally exceeds extreme distance from player
 function Ally:resetPosition()
     if self.x < Player.x then
-        self.physics.body:setPosition(Player.x - 15, Player.y)
+        self.physics.body:setPosition(Player.x - Player.width / 2 - 15, Player.y)
     else
-        self.physics.body:setPosition(Player.x + 15, Player.y)
+        self.physics.body:setPosition(Player.x + Player.width / 2 + 15, Player.y)
     end
 end
 
@@ -223,10 +224,12 @@ end
 
 -- move to player if too far away, reset position if extremely far, do nothing if in range
 function Ally:checkDistance(dt)
-    if self.x > Player.x + self.chaseDistance or self.x < Player.x - self.chaseDistance then
+    local distance = math.abs(self.x - Player.x)
+    if distance > self.chaseDistance and distance < self.extremeDistance then
         self:moveWithPlayer(dt)
-    elseif self.x > Player.x + self.extremeDistance or self.x < Player.x - self.extremeDistance then
-        self:resetPosition()
+    elseif distance > self.extremeDistance then
+        self.visible = false
+        self.teleportDesync.time = self.teleportDesync.duration
     else
         self:applyFriction(dt)
     end
@@ -274,6 +277,7 @@ end
 function Ally:decreaseGraceTime(dt)
     self:decreaseJumpGrace(dt)
     self:decreaseJumpDesync(dt)
+    self:decreaseTeleportDesync(dt)
 end
 
 function Ally:decreaseJumpGrace(dt)
@@ -286,7 +290,17 @@ function Ally:decreaseJumpDesync(dt)
     if self.jumpDesync.time > 0 then
         self.jumpDesync.time = self.jumpDesync.time - dt
         if self.jumpDesync.time <= 0 then
-            self.yVel = self.jumpAmount
+            self:jump()
+        end
+    end
+end
+
+function Ally:decreaseTeleportDesync(dt)
+    if self.teleportDesync.time > 0 then
+        self.teleportDesync.time = self.teleportDesync.time - dt
+        if self.teleportDesync.time <= 0 then
+            self:resetPosition()
+            self.visible = true
         end
     end
 end
@@ -374,7 +388,7 @@ function Ally:endContact(a, b, collision)
 end
 
 function Ally:draw()
-    if self.alive then
+    if self.alive and self.visible then
         local scaleX = 1
         if self.direction == self.data.oppositeDirection then
             scaleX = -1
