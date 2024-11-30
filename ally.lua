@@ -54,7 +54,7 @@ function Ally:load(x, y, type)
     self.state = "idle"
     self.type = type
     self.chaseDistance = 30 -- distance to chase player
-    self.extremeDistance = 200 -- distance to reset position
+    self.extremeDistance = 100 -- distance to reset position
     self.jumpDesync = { time = 0, duration = 0.1 }
     self.teleportDesync = { time = 0, duration = 1 }
 

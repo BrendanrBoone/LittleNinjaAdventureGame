@@ -172,6 +172,9 @@ function Map.moveThroughPortal(key)
         for _, instance in ipairs(ActivePortals) do
             if instance.destinationVisual and instance:checkLock() then
                 Map:toDestination(instance.destination, instance.dX, instance.dY)
+                if Ally.alive then
+                    Ally:resetPosition()
+                end
                 return true
             end
         end
