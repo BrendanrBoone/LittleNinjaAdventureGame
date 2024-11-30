@@ -33,7 +33,6 @@ function love.load()
     Recipes:load()
 end
 
--- menu screen toggle update to pause game
 function love.update(dt)
     if not WorldPause then
         World:update(dt)
@@ -83,7 +82,7 @@ function love.keypressed(key)
         if Map.moveThroughPortal(key) then return end
         if NPC.interact(key) then return end
         Player:keypressed(key)
-        Ally.keypressed(key)
+        Ally:keypressed(key)
     end
 
     Menu:Escape(key)

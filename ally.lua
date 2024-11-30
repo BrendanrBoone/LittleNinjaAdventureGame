@@ -53,7 +53,8 @@ function Ally:load(x, y, type)
     self.state = "idle"
     self.type = type
     self.chaseDistance = 30 -- distance to chase player
-    self.extremeDistance = 100 -- distance to reset position
+    self.extremeDistance = 50 -- distance to reset position
+    self.jumpDesync = { time = 0, duration = 0.1 }
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
@@ -272,6 +273,7 @@ end
 -- called in Ally:update()
 function Ally:decreaseGraceTime(dt)
     self:decreaseJumpGrace(dt)
+    self:decreaseJumpDesync(dt)
 end
 
 function Ally:decreaseJumpGrace(dt)
@@ -280,24 +282,37 @@ function Ally:decreaseJumpGrace(dt)
     end
 end
 
-function Ally:keypressed(key)
-    if self.alive then
-        self:jump(key)
+function Ally:decreaseJumpDesync(dt)
+    if self.jumpDesync.time > 0 then
+        self.jumpDesync.time = self.jumpDesync.time - dt
+        if self.jumpDesync.time <= 0 then
+            self.yVel = self.jumpAmount
+        end
     end
 end
 
-function Ally:jump(key)
+function Ally:keypressed(key)
+    if self.alive then
+        self:jumpKeyPressed(key)
+    end
+end
+
+function Ally:jump()
+    if self.grounded or self.graceTime > 0 then
+        self.yVel = self.jumpAmount
+        --Sounds.playSound(Sounds.sfx.AllyJump)
+    elseif self.airJumpsUsed < self.totalAirJumps then
+        self.yVel = self.airJumpAmount
+        self.grounded = false
+        self.airJumpsUsed = self.airJumpsUsed + 1
+        --Sounds.playSound(Sounds.sfx.AllyJump)
+    end
+end
+
+function Ally:jumpKeyPressed(key)
     if not self:doingAction() then
         if (key == "w" or key == "up" or key == "space") then
-            if self.grounded or self.graceTime > 0 then
-                self.yVel = self.jumpAmount
-                Sounds.playSound(Sounds.sfx.AllyJump)
-            elseif self.airJumpsUsed < self.totalAirJumps then
-                self.yVel = self.airJumpAmount
-                self.grounded = false
-                self.airJumpsUsed = self.airJumpsUsed + 1
-                Sounds.playSound(Sounds.sfx.AllyJump)
-            end
+            self.jumpDesync.time = self.jumpDesync.duration
         end
     end
 end
