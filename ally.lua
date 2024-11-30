@@ -63,7 +63,7 @@ function Ally:load(x, y, type)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)       -- unaffected by world gravity
     self.physics.fixture:setCategory(Categories.ally) -- needed for collision masking
-    self.physics.fixture:setMask(Categories.player) -- don't collide with player
+    self.physics.fixture:setMask(Categories.player, Categories.interactable) -- don't collide with player or interactable
     self.physics.fixture:setUserData("ally") -- name fixture
 
     self.interactText = Anima.new(self.physics.fixture, Dialogue[self.type].message, "below")
