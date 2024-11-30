@@ -58,7 +58,7 @@ function Ally:new(type)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)       -- unaffected by world gravity
-    self.physics.fixture:setCategory(Categories.ally)
+    self.physics.fixture:setCategory(Categories.ally) -- needed for collision masking
     self.physics.fixture:setMask(Categories.player) -- don't collide with player
     self.physics.fixture:setUserData("ally") -- name fixture
 
