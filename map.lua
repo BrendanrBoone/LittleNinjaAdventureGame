@@ -23,7 +23,7 @@ function Map:load()
             prev = nil,
             background = blackBackground
         },
-        hinataRoom = {
+        dragonDen = {
             next = nil,
             prev = nil,
             background = blackBackground
@@ -33,7 +33,7 @@ function Map:load()
     World = love.physics.newWorld(0, 2000)
     World:setCallbacks(beginContact, endContact)
 
-    self:init("level1")
+    self:init("dragonDen")
 end
 
 function Map:init(destination)
@@ -138,16 +138,10 @@ end
 
 function Map:clean()
     self.level:box2d_removeLayer("solid")
-    --[[Coin.removeAll()
-    Spike.removeAll()
-    Stone.removeAll()
-    Enemy.removeAll()
-    NicoRobin.removeAll()
-    Sunny.removeAll()]]
     Portal.removeAll()
     NPC.removeAll()
-    --Trampoline.removeAll()
     BackgroundObject.removeAll()
+    PickupItem.removeAll()
 end
 
 function Map:update(dt)
@@ -164,9 +158,11 @@ function Map:spawnEntities()
         if v.type == "npc" and not (Ally.alive and Ally.type == v.properties.type) then -- may change later after implementation of database
             NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type)
         elseif v.type == "portal" then
-            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock)
+            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock, v.properties.displayText)
         elseif v.type == "pickupItem" then
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
+        elseif v.type == "backgroundObject" then
+            BackgroundObject.new(v.properties.imgName, v.properties.level, v.x, v.y, v.width, v.height)
         end
     end
 end

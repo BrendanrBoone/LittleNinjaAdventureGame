@@ -28,7 +28,7 @@ function Sounds:load()
             name = "NarutoOst2",
             source = self.bgm.NarutoOst2
         },
-        hinataRoom = {
+        dragonDen = {
             name = "NarutoOst2",
             source = self.bgm.NarutoOst2
         }

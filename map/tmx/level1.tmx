@@ -46,7 +46,8 @@
    <properties>
     <property name="dX" type="float" value="5"/>
     <property name="dY" type="float" value="5"/>
-    <property name="destination" value="hinataRoom"/>
+    <property name="destination" value="dragonDen"/>
+    <property name="displayText" value="Dragon's Den"/>
     <property name="lock" value="fire"/>
    </properties>
    <point/>

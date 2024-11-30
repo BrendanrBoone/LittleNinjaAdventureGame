@@ -5,7 +5,7 @@ ActivePortals = {}
 local Player = require("player")
 local Categories = require("categories")
 
-function Portal.new(x, y, destination, dX, dY, lock)
+function Portal.new(x, y, destination, dX, dY, lock, displayText)
     local instance = setmetatable({}, Portal)
 
     instance.x = x
@@ -14,7 +14,7 @@ function Portal.new(x, y, destination, dX, dY, lock)
     instance.dX = dX
     instance.dY = dY
     instance.lock = lock
-
+    instance.displayText = displayText
     instance.state = "idle"
     instance.idleTime = {
         current = 0,
@@ -22,7 +22,7 @@ function Portal.new(x, y, destination, dX, dY, lock)
     }
     instance.destinationVisual = false
     instance.font = love.graphics.newFont("assets/ui/bit.ttf", 15)
-    instance.displayTextLength = instance.font:getWidth(instance.destination)
+    instance.displayTextLength = instance.font:getWidth(instance.displayText)
 
     -- Animations
     instance.animation = {
@@ -122,7 +122,7 @@ end
 function Portal:displayDestination()
     love.graphics.setFont(self.font)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(self.destination, self.x - self.displayTextLength / 2, self.y - self.height / 2)
+    love.graphics.print(self.displayText, self.x - self.displayTextLength / 2, self.y - self.height / 2)
 end
 
 function Portal:draw()

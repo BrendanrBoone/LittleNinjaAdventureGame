@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 5,
-  nextobjectid = 7,
+  nextobjectid = 8,
   properties = {},
   tilesets = {
     {
@@ -163,7 +163,7 @@ return {
           name = "Portal",
           type = "portal",
           shape = "point",
-          x = 318,
+          x = 80,
           y = 304,
           width = 0,
           height = 0,
@@ -173,6 +173,7 @@ return {
             ["dX"] = 5,
             ["dY"] = 5,
             ["destination"] = "level1",
+            ["displayText"] = "Outside",
             ["lock"] = "null"
           }
         },
@@ -189,6 +190,22 @@ return {
           visible = true,
           properties = {
             ["type"] = "princess"
+          }
+        },
+        {
+          id = 7,
+          name = "Dragon",
+          type = "backgroundObject",
+          shape = "rectangle",
+          x = 208.731,
+          y = 115.937,
+          width = 351,
+          height = 351,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["imgName"] = "blackPixelDragon",
+            ["level"] = 1
           }
         }
       }

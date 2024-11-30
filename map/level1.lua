@@ -172,7 +172,8 @@ return {
           properties = {
             ["dX"] = 5,
             ["dY"] = 5,
-            ["destination"] = "hinataRoom",
+            ["destination"] = "dragonDen",
+            ["displayText"] = "Dragon's Den",
             ["lock"] = "fire"
           }
         }

@@ -5,5 +5,6 @@ A little project to fulfill a request
 * sounds.lua: update()
 * player.lua: setNewFrame()
 * nicoRobin.lua -> npc.lua: NPC.new()
+* characterData.lua
 
 ## Things to do
