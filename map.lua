@@ -8,6 +8,7 @@ local BackgroundObject = require("backgroundObject")
 local PickupItem = require("pickupItem")
 local NPC = require("npc")
 local Categories = require("categories")
+local Ally = require("ally")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
@@ -160,7 +161,7 @@ end
 
 function Map:spawnEntities()
     for _, v in ipairs(self.entityLayer.objects) do
-        if v.type == "npc" then
+        if v.type == "npc" and not (Ally.alive and Ally.type == v.properties.type) then -- may change later after implementation of database
             NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type)
         elseif v.type == "portal" then
             Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock)

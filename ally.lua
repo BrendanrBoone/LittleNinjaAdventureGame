@@ -54,7 +54,7 @@ function Ally:load(x, y, type)
     self.state = "idle"
     self.type = type
     self.chaseDistance = 30 -- distance to chase player
-    self.extremeDistance = 50 -- distance to reset position
+    self.extremeDistance = 200 -- distance to reset position
     self.jumpDesync = { time = 0, duration = 0.1 }
     self.teleportDesync = { time = 0, duration = 1 }
 
@@ -231,6 +231,7 @@ function Ally:checkDistance(dt)
     if distance > self.chaseDistance and distance < self.extremeDistance then
         self:moveWithPlayer(dt)
     elseif distance > self.extremeDistance then
+        print("extreme distance")
         self.visible = false
         if self.teleportDesync.time <= 0 then
             self.teleportDesync.time = self.teleportDesync.duration
