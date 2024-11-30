@@ -24,4 +24,4 @@ A little project to fulfill a request
 
 ## Things to do
 * animate dragon
-* fireball jutsu
+* fireball jutsu: ```火``` -> ```風``` -> ```火``` maybe could change
