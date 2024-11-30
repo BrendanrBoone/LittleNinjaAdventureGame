@@ -8,7 +8,7 @@ local Dialogue = require("dialogue")
 local GUI = require("gui")
 local Helper = require("helper")
 local Categories = require("categories")
-
+local Ally = require("ally")
 --@param type: string "princess" or "nicoRobin"
 function NPC.new(x, y, type)
     local instance = setmetatable({}, NPC)
@@ -193,6 +193,7 @@ function NPC:princessEndEffects()
         self:removeActive()
         -- end the player dialogue animation because endContact is not called on fixture removal
         Player.interactText:animationEnd()
+        Ally:new(self.x, self.y, "princess")
     end
 end
 

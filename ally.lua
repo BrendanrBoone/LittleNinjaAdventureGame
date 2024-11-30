@@ -4,14 +4,14 @@ local Helper = require("helper")
 local Anima = require("myTextAnima")
 local Dialogue = require("dialogue")
 local Categories = require("categories")
+local Player = require("player")
+local CharacterData = require("characterData")
 
-function Ally:new(type)
-    self.x = 100
-    self.y = 100
+function Ally:new(x, y, type)
+    self.x = x
+    self.y = y
     self.offsetY = -12
     self.FrankyOffsetX = 3
-    self.startX = self.x
-    self.startY = self.y
     self.width = 25
     self.height = 40
     self.xVel = 0            -- + goes right
@@ -48,9 +48,12 @@ function Ally:new(type)
     self.invincibility = false
     self.grounded = false
 
-    self.direction = "left"
+    self.data = CharacterData[type]
+    self.direction = self.data.direction -- the direction to adjust
     self.state = "idle"
     self.type = type
+    self.chaseDistance = 30 -- distance to chase player
+    self.extremeDistance = 100 -- distance to reset position
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
@@ -66,50 +69,16 @@ function Ally:new(type)
     self.defaultInteractText = tostring(self.interactText.text)
 
     self:loadAssets()
-    self:loadHitboxes()
 end
 
 function Ally:loadAssets()
-    self.animation = {
-        timer = 0,
-        rate = 0.1
-    }
+    self.animation = self.data.animation.timer
 
-    self.animation.run = {
-        total = 6,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.run.total do
-        self.animation.run.img[i] = love.graphics.newImage("assets/Naruto/run/" .. i .. ".png")
-    end
-
-    self.animation.idle = {
-        total = 6,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.idle.total do
-        self.animation.idle.img[i] = love.graphics.newImage("assets/princess/idle/" .. i .. ".png")
-    end
-
-    self.animation.airRising = {
-        total = 2,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.airRising.total do
-        self.animation.airRising.img[i] = love.graphics.newImage("assets/Naruto/airRising/" .. i .. ".png")
-    end
-
-    self.animation.airFalling = {
-        total = 2,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.airFalling.total do
-        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
-    end
+    -- Copy animation data from character data
+    self.animation.run = self.data.animation.run
+    self.animation.idle = self.data.animation.idle
+    self.animation.airRising = self.data.animation.airRising
+    self.animation.airFalling = self.data.animation.airFalling
 
     self.animation.draw = self.animation.idle.img[1]
     self.animation.width = self.animation.draw:getWidth()
@@ -122,7 +91,6 @@ function Ally:takeDamage(amount)
     if not self.invincibility then
         self:cancelActiveActions()
         self:resetAnimations()
-        self:resetHitboxes()
 
         self:tintRed()
         Sounds.playSound(Sounds.sfx.AllyHit)
@@ -136,8 +104,13 @@ function Ally:takeDamage(amount)
     end
 end
 
+-- hard reset position. use when ally exceeds extreme distance from player
 function Ally:resetPosition()
-    self.physics.body:setPosition(self.startX, self.startY)
+    if self.x < Player.x then
+        self.physics.body:setPosition(Player.x - 15, Player.y)
+    else
+        self.physics.body:setPosition(Player.x + 15, Player.y)
+    end
 end
 
 function Ally:setPosition(x, y)
@@ -163,13 +136,12 @@ end
 function Ally:update(dt)
     -- print(self.x..", "..self.y)
     self:unTint(dt)
-    self:respawn()
     self:setState()
     self:setDirection()
     self:animate(dt)
     self:decreaseGraceTime(dt)
     self:syncPhysics() -- sets character position
-    self:move(dt)
+    self:checkDistance(dt)
     self:applyGravity(dt)
 end
 
@@ -239,29 +211,40 @@ function Ally:applyGravity(dt)
     end
 end
 
--- this checks sealing, cancelActiveActions does not
 function Ally:doingAction()
-    if self.talking then
+    if self.talking
+    or self.attacking 
+    or self.emoting then
         return true
     end
     return false
 end
 
-function Ally:move(dt)
+-- move to player if too far away, reset position if extremely far, do nothing if in range
+function Ally:checkDistance(dt)
+    if self.x > Player.x + self.chaseDistance or self.x < Player.x - self.chaseDistance then
+        self:moveWithPlayer(dt)
+    elseif self.x > Player.x + self.extremeDistance or self.x < Player.x - self.extremeDistance then
+        self:resetPosition()
+    else
+        self:applyFriction(dt)
+    end
+end
+
+-- move with Player
+function Ally:moveWithPlayer(dt)
     -- sprint
-    if love.keyboard.isDown("lshift") and self.chakra.current > 0 and self.xVel ~= 0 then
+    if love.keyboard.isDown("lshift") and self.xVel ~= 0 then
         self.maxSpeed = 400
     else
         self.maxSpeed = 200
     end
 
     -- left and right movement
-    if love.keyboard.isDown("d", "right") and not self:doingAction() then
+    if self.x < Player.x and not self:doingAction() then
         self.xVel = math.min(self.xVel + self.acceleration * dt, self.maxSpeed)
-    elseif love.keyboard.isDown("a", "left") and not self:doingAction() then
+    elseif self.x > Player.x and not self:doingAction() then
         self.xVel = math.max(self.xVel - self.acceleration * dt, -self.maxSpeed)
-    else
-        self:applyFriction(dt)
     end
 end
 
@@ -309,14 +292,6 @@ function Ally:jump(key)
                 self.airJumpsUsed = self.airJumpsUsed + 1
                 Sounds.playSound(Sounds.sfx.AllyJump)
             end
-        end
-    end
-end
-
-function Ally:fastFall(key)
-    if not self.grounded and not self.sealing then
-        if (key == "s") then
-            self.yVel = -self.jumpAmount
         end
     end
 end
@@ -376,7 +351,7 @@ end
 
 function Ally:draw()
     local scaleX = 1
-    if self.direction == "right" then
+    if self.direction == self.data.oppositeDirection then
         scaleX = -1
     end
     local width = self.animation.width / 2
