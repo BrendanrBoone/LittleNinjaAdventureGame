@@ -24,6 +24,7 @@ A little project to fulfill a request
 
 ## Things to do
 * make program more easily runable
+* make walking through portals feel more natural
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
