@@ -65,12 +65,6 @@
     <property name="type" value="sleepingDragon"/>
    </properties>
   </object>
-  <object id="8" name="NicoRobin" type="npc" x="701.5" y="303.45">
-   <properties>
-    <property name="type" value="nicoRobin"/>
-   </properties>
-   <point/>
-  </object>
  </objectgroup>
  <objectgroup id="4" name="spawns"/>
 </map>

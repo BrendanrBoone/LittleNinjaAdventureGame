@@ -208,21 +208,6 @@ return {
             ["level"] = 1,
             ["type"] = "sleepingDragon"
           }
-        },
-        {
-          id = 8,
-          name = "NicoRobin",
-          type = "npc",
-          shape = "point",
-          x = 701.5,
-          y = 303.45,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["type"] = "nicoRobin"
-          }
         }
       }
     },

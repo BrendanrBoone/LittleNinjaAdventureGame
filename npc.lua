@@ -235,7 +235,7 @@ function NPC.interact(key)
             if instance.interactable then
                 Player.talking = true
                 Player.interactText:newTypingAnimation("")
-                Player:setPosition(instance.x - instance.width / 2 + 5, instance.y + Player.offsetY)
+                Player:setPosition(instance.x - instance.width / 2 + 5, instance.y - Player.offsetY)
                 Player.xVel = 0
                 Player.direction = "right"
                 Player:cancelActiveActions()

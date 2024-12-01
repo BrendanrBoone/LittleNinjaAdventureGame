@@ -19,7 +19,8 @@ function BackgroundObject.new(type, anim, level, x, y, width, height)
     instance.type = type
     if anim then
         instance.state = "idle"
-        instance.animation = { timer = 0, rate = 0.2 }
+        instance.animation = {}
+        instance.animation.clock = BackgroundObject.animAssets[type].clock
         instance.animation.draw = BackgroundObject.animAssets[type][instance.state].img[1]
     else
         instance.img = love.graphics.newImage("assets/"..type..".png")
@@ -41,6 +42,7 @@ function BackgroundObject.loadAssets()
 
     -- sleeping dragon
     BackgroundObject.animAssets.sleepingDragon = {}
+    BackgroundObject.animAssets.sleepingDragon.clock = { timer = 0, rate = 0.4 }
     BackgroundObject.animAssets.sleepingDragon.idle = {
         total = 4,
         current = 1,
@@ -64,9 +66,9 @@ end
 
 function BackgroundObject:animate(dt)
     if self.anim then
-        self.animation.timer = self.animation.timer + dt
-        if self.animation.timer > self.animation.rate then
-            self.animation.timer = 0
+        self.animation.clock.timer = self.animation.clock.timer + dt
+        if self.animation.clock.timer > self.animation.clock.rate then
+            self.animation.clock.timer = 0
             self:setNewFrame()
         end
     end
