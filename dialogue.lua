@@ -4,9 +4,9 @@ Dialogue.nicoRobin = {
     message = "Hey Franky!",
     sequence = {
         { "Player",    "sUUUpERRRRRRR!" },
-        { "NicoRobin", "You seem excited. What are you doing?" },
+        { "nicoRobin", "You seem excited. What are you doing?" },
         { "Player",    "sunny's in need of some repairs. I need to go collect wood for some patch work." },
-        { "NicoRobin", "Oh! I wish you luck" },
+        { "nicoRobin", "Oh! I wish you luck" },
         { "Player",    "OW!" },
         { nil, nil }
     }

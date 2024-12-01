@@ -28,6 +28,13 @@ function BackgroundObject.new(imgName, level, x, y, width, height)
     table.insert(ActiveBackgroundObjects, instance)
 end
 
+function BackgroundObject.loadAssets()
+    BackgroundObject.sleepingDragonAnim = {}
+    for i = 1, 4 do
+        BackgroundObject.sleepingDragonAnim[i] = love.graphics.newImage("assets/dragon/sleeping/" .. i .. ".png")
+    end
+end
+
 function BackgroundObject:update(dt)
     self:syncAssociate()
 end

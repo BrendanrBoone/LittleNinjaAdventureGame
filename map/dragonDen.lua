@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 5,
-  nextobjectid = 8,
+  nextobjectid = 9,
   properties = {},
   tilesets = {
     {
@@ -206,6 +206,21 @@ return {
           properties = {
             ["imgName"] = "blackPixelDragon",
             ["level"] = 1
+          }
+        },
+        {
+          id = 8,
+          name = "NicoRobin",
+          type = "npc",
+          shape = "point",
+          x = 701.5,
+          y = 303.45,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "nicoRobin"
           }
         }
       }

@@ -9,6 +9,7 @@ local GUI = require("gui")
 local Helper = require("helper")
 local Categories = require("categories")
 local Ally = require("ally")
+
 --@param type: string "princess" or "nicoRobin"
 function NPC.new(x, y, type)
     local instance = setmetatable({}, NPC)
@@ -22,9 +23,7 @@ function NPC.new(x, y, type)
 
     -- Animations
     instance.animation = { timer = 0, rate = 0.2 }
-    instance.animation.npc = { total = 4, current = 1, img = NPC.princessAnim } -- change this to princess later
-    instance:updateAnimationImgType() -- remove this later
-    instance.animation.draw = instance.animation.npc.img[1]
+    instance.animation.draw = NPC.animAssets[instance.type].idle.img[1]
 
     -- Physics
     instance.physics = {}
@@ -47,21 +46,54 @@ function NPC.new(x, y, type)
 end
 
 function NPC.loadAssets()
-    NPC.princessAnim = {}
+    NPC.animAssets = {}
+
+    -- princess
+    NPC.animAssets.princess = {}
+    NPC.animAssets.princess.idle = {
+        total = 4,
+        current = 1,
+        img = {}
+    }
     for i = 1, 4 do
-        NPC.princessAnim[i] = love.graphics.newImage("assets/princess/idle/" .. i .. ".png")
+        NPC.animAssets.princess.idle.img[i] = love.graphics.newImage("assets/princess/idle/" .. i .. ".png")
     end
 
-    NPC.width = NPC.princessAnim[1]:getWidth()
-    NPC.height = NPC.princessAnim[1]:getHeight()
-end
-
--- changes the animation image based on the NPC type, necessary for NPCs that have different animations
-function NPC:updateAnimationImgType()
-    if self.type == "princess" then
-        self.animation.npc.total = 4
-        self.animation.npc.img = NPC.princessAnim
+    -- nicoRobin
+    NPC.animAssets.nicoRobin = {}
+    NPC.animAssets.nicoRobin.idle = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, 6 do
+        NPC.animAssets.nicoRobin.idle.img[i] = love.graphics.newImage("assets/nicoRobin/idle/" .. i .. ".png")
     end
+
+    NPC.animAssets.nicoRobin.sittingDown = {
+        total = 4,
+        current = 1,
+        img = {}
+    }
+    for i = 1, 4 do
+        NPC.animAssets.nicoRobin.sittingDown.img[i] = love.graphics.newImage("assets/nicoRobin/sittingDown/" .. i .. ".png")
+    end
+
+    NPC.animAssets.nicoRobin.reading = {
+        total = 50,
+        current = 1,
+        img = {}
+    }
+    for i = 1, 50 do
+        local current, stillFrame, lastFrame = i, 1, 4
+        if current > lastFrame then
+            current = stillFrame
+        end
+        NPC.animAssets.nicoRobin.reading.img[i] = love.graphics.newImage("assets/nicoRobin/reading/" .. current .. ".png")
+    end
+
+    NPC.width = NPC.animAssets.princess.idle.img[1]:getWidth()
+    NPC.height = NPC.animAssets.princess.idle.img[1]:getHeight()
 end
 
 function NPC.removeAll()
@@ -85,7 +117,7 @@ function NPC:removeActive()
 end
 
 function NPC:setState(dt)
-    if self.type == "NicoRobin" then
+    if self.type == "nicoRobin" then
         self:setNicoRobinState(dt)
     end
 end
@@ -97,7 +129,7 @@ function NPC:setNicoRobinState(dt)
             self.state = "sittingDown"
         end
     elseif self.state == "sittingDown"
-    and self.animation.sittingDown.current >= self.animation.sittingDown.total then
+    and NPC.animAssets.nicoRobin.sittingDown.current >= NPC.animAssets.nicoRobin.sittingDown.total then
         self.state = "reading"
     end
 end
@@ -118,7 +150,7 @@ end
 
 -- updates the image
 function NPC:setNewFrame()
-    local anim = self.animation.npc
+    local anim = NPC.animAssets[self.type][self.state]
     if anim.current < anim.total then
         anim.current = anim.current + 1
     else
@@ -203,7 +235,7 @@ function NPC.interact(key)
             if instance.interactable then
                 Player.talking = true
                 Player.interactText:newTypingAnimation("")
-                Player:setPosition(instance.x - instance.width / 2 + 5, instance.y)
+                Player:setPosition(instance.x - instance.width / 2 + 5, instance.y + Player.offsetY)
                 Player.xVel = 0
                 Player.direction = "right"
                 Player:cancelActiveActions()
