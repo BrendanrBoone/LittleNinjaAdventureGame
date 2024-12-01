@@ -23,7 +23,7 @@ A little project to fulfill a request
 * characterData.lua
 
 ## Things to do
-* animate dragon
+* make program more easily runable
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
