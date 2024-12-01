@@ -25,6 +25,7 @@ function love.load()
     Explosion.loadAssets()
     Smoke.loadAssets()
     Aura.loadAssets()
+    BackgroundObject.loadAssets()
     NPC.loadAssets() -- rule of thumb: assets need to load before the map
     Map:load()
     GUI:load()

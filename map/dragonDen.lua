@@ -204,8 +204,9 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["imgName"] = "blackPixelDragon",
-            ["level"] = 1
+            ["anim"] = true,
+            ["level"] = 1,
+            ["type"] = "sleepingDragon"
           }
         },
         {

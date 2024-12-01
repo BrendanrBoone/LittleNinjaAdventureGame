@@ -162,7 +162,7 @@ function Map:spawnEntities()
         elseif v.type == "pickupItem" then
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
         elseif v.type == "backgroundObject" then
-            BackgroundObject.new(v.properties.imgName, v.properties.level, v.x, v.y, v.width, v.height)
+            BackgroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
         end
     end
 end

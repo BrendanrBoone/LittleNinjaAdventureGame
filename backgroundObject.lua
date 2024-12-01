@@ -8,14 +8,22 @@ local Camera = require("camera")
 
 local levelScale = 100
 
-function BackgroundObject.new(imgName, level, x, y, width, height)
+function BackgroundObject.new(type, anim, level, x, y, width, height)
     local instance = setmetatable({}, BackgroundObject)
 
     if not Player then
         Player = require("player")
     end
 
-    instance.img = love.graphics.newImage("assets/"..imgName..".png")
+    instance.anim = anim
+    instance.type = type
+    if anim then
+        instance.state = "idle"
+        instance.animation = { timer = 0, rate = 0.2 }
+        instance.animation.draw = BackgroundObject.animAssets[type][instance.state].img[1]
+    else
+        instance.img = love.graphics.newImage("assets/"..type..".png")
+    end
     instance.level = level -- what level dictates the movement in background
     instance.posX = x
     instance.posY = y
@@ -29,14 +37,23 @@ function BackgroundObject.new(imgName, level, x, y, width, height)
 end
 
 function BackgroundObject.loadAssets()
-    BackgroundObject.sleepingDragonAnim = {}
+    BackgroundObject.animAssets = {}
+
+    -- sleeping dragon
+    BackgroundObject.animAssets.sleepingDragon = {}
+    BackgroundObject.animAssets.sleepingDragon.idle = {
+        total = 4,
+        current = 1,
+        img = {}
+    }
     for i = 1, 4 do
-        BackgroundObject.sleepingDragonAnim[i] = love.graphics.newImage("assets/dragon/sleeping/" .. i .. ".png")
+        BackgroundObject.animAssets.sleepingDragon.idle.img[i] = love.graphics.newImage("assets/dragon/sleeping/" .. i .. ".png")
     end
 end
 
 function BackgroundObject:update(dt)
-    self:syncAssociate()
+    self:syncCoordinate()
+    self:animate(dt)
 end
 
 function BackgroundObject.updateAll(dt)
@@ -45,11 +62,27 @@ function BackgroundObject.updateAll(dt)
     end
 end
 
--- move background object relative to where the player is on the map
-function BackgroundObject:syncAssociate()
-    self:syncCoordinate()
+function BackgroundObject:animate(dt)
+    if self.anim then
+        self.animation.timer = self.animation.timer + dt
+        if self.animation.timer > self.animation.rate then
+            self.animation.timer = 0
+            self:setNewFrame()
+        end
+    end
 end
 
+function BackgroundObject:setNewFrame()
+    local anim = BackgroundObject.animAssets[self.type][self.state]
+    if anim.current < anim.total then
+        anim.current = anim.current + 1
+    else
+        anim.current = 1
+    end
+    self.animation.draw = anim.img[anim.current]
+end
+
+-- move background object relative to where the camera is on the map
 function BackgroundObject:syncCoordinate()
     self.bgoX = Camera.x / MapWidth * self.bgoRange
     self.x = self.posX - self.bgoRange / 2 + self.bgoX
@@ -60,7 +93,11 @@ function BackgroundObject.removeAll()
 end
 
 function BackgroundObject:draw()
-    love.graphics.draw(self.img, self.x, self.posY)
+    if self.anim then
+        love.graphics.draw(self.animation.draw, self.x, self.posY)
+    else
+        love.graphics.draw(self.img, self.x, self.posY)
+    end
     --love.graphics.rectangle("fill", self.x, self.posY, self.width, self.height)
 end
 

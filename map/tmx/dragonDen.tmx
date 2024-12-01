@@ -60,8 +60,9 @@
   </object>
   <object id="7" name="Dragon" type="backgroundObject" x="208.731" y="115.937" width="351" height="351">
    <properties>
-    <property name="imgName" value="blackPixelDragon"/>
+    <property name="anim" type="bool" value="true"/>
     <property name="level" type="int" value="1"/>
+    <property name="type" value="sleepingDragon"/>
    </properties>
   </object>
   <object id="8" name="NicoRobin" type="npc" x="701.5" y="303.45">
