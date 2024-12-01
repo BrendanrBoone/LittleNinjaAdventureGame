@@ -14,6 +14,9 @@ local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
 local redBackground = love.graphics.newImage("assets/redBackground.png")
 local blackBackground = love.graphics.newImage("assets/blackBackground.jpg")
+local desertBackground = love.graphics.newImage("assets/desertBackground.png")
+local desertBackground2 = love.graphics.newImage("assets/desertBackground2.png")
+local desertBackground3 = love.graphics.newImage("assets/desertBackground3.png")
 
 function Map:load()
     -- need to make some sort of way to make levels determinable by name
@@ -21,7 +24,7 @@ function Map:load()
         level1 = {
             next = nil,
             prev = nil,
-            background = blackBackground
+            background = desertBackground
         },
         dragonDen = {
             next = nil,
