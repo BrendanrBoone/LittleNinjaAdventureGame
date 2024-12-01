@@ -58,7 +58,7 @@
    </properties>
    <point/>
   </object>
-  <object id="7" name="Dragon" type="backgroundObject" x="208.731" y="115.937" width="351" height="351">
+  <object id="7" name="Dragon" type="backgroundObject" x="208.731" y="101.937" width="351" height="351">
    <properties>
     <property name="anim" type="bool" value="true"/>
     <property name="level" type="int" value="1"/>

@@ -198,7 +198,7 @@ return {
           type = "backgroundObject",
           shape = "rectangle",
           x = 208.731,
-          y = 115.937,
+          y = 101.937,
           width = 351,
           height = 351,
           rotation = 0,
