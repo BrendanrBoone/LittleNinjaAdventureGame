@@ -250,7 +250,7 @@ end
 -- move with Player
 function Ally:moveWithPlayer(dt)
     -- sprint
-    if love.keyboard.isDown("lshift") and self.xVel ~= 0 then
+    if love.keyboard.isDown("lshift") and Player.chakra.current > 0 and self.xVel ~= 0 then
         self.maxSpeed = 400
     else
         self.maxSpeed = 200
