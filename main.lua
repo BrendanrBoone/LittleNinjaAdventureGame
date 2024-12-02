@@ -16,6 +16,7 @@ local PickupItem = require("pickupItem")
 local Recipes = require("recipes")
 local NPC = require("npc")
 local Ally = require("ally")
+local ScreenTransition = require("screenTransition")
 
 WorldPause = false
 
@@ -32,6 +33,7 @@ function love.load()
     Player:load()
     Menu:load()
     Recipes:load()
+    ScreenTransition:load()
 end
 
 function love.update(dt)
@@ -41,8 +43,9 @@ function love.update(dt)
         Camera:setPosition(Player.x, Player.y)
         Player:update(dt)
         Ally:update(dt)
-        PickupItem.updateAll()
+        ScreenTransition:update(dt)
         GUI:update(dt)
+        PickupItem.updateAll()
         Portal.updateAll(dt)
         Explosion.updateAll(dt)
         Smoke.updateAll(dt)
@@ -72,6 +75,7 @@ function love.draw()
     Smoke.drawAll()
     Hitbox.drawAll()
     Anima.drawAll()
+    ScreenTransition:draw()
     Camera:clear() -- these
 
     GUI:draw()

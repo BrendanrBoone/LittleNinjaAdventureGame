@@ -9,6 +9,7 @@ local PickupItem = require("pickupItem")
 local NPC = require("npc")
 local Categories = require("categories")
 local Ally = require("ally")
+local ScreenTransition = require("screenTransition")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")

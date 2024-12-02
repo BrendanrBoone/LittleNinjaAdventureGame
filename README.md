@@ -23,8 +23,10 @@ A little project to fulfill a request
 * characterData.lua
 
 ## Things to do
-* make program more easily runable
-* make walking through portals feel more natural
+* make program more easily runable for increase accessability
+* make walking through portals feel more natural -- add a transition
+* castle guard npc for lore to save princess
+* storyboard script to control where the npcs show up in the game
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
