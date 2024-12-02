@@ -47,17 +47,14 @@ function ScreenTransition:update(dt)
 end
 
 function ScreenTransition:setPosition()
-    self.x = Camera.x
-    self.y = Camera.y
+    if self.state ~= "null" then
+        self.x = Camera.x
+        self.y = Camera.y
+    end
 end
 
 function ScreenTransition:animate(dt)
     if self.state ~= "null" then
-        --[[self.animation.timer = self.animation.timer + dt
-        if self.animation.timer > self.animation.rate then
-            self.animation.timer = 0
-            self:setNewFrame()
-        end]]
         self:setNewFrame()
     end
 end
@@ -93,10 +90,9 @@ end
 
 function ScreenTransition:draw()
     if self.state ~= "null" then
-        print("drawing")
         love.graphics.setColor(0, 0, 0)
         love.graphics.stencil(function()
-            love.graphics.circle("fill", self.x + self.screenWidth/2, self.y + self.screenHeight/2, self.curCircleSize)
+            love.graphics.circle("fill", self.x + self.xCenter/2, self.y + self.yCenter/2, self.curCircleSize)
         end, "replace", 1)
         love.graphics.setStencilTest("equal", 0)
         love.graphics.rectangle("fill", self.x, self.y, self.screenWidth, self.screenHeight)
