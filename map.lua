@@ -144,7 +144,7 @@ end
 
 function Map.loadPlayer(x, y)
     Player:setPosition(x, y)
-    Hitbox.loadAllTargets(ActiveEnemys)
+    --Hitbox.loadAllTargets(ActiveEnemys)
 end
 
 function Map:clean()
@@ -165,7 +165,7 @@ function Map:levelTransitionDesync()
         Map:toDestination(
             self.transitionDesync.destination,
             self.transitionDesync.dX,
-            self.transitionDesync.dY
+            self.transitionDesync.dY - Player.offsetY
         )
         if Ally.alive then
             Ally:teleportToPlayer()

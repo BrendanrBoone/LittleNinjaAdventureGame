@@ -18,7 +18,7 @@ end
 
 function ScreenTransition:loadAssets()
     self.animAssets = {}
-    local maxCircleSize = self.screenWidth
+    local maxCircleSize = self.screenHeight
 
     --open
     self.animAssets.open = {}
