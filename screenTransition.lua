@@ -24,8 +24,8 @@ function ScreenTransition:loadAssets()
     self.animAssets.open = {}
     self.animAssets.open.current = 1
     self.animAssets.open.circleSize = {}
-    for i=1, maxCircleSize do
-        self.animAssets.open.circleSize[i] = i - 1
+    for i=1, maxCircleSize/5 do
+        self.animAssets.open.circleSize[i] = i * 5
     end
     self.animAssets.open.total = #self.animAssets.open.circleSize
 
@@ -33,8 +33,8 @@ function ScreenTransition:loadAssets()
     self.animAssets.close = {}
     self.animAssets.close.current = 1
     self.animAssets.close.circleSize = {}
-    for i=1, maxCircleSize do
-        self.animAssets.close.circleSize[i] = maxCircleSize - i
+    for i=1, maxCircleSize/5 do
+        self.animAssets.close.circleSize[i] = maxCircleSize - i * 5
     end
     self.animAssets.close.total = #self.animAssets.close.circleSize
 
@@ -53,11 +53,12 @@ end
 
 function ScreenTransition:animate(dt)
     if self.state ~= "null" then
-        self.animation.timer = self.animation.timer + dt
+        --[[self.animation.timer = self.animation.timer + dt
         if self.animation.timer > self.animation.rate then
             self.animation.timer = 0
             self:setNewFrame()
-        end
+        end]]
+        self:setNewFrame()
     end
 end
 
@@ -93,13 +94,13 @@ end
 function ScreenTransition:draw()
     if self.state ~= "null" then
         print("drawing")
-        --[[love.graphics.stencil(function()
-            love.graphics.circle("fill", self.x + self.squareSize, self.y + self.squareSize, self.curCircleSize)
-        end, "replace", 1)]]
-        --love.graphics.setStencilTest("greater", 0)
+        love.graphics.stencil(function()
+            love.graphics.circle("fill", self.x + self.screenWidth/2, self.y + self.screenHeight/2, self.curCircleSize)
+        end, "replace", 1)
+        love.graphics.setStencilTest("greater", 0)
         love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("fill", self.x, self.y, self.screenWidth, self.screenHeight)
-        --love.graphics.setStencilTest()
+        love.graphics.setStencilTest()
         love.graphics.setColor(1, 1, 1)
     end
 end
