@@ -34,6 +34,13 @@ function Map:load()
         }
     }
 
+    -- store transition variables so it can be desynced
+    self.transitionDesync = {
+        destination = nil,
+        dX = nil,
+        dY = nil
+    }
+
     World = love.physics.newWorld(0, 2000)
     World:setCallbacks(beginContact, endContact)
 
@@ -149,7 +156,25 @@ function Map:clean()
 end
 
 function Map:update(dt)
-    -- conditions to swap level
+    self:swapLevel()
+    self:levelTransitionDesync()
+end
+
+function Map:levelTransitionDesync()
+    if ScreenTransition.state == "open" then
+        Map:toDestination(
+            self.transitionDesync.destination,
+            self.transitionDesync.dX,
+            self.transitionDesync.dY
+        )
+        if Ally.alive then
+            Ally:teleportToPlayer()
+        end
+    end
+end
+
+-- conditions to swap level
+function Map:swapLevel()
     if Player.x > MapWidth - 16 then
         self:next()
     elseif Player.x < 0 + 16 then
@@ -171,14 +196,15 @@ function Map:spawnEntities()
     end
 end
 
-function Map.moveThroughPortal(key)
+function Map:moveThroughPortal(key)
     if key == "e" then
         for _, instance in ipairs(ActivePortals) do
             if instance.destinationVisual and instance:checkLock() then
-                Map:toDestination(instance.destination, instance.dX, instance.dY)
-                if Ally.alive then
-                    Ally:teleportToPlayer()
-                end
+                --transition Desync
+                ScreenTransition:close()
+                self.transitionDesync.destination = instance.destination
+                self.transitionDesync.dX = instance.dX
+                self.transitionDesync.dY = instance.dY
                 return true
             end
         end

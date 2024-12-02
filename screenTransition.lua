@@ -1,5 +1,7 @@
 local ScreenTransition = {}
 
+local Camera = require("camera")
+
 function ScreenTransition:load()
     self.screenWidth = love.graphics.getWidth()
     self.screenHeight = love.graphics.getHeight()
@@ -7,17 +9,16 @@ function ScreenTransition:load()
     self.state = "null" -- 3 states: "null", "open", "close"
     self.animation = { timer = 0, rate = 0.1 }
     
-    -- Define the square size as a fraction of the screen size
-    self.squareSize = math.max(self.screenWidth, self.screenHeight) * 0.5 -- 50% of the smaller dimension
-    self.x = (self.screenWidth - self.squareSize) / 2 -- Centering the square
-    self.y = (self.screenHeight - self.squareSize) / 2 -- Centering the square
+    self.xCenter = self.screenWidth - self.screenWidth / 2 -- Centering the square
+    self.yCenter = self.screenHeight - self.screenHeight / 2 -- Centering the square
+    self.x, self.y = 0, 0
 
     self:loadAssets()
 end
 
 function ScreenTransition:loadAssets()
     self.animAssets = {}
-    local maxCircleSize = self.squareSize
+    local maxCircleSize = self.screenWidth
 
     --open
     self.animAssets.open = {}
@@ -41,7 +42,13 @@ function ScreenTransition:loadAssets()
 end
 
 function ScreenTransition:update(dt)
+    self:setPosition()
     self:animate(dt)
+end
+
+function ScreenTransition:setPosition()
+    self.x = Camera.x
+    self.y = Camera.y
 end
 
 function ScreenTransition:animate(dt)
@@ -58,14 +65,23 @@ function ScreenTransition:setNewFrame()
     local anim = ScreenTransition.animAssets[self.state]
     if anim.current < anim.total then
         anim.current = anim.current + 1
-    elseif self.state == "open" then
-        anim.current = 1
-        self.animAssets.close.current = 1
-        self.state = "null"
+    else
+        self:transitionState(anim)
     end
-    self.animation.curCircleSize = anim.circleSize[anim.current]
+    self.curCircleSize = anim.circleSize[anim.current]
 end
 
+function ScreenTransition:transitionState(anim)
+    if self.state == "close" then
+        anim.current = 1
+        self.state = "open"
+    elseif self.state == "open" then
+        anim.current = 1
+        self.state = "null"
+    end
+end
+
+-- start screen transition with close()
 function ScreenTransition:close()
     self.state = "close"
 end
@@ -76,13 +92,14 @@ end
 
 function ScreenTransition:draw()
     if self.state ~= "null" then
-        love.graphics.stencil(function()
-            love.graphics.circle("fill", self.x + self.squareSize, self.y + self.squareSize, self.animation.curCircleSize)
-        end, "replace", 1)
-        love.graphics.setStencilTest("greater", 0)
+        print("drawing")
+        --[[love.graphics.stencil(function()
+            love.graphics.circle("fill", self.x + self.squareSize, self.y + self.squareSize, self.curCircleSize)
+        end, "replace", 1)]]
+        --love.graphics.setStencilTest("greater", 0)
         love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("fill", self.x + self.squareSize, self.y + self.squareSize, self.squareSize, self.squareSize)
-        love.grphics.setStencilTest()
+        love.graphics.rectangle("fill", self.x, self.y, self.screenWidth, self.screenHeight)
+        --love.graphics.setStencilTest()
         love.graphics.setColor(1, 1, 1)
     end
 end
