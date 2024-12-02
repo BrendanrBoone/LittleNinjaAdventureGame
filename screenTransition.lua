@@ -94,11 +94,11 @@ end
 function ScreenTransition:draw()
     if self.state ~= "null" then
         print("drawing")
+        love.graphics.setColor(0, 0, 0)
         love.graphics.stencil(function()
             love.graphics.circle("fill", self.x + self.screenWidth/2, self.y + self.screenHeight/2, self.curCircleSize)
         end, "replace", 1)
-        love.graphics.setStencilTest("greater", 0)
-        love.graphics.setColor(0, 0, 0)
+        love.graphics.setStencilTest("equal", 0)
         love.graphics.rectangle("fill", self.x, self.y, self.screenWidth, self.screenHeight)
         love.graphics.setStencilTest()
         love.graphics.setColor(1, 1, 1)
