@@ -1,6 +1,6 @@
 local ScreenTransition = {}
 
-local Camera = require("camera")
+local Player = require("player")
 
 function ScreenTransition:load()
     self.screenWidth = love.graphics.getWidth()
@@ -42,15 +42,7 @@ function ScreenTransition:loadAssets()
 end
 
 function ScreenTransition:update(dt)
-    self:setPosition()
     self:animate(dt)
-end
-
-function ScreenTransition:setPosition()
-    if self.state ~= "null" then
-        self.x = Camera.x
-        self.y = Camera.y
-    end
 end
 
 function ScreenTransition:animate(dt)
@@ -76,12 +68,14 @@ function ScreenTransition:transitionState(anim)
     elseif self.state == "open" then
         anim.current = 1
         self.state = "null"
+        Player.actionable = true
     end
 end
 
 -- start screen transition with close()
 function ScreenTransition:close()
     self.state = "close"
+    Player.actionable = false
 end
 
 function ScreenTransition:open()
@@ -92,7 +86,7 @@ function ScreenTransition:draw()
     if self.state ~= "null" then
         love.graphics.setColor(0, 0, 0)
         love.graphics.stencil(function()
-            love.graphics.circle("fill", self.x + self.xCenter/2, self.y + self.yCenter/2, self.curCircleSize)
+            love.graphics.circle("fill", self.x + self.xCenter, self.y + self.yCenter, self.curCircleSize)
         end, "replace", 1)
         love.graphics.setStencilTest("equal", 0)
         love.graphics.rectangle("fill", self.x, self.y, self.screenWidth, self.screenHeight)

@@ -75,11 +75,11 @@ function love.draw()
     Smoke.drawAll()
     Hitbox.drawAll()
     Anima.drawAll()
-    ScreenTransition:draw()
     Camera:clear() -- these
 
     GUI:draw()
     Menu:draw()
+    ScreenTransition:draw()
 end
 
 function love.keypressed(key)

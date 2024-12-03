@@ -98,6 +98,7 @@ function Player:load()
     self.alive = true
     self.invincibility = false
     self.grounded = false
+    self.actionable = true
 
     self.direction = "right"
     self.state = "idle"
@@ -316,9 +317,15 @@ function Player:update(dt)
     self:animate(dt)
     self:decreaseGraceTime(dt)
     self:syncPhysics() -- sets character position
-    self:move(dt)
-    self:chargeChakra(dt)
+    self:action(dt)
     self:applyGravity(dt)
+end
+
+function Player:action(dt)
+    if self.actionable then
+        self:move(dt)
+        self:chargeChakra(dt)
+    end
 end
 
 function Player:chargeChakra(dt)
@@ -566,7 +573,6 @@ function Player:checkRelease()
     return false
 end
 
--- called in main.keypressed()
 function Player:dashForward(key)
     if not self:doingAction() and key == "lshift" and self.dash.cost <= self.chakra.current then
         self.dash.inputPressed = self.dash.inputPressed + 1
@@ -744,12 +750,14 @@ function Player:cancelActiveActions()
 end
 
 function Player:keypressed(key)
-    self:jump(key)
-    self:fastFall(key)
-    self:fireSeal(key)
-    self:waterSeal(key)
-    self:windSeal(key)
-    self:activateJutsu(key)
+    if self.actionable then
+        self:jump(key)
+        self:fastFall(key)
+        self:fireSeal(key)
+        self:waterSeal(key)
+        self:windSeal(key)
+        self:activateJutsu(key)
+    end
 end
 
 -- start some sort of animation and clear sequence after

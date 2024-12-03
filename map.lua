@@ -44,7 +44,7 @@ function Map:load()
     World = love.physics.newWorld(0, 2000)
     World:setCallbacks(beginContact, endContact)
 
-    self:init("level1")
+    self:init("dragonDen")
 end
 
 function Map:init(destination)
