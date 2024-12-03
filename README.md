@@ -24,7 +24,7 @@ A little project to fulfill a request
 
 ## Things to do
 * make program more easily runable for increase accessability
-* make walking through portals feel more natural -- add a transition
+* the transition blinks: fix that
 * castle guard npc for lore to save princess
 * storyboard script to control where the npcs show up in the game
 * fireball jutsu: ```火``` -> ```火```

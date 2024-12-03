@@ -63,11 +63,11 @@ end
 
 function ScreenTransition:transitionState(anim)
     if self.state == "close" then
-        anim.current = 1
         self.state = "open"
-    elseif self.state == "open" then
         anim.current = 1
+    elseif self.state == "open" then
         self.state = "null"
+        anim.current = 1
         Player.actionable = true
     end
 end
