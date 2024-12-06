@@ -20,6 +20,14 @@ function ScreenTransition:loadAssets()
     self.animAssets = {}
     local maxCircleSize = self.screenHeight
 
+    --black
+    self.animAssets.black = {}
+    self.animAssets.black.current = 1
+    self.animAssets.black.total = 2
+    self.animAssets.black.circleSize = {}
+    self.animAssets.black.circleSize[1] = 0
+    self.animAssets.black.circleSize[2] = 0
+
     --open
     self.animAssets.open = {}
     self.animAssets.open.current = 1
@@ -63,7 +71,7 @@ end
 
 function ScreenTransition:transitionState(anim)
     if self.state == "close" then
-        self.state = "open"
+        self.state = "black"
         anim.current = 1
     elseif self.state == "open" then
         self.state = "null"

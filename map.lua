@@ -122,6 +122,9 @@ function Map:toDestination(destination, dX, dY)
     self:init(destination)
     print(dX .. " " .. dY)
     Map.loadPlayer(dX, dY) -- go to portal coordinates
+    if ScreenTransition.state == "black" then
+        ScreenTransition:open()
+    end
 end
 
 function Map:next()
@@ -161,7 +164,7 @@ function Map:update(dt)
 end
 
 function Map:levelTransitionDesync()
-    if ScreenTransition.state == "open" then
+    if ScreenTransition.state == "black" then
         Map:toDestination(
             self.transitionDesync.destination,
             self.transitionDesync.dX,
