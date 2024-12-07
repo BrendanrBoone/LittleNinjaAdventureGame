@@ -26,6 +26,7 @@ A little project to fulfill a request
 * make program more easily runable for increase accessability
 * castle guard npc for lore to save princess
 * storyboard script to control where the npcs show up in the game
+    * if completed this update that type shit
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
