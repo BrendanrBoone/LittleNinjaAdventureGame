@@ -19,7 +19,9 @@ function NPC.new(x, y, type)
     instance.type = type
 
     instance.state = "idle"
-    instance.idleTime = { current = 0, duration = 3} -- robin
+    instance.idleTime = { current = 0, duration = 3} -- start idle
+    instance.interactable = false
+    instance.interacted = false
 
     -- Animations
     instance.animation = { timer = 0, rate = 0.2 }
@@ -92,6 +94,26 @@ function NPC.loadAssets()
         NPC.animAssets.nicoRobin.reading.img[i] = love.graphics.newImage("assets/nicoRobin/reading/" .. current .. ".png")
     end
 
+    -- soldier
+    NPC.animAssets.soldier = {}
+    NPC.animAssets.soldier.idle = {
+        total = 4,
+        current = 1,
+        img = {}
+    }
+    for i = 1, 4 do
+        NPC.animAssets.soldier.idle.img[i] = love.graphics.newImage("assets/soldier/idle/" .. i .. ".png")
+    end
+
+    NPC.animAssets.soldier.wave = {
+        total = 4,
+        current = 1,
+        img = {}
+    }
+    for i = 1, 4 do
+        NPC.animAssets.soldier.wave.img[i] = love.graphics.newImage("assets/soldier/wave/" .. i .. ".png")
+    end
+
     NPC.width = NPC.animAssets.princess.idle.img[1]:getWidth()
     NPC.height = NPC.animAssets.princess.idle.img[1]:getHeight()
 end
@@ -119,6 +141,8 @@ end
 function NPC:setState(dt)
     if self.type == "nicoRobin" then
         self:setNicoRobinState(dt)
+    elseif self.type == "soldier" then
+        self:setSoldierState()
     end
 end
 
@@ -131,6 +155,13 @@ function NPC:setNicoRobinState(dt)
     elseif self.state == "sittingDown"
     and NPC.animAssets.nicoRobin.sittingDown.current >= NPC.animAssets.nicoRobin.sittingDown.total then
         self.state = "reading"
+    end
+end
+
+function NPC:setSoldierState()
+    if self.interactable and not self.interacted then
+        self.interacted = true
+        self.state = "wave"
     end
 end
 
@@ -209,6 +240,16 @@ function NPC:updateDialogue()
     end
 end
 
+function NPC:dialogueStartEffects()
+    self:soldierStartEffects()
+end
+
+function NPC:soldierStartEffects()
+    if self.type == "soldier" then
+        self.state = "idle"
+    end
+end
+
 function NPC:dialogueEndEffects()
     self:nicoRobinEndEffects()
     self:princessEndEffects()
@@ -233,6 +274,7 @@ function NPC.interact(key)
     if not Player:doingAction() and key == "e" then
         for _, instance in ipairs(ActiveNPCs) do
             if instance.interactable then
+                instance:dialogueStartEffects()
                 Player.talking = true
                 Player.interactText:newTypingAnimation("")
                 Player:setPosition(instance.x - instance.width / 2 + 5, instance.y - Player.offsetY)

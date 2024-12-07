@@ -21,4 +21,18 @@ Dialogue.princess = {
     }
 }
 
+Dialogue.soldier = {
+    message = "Hey",
+    sequence = {
+        { "soldier", "The princess is in danger!" },
+        { "Player",   "What happened?" },
+        { "soldier", "She was kidnapped by a dragon!" },
+        { "soldier", "I don't want to die. Please..." },
+        { "soldier", "save the princess." },
+        { "soldier", "The dragon went into the cave ahead." },
+        { "Player",   "I'm on it." },
+        { nil, nil }
+    }
+}
+
 return Dialogue

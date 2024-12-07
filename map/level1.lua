@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 15,
+  nextobjectid = 17,
   properties = {},
   tilesets = {
     {
@@ -281,6 +281,21 @@ return {
             ["anim"] = false,
             ["level"] = 3,
             ["type"] = "desertTexture"
+          }
+        },
+        {
+          id = 16,
+          name = "Soldier",
+          type = "npc",
+          shape = "point",
+          x = 432.333,
+          y = 303.45,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "soldier"
           }
         }
       }
