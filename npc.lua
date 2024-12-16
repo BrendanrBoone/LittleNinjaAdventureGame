@@ -19,7 +19,7 @@ function NPC.new(x, y, type)
     instance.type = type
 
     instance.state = "idle"
-    instance.idleTime = { current = 0, duration = 3} -- start idle
+    instance.idleTime = { current = 0, duration = 3 } -- start idle
     instance.interactable = false
     instance.interacted = false
 
@@ -78,7 +78,8 @@ function NPC.loadAssets()
         img = {}
     }
     for i = 1, 4 do
-        NPC.animAssets.nicoRobin.sittingDown.img[i] = love.graphics.newImage("assets/nicoRobin/sittingDown/" .. i .. ".png")
+        NPC.animAssets.nicoRobin.sittingDown.img[i] = love.graphics.newImage("assets/nicoRobin/sittingDown/" ..
+        i .. ".png")
     end
 
     NPC.animAssets.nicoRobin.reading = {
@@ -153,7 +154,7 @@ function NPC:setNicoRobinState(dt)
             self.state = "sittingDown"
         end
     elseif self.state == "sittingDown"
-    and NPC.animAssets.nicoRobin.sittingDown.current >= NPC.animAssets.nicoRobin.sittingDown.total then
+        and NPC.animAssets.nicoRobin.sittingDown.current >= NPC.animAssets.nicoRobin.sittingDown.total then
         self.state = "reading"
     end
 end
@@ -221,22 +222,28 @@ function NPC:updateDialogue()
     local npcAnima = self.interactText
     playerAnima:modifyAnimationRate(0.1)
 
-    if self.dialogue[self.dialogueIndex][1] == self.type then
-        npcAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
-    elseif self.dialogue[self.dialogueIndex][1] == "Player" then
-        playerAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
-    end
-    print(self.dialogue[self.dialogueIndex][2])
-    self.dialogueIndex = self.dialogueIndex + 1
+    self:playDialogue(playerAnima, npcAnima)
+end
 
-    if self.dialogueIndex > #self.dialogue then
-        self.dialogueIndex = 1
-        playerAnima:modifyAnimationRate(0)
-        playerAnima:newTypingAnimation(Player.defaultInteractText)
-        npcAnima:newTypingAnimation(self.defaultNPCInteractText)
-        Player.talking = false
-        self.dialogueGrace.time = 0
-        self:dialogueEndEffects()
+function NPC:playDialogue(playerAnima, npcAnima)
+    if self.dialogueIndex <= #self.dialogue then
+        print(self.dialogue[self.dialogueIndex][2])
+        if self.dialogue[self.dialogueIndex][1] == self.type then
+            npcAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
+        elseif self.dialogue[self.dialogueIndex][1] == "Player" then
+            playerAnima:newTypingAnimation(self.dialogue[self.dialogueIndex][2])
+        end
+        self.dialogueIndex = self.dialogueIndex + 1
+
+        if self.dialogueIndex > #self.dialogue then
+            self.dialogueIndex = 1
+            playerAnima:modifyAnimationRate(0)
+            playerAnima:newTypingAnimation(Player.defaultInteractText)
+            npcAnima:newTypingAnimation(self.defaultNPCInteractText)
+            Player.talking = false
+            self.dialogueGrace.time = 0
+            self:dialogueEndEffects()
+        end
     end
 end
 
@@ -253,6 +260,7 @@ end
 function NPC:dialogueEndEffects()
     self:nicoRobinEndEffects()
     self:princessEndEffects()
+    self:soldierEndEffects()
 end
 
 function NPC:nicoRobinEndEffects()
@@ -270,6 +278,20 @@ function NPC:princessEndEffects()
     end
 end
 
+function NPC:soldierEndEffects()
+    if self.type == "soldier" then
+        GUI:goNextLevelIndicatorAnimationStart()
+    end
+end
+
+function NPC.keypressed(key)
+    if NPC.interact(key)
+        or NPC.skipDialogue(key) then
+        return true
+    end
+    return false
+end
+
 function NPC.interact(key)
     if not Player:doingAction() and key == "e" then
         for _, instance in ipairs(ActiveNPCs) do
@@ -281,6 +303,18 @@ function NPC.interact(key)
                 Player.xVel = 0
                 Player.direction = "right"
                 Player:cancelActiveActions()
+                return true
+            end
+        end
+    end
+end
+
+function NPC.skipDialogue(key)
+    if key == "e" and Player.talking then
+        for _, instance in ipairs(ActiveNPCs) do
+            if instance.interactable then
+                print("skipped")
+                instance:playDialogue(Player.interactText, instance.interactText)
                 return true
             end
         end

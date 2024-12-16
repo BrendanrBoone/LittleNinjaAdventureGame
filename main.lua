@@ -85,7 +85,7 @@ end
 function love.keypressed(key)
     if not WorldPause then
         if Map:moveThroughPortal(key) then return end
-        if NPC.interact(key) then return end
+        if NPC.keypressed(key) then return end
         Player:keypressed(key)
         Ally:keypressed(key)
     end

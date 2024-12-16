@@ -27,7 +27,7 @@ Dialogue.soldier = {
         { "soldier", "The princess is in danger!" },
         { "Player",   "What happened?" },
         { "soldier", "She was kidnapped by a dragon!" },
-        { "soldier", "I don't want to die. Please..." },
+        { "soldier", "But the entrance is protected by some fire. Please..." },
         { "soldier", "save the princess." },
         { "soldier", "The dragon went into the cave ahead." },
         { "Player",   "I'm on it." },

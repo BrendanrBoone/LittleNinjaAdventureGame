@@ -24,7 +24,6 @@ A little project to fulfill a request
 
 ## Things to do
 * make program more easily runable for increase accessability
-* skippable dialogue
 * castle guard npc for lore to save princess
 * storyboard script to control where the npcs show up in the game
     * if completed this update that type shit
