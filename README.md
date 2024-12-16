@@ -25,8 +25,7 @@ A little project to fulfill a request
 ## Things to do
 * make program more easily runable for increase accessability
 * castle guard npc for lore to save princess
-* storyboard script to control where the npcs show up in the game
-    * if completed this update that type shit
+* inventory mechanic for story progression and holding items, also menu to look at inventory
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
