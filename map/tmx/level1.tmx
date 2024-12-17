@@ -98,6 +98,8 @@
   </object>
   <object id="16" name="Soldier" type="npc" x="432.333" y="303.45">
    <properties>
+    <property name="prerequisiteStoryItem" value=""/>
+    <property name="storyItemName" value="soldierBadge"/>
     <property name="type" value="soldier"/>
    </properties>
    <point/>

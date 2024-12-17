@@ -9,14 +9,16 @@ local GUI = require("gui")
 local Helper = require("helper")
 local Categories = require("categories")
 local Ally = require("ally")
+local Inventory = require("inventory")
 
 --@param type: string "princess" or "nicoRobin"
-function NPC.new(x, y, type)
+function NPC.new(x, y, type, itemName)
     local instance = setmetatable({}, NPC)
 
     instance.x = x
     instance.y = y
     instance.type = type
+    instance.itemName = itemName -- this is so player knows if they have interacted with npc before beyond current maps
 
     instance.state = "idle"
     instance.idleTime = { current = 0, duration = 3 } -- start idle
@@ -275,12 +277,14 @@ function NPC:princessEndEffects()
         -- end the player dialogue animation because endContact is not called on fixture removal
         Player.interactText:animationEnd()
         Ally:load(self.x, self.y, "princess")
+        Inventory:add("storyItem", self.itemName)
     end
 end
 
 function NPC:soldierEndEffects()
     if self.type == "soldier" then
         GUI:goNextLevelIndicatorAnimationStart()
+        Inventory:add("storyItem", self.itemName)
     end
 end
 

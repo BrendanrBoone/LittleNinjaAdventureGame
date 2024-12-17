@@ -10,6 +10,7 @@ local NPC = require("npc")
 local Categories = require("categories")
 local Ally = require("ally")
 local ScreenTransition = require("screenTransition")
+local Inventory = require("inventory")
 
 local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
 local skyBlueBackground = love.graphics.newImage("assets/background.png")
@@ -49,7 +50,7 @@ end
 
 function Map:init(destination)
     self.currentLevel = destination
-    self.level = STI("map/" .. destination .. ".lua", {"box2d"})
+    self.level = STI("map/" .. destination .. ".lua", { "box2d" })
     self.level:box2d_init(World)
 
     self.solidLayer = self.level.layers.solid
@@ -187,10 +188,14 @@ end
 
 function Map:spawnEntities()
     for _, v in ipairs(self.entityLayer.objects) do
-        if v.type == "npc" and not (Ally.alive and Ally.type == v.properties.type) then -- may change later after implementation of database
-            NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type)
+        -- NPCs can only spawn when you don't have their storyItem and have all prerequisite story items
+        if v.type == "npc" and
+            not Inventory:check("storyItem", v.properties.storyItemName) and
+            Inventory:check("storyItem", v.properties.prerequisiteStoryItem) then
+            NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type, v.properties.storyItemName)
         elseif v.type == "portal" then
-            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY, v.properties.lock, v.properties.displayText)
+            Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY,
+            v.properties.lock, v.properties.displayText)
         elseif v.type == "pickupItem" then
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
         elseif v.type == "backgroundObject" then

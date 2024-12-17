@@ -9,6 +9,7 @@ local Helper = require("helper")
 local Anima = require("myTextAnima")
 local Recipes = require("recipes")
 local Categories = require("categories")
+local Inventory = require("inventory")
 
 function Player:load()
     self.x = 100
@@ -843,6 +844,7 @@ end
 
 function Player:activateJutsu(key)
     if (not self:doingAction() or self.sealing) and key == "r" then
+        Inventory:printStoryItems()
         local recipe = Recipes:checkSequence(self.sealSequence.sequence)
         if recipe then -- inventory mechanic for jutsus added here later
             self:resetSeals()

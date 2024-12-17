@@ -189,6 +189,8 @@ return {
           rotation = 0,
           visible = true,
           properties = {
+            ["prerequisiteStoryItem"] = "",
+            ["storyItemName"] = "princessPass",
             ["type"] = "princess"
           }
         },

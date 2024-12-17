@@ -17,10 +17,12 @@ local Recipes = require("recipes")
 local NPC = require("npc")
 local Ally = require("ally")
 local ScreenTransition = require("screenTransition")
+local Inventory = require("inventory")
 
 WorldPause = false
 
 function love.load()
+    Inventory:load()
     Sounds:load()
     Portal.loadAssets()
     Explosion.loadAssets()
