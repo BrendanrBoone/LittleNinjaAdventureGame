@@ -39,6 +39,20 @@ function Menu:load()
     self.inventoryBox.storyItemsTab.y = self.inventoryBox.y
     self.inventoryBox.storyItemsTab.width = self.inventoryBox.width / 3
     self.inventoryBox.storyItemsTab.height = self.inventoryBox.height / 6
+
+    self.inventoryBox.itemsTab = {}
+    self.inventoryBox.itemsTab.color = Colors.yellowDim
+    self.inventoryBox.itemsTab.x = self.inventoryBox.x + self.inventoryBox.storyItemsTab.width
+    self.inventoryBox.itemsTab.y = self.inventoryBox.y
+    self.inventoryBox.itemsTab.width = self.inventoryBox.width / 3
+    self.inventoryBox.itemsTab.height = self.inventoryBox.height / 6
+
+    self.inventoryBox.scrollsTab = {}
+    self.inventoryBox.scrollsTab.color = Colors.orangeDim
+    self.inventoryBox.scrollsTab.x = self.inventoryBox.x + self.inventoryBox.storyItemsTab.width * 2
+    self.inventoryBox.scrollsTab.y = self.inventoryBox.y
+    self.inventoryBox.scrollsTab.width = self.inventoryBox.width / 3
+    self.inventoryBox.scrollsTab.height = self.inventoryBox.height / 6
     
 end
 
@@ -60,11 +74,27 @@ function Menu:displayInventoryBox()
     love.graphics.setColor(Colors.gray[1], Colors.gray[2], Colors.gray[3], 0.5)
     love.graphics.rectangle("fill", self.inventoryBox.x, self.inventoryBox.y, self.inventoryBox.width, self.inventoryBox.height)
     self:displayStoryItemTab()
+    self:displayItemsTab()
+    self:displayScrollsTab()
 end
 
 function Menu:displayStoryItemTab()
-    local color = self.inventoryBox.storyItemsTab.color
     local tab = self.inventoryBox.storyItemsTab
+    local color = tab.color
+    love.graphics.setColor(color[1], color[2], color[3], 0.5)
+    love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
+end
+
+function Menu:displayItemsTab()
+    local tab = self.inventoryBox.itemsTab
+    local color = tab.color
+    love.graphics.setColor(color[1], color[2], color[3], 0.5)
+    love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
+end
+
+function Menu:displayScrollsTab()
+    local tab = self.inventoryBox.scrollsTab
+    local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
 end
@@ -101,15 +131,51 @@ end
 function Menu:mousepressed(mx, my, button)
     if self.paused then
         if button == 1 then
-            self:exitButtonPressed(mx, my)
+            self:exitButtonClicked(mx, my)
+            self:storyItemsTabClicked(mx, my)
+            self:itemsTabClicked(mx, my)
+            self:scrollsTabClicked(mx, my)
         end
     end
 end
 
-function Menu:exitButtonPressed(mx, my)
+function Menu:exitButtonClicked(mx, my)
     if mx >= self.exitButton.x and mx < self.exitButton.x + self.exitButton.width
     and my >= self.exitButton.y and my < self.exitButton.y + self.exitButton.height then
         self.quit()
+    end
+end
+
+function Menu:storyItemsTabClicked(mx, my)
+    local tab = self.inventoryBox.storyItemsTab
+    if mx >= tab.x and mx < tab.x + tab.width
+    and my >= tab.y and my < tab.y + tab.height then
+        print("tab clicked")
+        tab.color = Colors.red
+        self.inventoryBox.itemsTab.color = Colors.yellowDim
+        self.inventoryBox.scrollsTab.color = Colors.orangeDim
+    end
+end
+
+function Menu:itemsTabClicked(mx, my)
+    local tab = self.inventoryBox.itemsTab
+    if mx >= tab.x and mx < tab.x + tab.width
+    and my >= tab.y and my < tab.y + tab.height then
+        print("tab clicked")
+        tab.color = Colors.yellow
+        self.inventoryBox.storyItemsTab.color = Colors.redDim
+        self.inventoryBox.scrollsTab.color = Colors.orangeDim
+    end
+end
+
+function Menu:scrollsTabClicked(mx, my)
+    local tab = self.inventoryBox.scrollsTab
+    if mx >= tab.x and mx < tab.x + tab.width
+    and my >= tab.y and my < tab.y + tab.height then
+        print("tab clicked")
+        tab.color = Colors.orange
+        self.inventoryBox.storyItemsTab.color = Colors.redDim
+        self.inventoryBox.itemsTab.color = Colors.yellowDim
     end
 end
 
