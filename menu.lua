@@ -1,5 +1,7 @@
 local Menu = {}
 
+local Colors = require("colors")
+
 -- Complete after finishing hitboxes
 
 function Menu:load()
@@ -23,6 +25,12 @@ function Menu:load()
     self.screenTint.height = self.screenTint.img:getHeight()
     self.screenTint.x = 0
     self.screenTint.y = 0
+
+    self.inventoryBox = {}
+    self.inventoryBox.width = self.exitButton.width * 3
+    self.inventoryBox.height = self.exitButton.height * 2
+    self.inventoryBox.x = self.exitButton.x + self.exitButton.width / 2 - self.inventoryBox.width / 2
+    self.inventoryBox.y = self.exitButton.y + self.exitButton.height + 10
 end
 
 function Menu:update(dt)
@@ -34,7 +42,13 @@ function Menu:draw()
         self:displayScreenTint()
         self:displayPauseTitle()
         self:displayExitButton()
+        self:displayInventoryBox()
     end
+end
+
+function Menu:displayInventoryBox()
+    love.graphics.setColor(Colors.gray[1], Colors.gray[2], Colors.gray[3], 0.5)
+    love.graphics.rectangle("fill", self.inventoryBox.x, self.inventoryBox.y, self.inventoryBox.width, self.inventoryBox.height)
 end
 
 function Menu:displayScreenTint()
@@ -43,7 +57,6 @@ end
 
 function Menu:displayPauseTitle()
     love.graphics.setFont(self.font)
-    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print("Paused", self.pausedTitle.x, self.pausedTitle.y)
 end
 
