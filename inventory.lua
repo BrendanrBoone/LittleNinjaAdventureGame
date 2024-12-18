@@ -4,11 +4,12 @@ local Item = require("item")
 local StoryItems = require("itemData/storyItems")
 
 --[[
--- this file removes and places npc locations, and handles dialogue
-General story idea:
- - Chapter 1
-    - Soldier requesting
+STORY:
+    Soldier asks for help saving princess
 
+REQUIREMENTS:
+    Princess wants soldier badge
+    Soldier at castle gate wants princess pass and spawns after soldier badge
 ]]
 
 function Inventory:load()
