@@ -5,6 +5,7 @@ local Sounds = require("sounds")
 local Hitbox = require("hitbox")
 local Portal = require("portal")
 local BackgroundObject = require("backgroundObject")
+local ForegroundObject = require("foregroundObject")
 local PickupItem = require("pickupItem")
 local NPC = require("npc")
 local Categories = require("categories")
@@ -200,6 +201,8 @@ function Map:spawnEntities()
             PickupItem.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.itemType)
         elseif v.type == "backgroundObject" then
             BackgroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
+        elseif v.type == "foregroundObject" then
+            ForegroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
         end
     end
 end

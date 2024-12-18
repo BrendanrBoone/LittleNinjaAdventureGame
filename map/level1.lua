@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 17,
+  nextobjectid = 18,
   properties = {},
   tilesets = {
     {
@@ -298,6 +298,23 @@ return {
             ["prerequisiteStoryItem"] = "",
             ["storyItemName"] = "soldierBadge",
             ["type"] = "soldier"
+          }
+        },
+        {
+          id = 17,
+          name = "Castle Wall",
+          type = "foregroundObject",
+          shape = "rectangle",
+          x = 1475,
+          y = 20,
+          width = 125,
+          height = 320,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["anim"] = false,
+            ["level"] = 1,
+            ["type"] = "castle"
           }
         }
       }

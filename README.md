@@ -21,10 +21,13 @@ A little project to fulfill a request
 * player.lua: setNewFrame()
 * nicoRobin.lua -> npc.lua: NPC.new()
 * characterData.lua
+* backgroundObject.lua -> animated
 
 ## Things to do
 * make program more easily runable for increase accessability
-* menu to look at inventory
+* add music to dragon room
+* etherial message function
+* Guard and wall dynamic storyline progression system
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
