@@ -18,7 +18,7 @@ function Menu:load()
     self.exitButton.width = self.exitButton.img:getWidth()
     self.exitButton.height = self.exitButton.img:getHeight()
     self.exitButton.x = love.graphics.getWidth() / 2 - self.exitButton.width / 2
-    self.exitButton.y = love.graphics.getHeight() / 2
+    self.exitButton.y = self.pausedTitle.y + self.font:getHeight("IDK") + 10
 
     self.screenTint = {}
     self.screenTint.img = love.graphics.newImage("assets/menuTintBack.png")
@@ -29,30 +29,30 @@ function Menu:load()
 
     self.inventoryBox = {}
     self.inventoryBox.width = self.exitButton.width * 3
-    self.inventoryBox.height = self.exitButton.height * 2
     self.inventoryBox.x = self.exitButton.x + self.exitButton.width / 2 - self.inventoryBox.width / 2
-    self.inventoryBox.y = self.exitButton.y + self.exitButton.height + 10
+    self.inventoryBox.y = self.exitButton.y + self.exitButton.height + 100
+    self.inventoryBox.height = love.graphics.getHeight() - self.inventoryBox.y - 10
 
     self.inventoryBox.storyItemsTab = {}
     self.inventoryBox.storyItemsTab.color = Colors.red
     self.inventoryBox.storyItemsTab.x = self.inventoryBox.x
     self.inventoryBox.storyItemsTab.y = self.inventoryBox.y
     self.inventoryBox.storyItemsTab.width = self.inventoryBox.width / 3
-    self.inventoryBox.storyItemsTab.height = self.inventoryBox.height / 6
+    self.inventoryBox.storyItemsTab.height = self.inventoryBox.height / 12
 
     self.inventoryBox.itemsTab = {}
     self.inventoryBox.itemsTab.color = Colors.yellowDim
     self.inventoryBox.itemsTab.x = self.inventoryBox.x + self.inventoryBox.storyItemsTab.width
     self.inventoryBox.itemsTab.y = self.inventoryBox.y
     self.inventoryBox.itemsTab.width = self.inventoryBox.width / 3
-    self.inventoryBox.itemsTab.height = self.inventoryBox.height / 6
+    self.inventoryBox.itemsTab.height = self.inventoryBox.height / 12
 
     self.inventoryBox.scrollsTab = {}
     self.inventoryBox.scrollsTab.color = Colors.orangeDim
     self.inventoryBox.scrollsTab.x = self.inventoryBox.x + self.inventoryBox.storyItemsTab.width * 2
     self.inventoryBox.scrollsTab.y = self.inventoryBox.y
     self.inventoryBox.scrollsTab.width = self.inventoryBox.width / 3
-    self.inventoryBox.scrollsTab.height = self.inventoryBox.height / 6
+    self.inventoryBox.scrollsTab.height = self.inventoryBox.height / 12
     
 end
 
