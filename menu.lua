@@ -8,6 +8,7 @@ local Helper = require("helper")
 function Menu:load()
     self.paused = false
     self.font = love.graphics.newFont("assets/ui/bit.ttf", 40)
+    self.tabFont = love.graphics.newFont("assets/ui/bit.ttf", 20)
 
     self.pausedTitle = {}
     self.pausedTitle.x = love.graphics.getWidth() / 2 - 50
@@ -83,6 +84,13 @@ function Menu:displayStoryItemTab()
     local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
+
+    Helper.resetDrawSettings()
+    local displayText = "Story Items"
+    local textLength = self.tabFont:getWidth(displayText)
+    local textHeight = self.tabFont:getHeight(displayText)
+    love.graphics.setFont(self.tabFont)
+    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
 end
 
 function Menu:displayItemsTab()
@@ -90,6 +98,13 @@ function Menu:displayItemsTab()
     local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
+    
+    Helper.resetDrawSettings()
+    local displayText = "Items"
+    local textLength = self.tabFont:getWidth(displayText)
+    local textHeight = self.tabFont:getHeight(displayText)
+    love.graphics.setFont(self.tabFont)
+    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
 end
 
 function Menu:displayScrollsTab()
@@ -97,6 +112,13 @@ function Menu:displayScrollsTab()
     local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
+    
+    Helper.resetDrawSettings()
+    local displayText = "Scrolls"
+    local textLength = self.tabFont:getWidth(displayText)
+    local textHeight = self.tabFont:getHeight(displayText)
+    love.graphics.setFont(self.tabFont)
+    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
 end
 
 function Menu:displayScreenTint()
