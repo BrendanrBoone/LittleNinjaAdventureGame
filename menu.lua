@@ -1,6 +1,7 @@
 local Menu = {}
 
 local Colors = require("colors")
+local Helper = require("helper")
 
 -- Complete after finishing hitboxes
 
@@ -51,6 +52,7 @@ function Menu:draw()
         self:displayPauseTitle()
         self:displayExitButton()
         self:displayInventoryBox()
+        Helper.resetDrawSettings()
     end
 end
 
@@ -68,7 +70,6 @@ function Menu:displayStoryItemTab()
 end
 
 function Menu:displayScreenTint()
-    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(self.screenTint.img, self.screenTint.x, self.screenTint.y, 0, 1, 1)
 end
 

@@ -58,4 +58,8 @@ function Helper.checkCollDir(collision, dir)
     return false
 end
 
+function Helper.resetDrawSettings()
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 return Helper
