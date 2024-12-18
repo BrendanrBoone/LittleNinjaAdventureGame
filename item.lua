@@ -5,12 +5,13 @@ ActiveItems = {}
 
 --@params name: string
 --@params description: string
-function Item.new(name, description, itemName, type)
+function Item.new(displayName, description, itemName, iconImg, type)
     local instance = setmetatable({}, Item)
 
-    instance.name = name
+    instance.displayName = displayName
     instance.description = description
     instance.itemName = itemName
+    instance.iconImg = iconImg
     instance.type = type
 
     table.insert(ActiveItems, instance)
@@ -19,20 +20,20 @@ end
 
 --@param item: table (itemData/storyItems.lua)
 function Item.newStoryItem(item)
-    local storyItem = Item.new(item.name, item.description, item.itemName, "storyItem")
+    local storyItem = Item.new(item.displayName, item.description, item.itemName, item.iconImg, "storyItem")
     return storyItem
 end
 
 --unfinished
 function Item.newScroll(item)
-    local storyItem = Item.new(item.name, item.description, item.itemName, "scroll")
+    local storyItem = Item.new(item.displayName, item.description, item.itemName, item.iconImg, "scroll")
 
     return storyItem
 end
 
 --unfinished
 function Item.newItem(item)
-    local storyItem = Item.new(item.name, item.description, item.itemName, "item")
+    local storyItem = Item.new(item.displayName, item.description, item.itemName, item.iconImg, "item")
 
     return storyItem
 end

@@ -2,6 +2,7 @@ local Menu = {}
 
 local Colors = require("colors")
 local Helper = require("helper")
+local Inventory = require("inventory")
 
 -- Complete after finishing hitboxes
 
@@ -33,6 +34,7 @@ function Menu:load()
     self.inventoryBox.x = self.exitButton.x + self.exitButton.width / 2 - self.inventoryBox.width / 2
     self.inventoryBox.y = self.exitButton.y + self.exitButton.height + 100
     self.inventoryBox.height = love.graphics.getHeight() - self.inventoryBox.y - 10
+    self.inventoryBox.currentInventory = "storyItem"
 
     self.inventoryBox.storyItemsTab = {}
     self.inventoryBox.storyItemsTab.color = Colors.red
@@ -77,6 +79,24 @@ function Menu:displayInventoryBox()
     self:displayStoryItemTab()
     self:displayItemsTab()
     self:displayScrollsTab()
+
+    local currentX = self.inventoryBox.x + 10
+    local currentY = self.inventoryBox.y + self.inventoryBox.storyItemsTab.height + 10
+    for _, item in ipairs(Inventory[self.inventoryBox.currentInventory]) do
+        local img = love.graphics.newImage(item.iconImg)
+        local imgSize = img:getWidth() -- icon is a square so height and width are the same
+        if not (currentX + imgSize > self.inventoryBox.x + self.inventoryBox.width) then
+            love.graphics.setColor(Colors.gray)
+            love.graphics.rectangle("fill", currentX, currentY, imgSize, imgSize)
+            Helper.resetDrawSettings()
+            love.graphics.draw(img, currentX, currentY, 0, 1, 1)
+            currentX = currentX + imgSize + 10
+        else
+            currentX = self.inventoryBox.x + 10
+            currentY = currentY + imgSize + 10
+            love.graphics.draw(img, currentX, currentY, 0, 1, 1)
+        end
+    end
 end
 
 function Menu:displayStoryItemTab()
@@ -98,7 +118,7 @@ function Menu:displayItemsTab()
     local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
-    
+
     Helper.resetDrawSettings()
     local displayText = "Items"
     local textLength = self.tabFont:getWidth(displayText)
@@ -112,7 +132,7 @@ function Menu:displayScrollsTab()
     local color = tab.color
     love.graphics.setColor(color[1], color[2], color[3], 0.5)
     love.graphics.rectangle("fill", tab.x, tab.y, tab.width, tab.height)
-    
+
     Helper.resetDrawSettings()
     local displayText = "Scrolls"
     local textLength = self.tabFont:getWidth(displayText)
@@ -172,10 +192,10 @@ function Menu:storyItemsTabClicked(mx, my)
     local tab = self.inventoryBox.storyItemsTab
     if mx >= tab.x and mx < tab.x + tab.width
     and my >= tab.y and my < tab.y + tab.height then
-        print("tab clicked")
         tab.color = Colors.red
         self.inventoryBox.itemsTab.color = Colors.yellowDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
+        self.inventoryBox.currentInventory = "storyItem"
     end
 end
 
@@ -183,10 +203,10 @@ function Menu:itemsTabClicked(mx, my)
     local tab = self.inventoryBox.itemsTab
     if mx >= tab.x and mx < tab.x + tab.width
     and my >= tab.y and my < tab.y + tab.height then
-        print("tab clicked")
         tab.color = Colors.yellow
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
+        self.inventoryBox.currentInventory = "item"
     end
 end
 
@@ -194,10 +214,10 @@ function Menu:scrollsTabClicked(mx, my)
     local tab = self.inventoryBox.scrollsTab
     if mx >= tab.x and mx < tab.x + tab.width
     and my >= tab.y and my < tab.y + tab.height then
-        print("tab clicked")
         tab.color = Colors.orange
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.itemsTab.color = Colors.yellowDim
+        self.inventoryBox.currentInventory = "scroll"
     end
 end
 
