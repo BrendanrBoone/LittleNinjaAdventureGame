@@ -54,7 +54,8 @@
   </object>
   <object id="6" name="Princess" type="npc" x="611.367" y="303.452">
    <properties>
-    <property name="prerequisiteStoryItem" value=""/>
+    <property name="completionStoryItem" value="princessPass"/>
+    <property name="prerequisiteStoryItem" value="soldierBadge"/>
     <property name="storyItemName" value="princessPass"/>
     <property name="type" value="princess"/>
    </properties>

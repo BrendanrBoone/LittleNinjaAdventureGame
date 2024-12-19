@@ -256,6 +256,9 @@ end
 function NPC:soldierStartEffects()
     if self.type == "soldier" then
         self.state = "idle"
+        if Inventory:check("storyItem", "princessPass") then
+            self.dialogue = Dialogue.soldier.sequence2
+        end
     end
 end
 

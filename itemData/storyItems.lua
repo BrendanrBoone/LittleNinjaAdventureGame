@@ -16,4 +16,11 @@ StoryItems.soldierBadge = {
     iconImg = "assets/itemIcons/soldierBadge.png"
 }
 
+StoryItems.gatePass = {
+    displayName = "Gate Pass",
+    description = "Pass to freely go through the castle gate.",
+    itemName = "gatePass",
+    iconImg = "assets/itemIcons/gatePass.png"
+}
+
 return StoryItems

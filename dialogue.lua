@@ -32,6 +32,12 @@ Dialogue.soldier = {
         { "soldier", "The dragon went into the cave ahead." },
         { "Player",   "I'm on it." },
         { nil, nil }
+    },
+    sequence2 = {
+        { "soldier", "Thank goodness! I see you've rescued the Princess" },
+        { "soldier", "Please have this GATE PASS and escort her inside" },
+        { "Player", "ok!" },
+        { nil, nil }
     }
 }
 

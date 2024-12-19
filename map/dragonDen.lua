@@ -189,7 +189,8 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["prerequisiteStoryItem"] = "",
+            ["completionStoryItem"] = "princessPass",
+            ["prerequisiteStoryItem"] = "soldierBadge",
             ["storyItemName"] = "princessPass",
             ["type"] = "princess"
           }

@@ -189,9 +189,9 @@ end
 
 function Map:spawnEntities()
     for _, v in ipairs(self.entityLayer.objects) do
-        -- NPCs can only spawn when you don't have their storyItem and have all prerequisite story items
+        -- NPCs can only spawn when you don't have their storyline completion item and have their prerequisite item
         if v.type == "npc" and
-            not Inventory:check("storyItem", v.properties.storyItemName) and
+            not Inventory:check("storyItem", v.properties.completionStoryItem) and
             Inventory:check("storyItem", v.properties.prerequisiteStoryItem) then
             NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type, v.properties.storyItemName)
         elseif v.type == "portal" then
@@ -203,6 +203,8 @@ function Map:spawnEntities()
             BackgroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
         elseif v.type == "foregroundObject" then
             ForegroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
+        else
+            print("entity not spawned")
         end
     end
 end

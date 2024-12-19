@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 18,
+  nextobjectid = 19,
   properties = {},
   tilesets = {
     {
@@ -295,6 +295,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
+            ["completionStoryItem"] = "princessPass",
             ["prerequisiteStoryItem"] = "",
             ["storyItemName"] = "soldierBadge",
             ["type"] = "soldier"
@@ -315,6 +316,24 @@ return {
             ["anim"] = false,
             ["level"] = 1,
             ["type"] = "castle"
+          }
+        },
+        {
+          id = 18,
+          name = "Soldier",
+          type = "npc",
+          shape = "point",
+          x = 1420.67,
+          y = 303.45,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["completionStoryItem"] = "permanentNPC",
+            ["prerequisiteStoryItem"] = "princessPass",
+            ["storyItemName"] = "gatePass",
+            ["type"] = "soldier"
           }
         }
       }

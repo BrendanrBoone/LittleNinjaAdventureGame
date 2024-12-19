@@ -32,6 +32,8 @@ function Inventory:add(type, itemName)
     table.insert(self[type], item)
 end
 
+--@param type: string (ex: "storyItem")
+--@param itemName: string (ex: "soldierBadge")
 function Inventory:check(type, itemName)
     if type == "storyItem" then
         return self:checkStoryItems(itemName)

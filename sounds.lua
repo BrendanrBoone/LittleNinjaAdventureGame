@@ -10,6 +10,9 @@ function Sounds:load()
     self.bgm.NakamaNoShirushi = love.audio.newSource(
         "assets/bgm/One Piece OST - Nakama no Shirushi da! Sign Of Friendship.mp3", "stream")
     self.bgm.NarutoOst2 = love.audio.newSource("assets/bgm/Naruto OST 2 - Sasuke's Theme.mp3", "stream")
+    self.bgm.dragonTheme = love.audio.newSource("assets/bgm/dragonTheme.mp3", "stream")
+    self.bgm.dragonThemeSnore = love.audio.newSource("assets/bgm/dragonThemeSnore.mp3", "stream")
+    self.bgm.dragonThemeSnoreLouder = love.audio.newSource("assets/bgm/dragonThemeSnoreLouder.mp3", "stream")
 
     self.sfx = {}
     self.sfx.maxSound = 0.3
@@ -29,8 +32,8 @@ function Sounds:load()
             source = self.bgm.NarutoOst2
         },
         dragonDen = {
-            name = "NarutoOst2",
-            source = self.bgm.NarutoOst2
+            name = "dragonThemeSnoreLouder",
+            source = self.bgm.dragonThemeSnoreLouder
         }
     }
     self.currentlyPlayingBgm = self.bgmLevels["level1"]
