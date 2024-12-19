@@ -25,9 +25,9 @@ A little project to fulfill a request
 
 ## Things to do
 * make program more easily runable for increase accessability
-* add music to dragon room
 * etherial message function
-* Guard and wall dynamic storyline progression system
+* functioning castle door
+* add scrolls for release jutsus in scroll inventory
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```
