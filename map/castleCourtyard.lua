@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 22,
+  nextobjectid = 21,
   properties = {},
   tilesets = {
     {
@@ -231,109 +231,20 @@ return {
       properties = {},
       objects = {
         {
-          id = 10,
-          name = "Portal",
-          type = "portal",
-          shape = "point",
-          x = 678.195,
-          y = 304,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["dX"] = 80,
-            ["dY"] = 304,
-            ["destination"] = "dragonDen",
-            ["displayText"] = "Dragon's Den",
-            ["lock"] = "fire"
-          }
-        },
-        {
-          id = 12,
-          name = "Cave",
-          type = "backgroundObject",
-          shape = "rectangle",
-          x = 591,
-          y = 125,
-          width = 349,
-          height = 225,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["anim"] = false,
-            ["level"] = 2,
-            ["type"] = "cave"
-          }
-        },
-        {
           id = 13,
-          name = "DesertTexture",
+          name = "CastleWall",
           type = "backgroundObject",
           shape = "rectangle",
-          x = -577.333,
-          y = 212.667,
+          x = -577.33,
+          y = 18,
           width = 2526,
-          height = 124,
+          height = 318,
           rotation = 0,
           visible = true,
           properties = {
             ["anim"] = false,
             ["level"] = 3,
-            ["type"] = "desertTexture"
-          }
-        },
-        {
-          id = 16,
-          name = "Soldier",
-          type = "npc",
-          shape = "point",
-          x = 432.333,
-          y = 303.45,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["completionStoryItem"] = "princessPass",
-            ["prerequisiteStoryItem"] = "",
-            ["storyItemName"] = "soldierBadge",
-            ["type"] = "soldier"
-          }
-        },
-        {
-          id = 17,
-          name = "Castle Wall",
-          type = "foregroundObject",
-          shape = "rectangle",
-          x = 1475,
-          y = 20,
-          width = 125,
-          height = 320,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["anim"] = false,
-            ["level"] = 1,
-            ["type"] = "castle"
-          }
-        },
-        {
-          id = 18,
-          name = "Soldier",
-          type = "npc",
-          shape = "point",
-          x = 1420.67,
-          y = 303.45,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["completionStoryItem"] = "permanentNPC",
-            ["prerequisiteStoryItem"] = "princessPass",
-            ["storyItemName"] = "gatePass",
-            ["type"] = "soldier"
+            ["type"] = "castleWallBackgroundObject"
           }
         }
       }
@@ -353,11 +264,11 @@ return {
       properties = {},
       objects = {
         {
-          id = 20,
-          name = "End",
-          type = "end",
+          id = 19,
+          name = "Start",
+          type = "start",
           shape = "point",
-          x = 1546,
+          x = 52.6667,
           y = 304,
           width = 0,
           height = 0,
@@ -366,11 +277,11 @@ return {
           properties = {}
         },
         {
-          id = 21,
-          name = "Start",
-          type = "start",
+          id = 20,
+          name = "End",
+          type = "end",
           shape = "point",
-          x = 52.67,
+          x = 1546,
           y = 304,
           width = 0,
           height = 0,

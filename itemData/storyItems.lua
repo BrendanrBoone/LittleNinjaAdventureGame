@@ -13,14 +13,14 @@ StoryItems.soldierBadge = {
     displayName = "Soldier Badge",
     description = "Looks like the soldier gave you his badge for keepsake",
     itemName = "soldierBadge",
-    iconImg = "assets/itemIcons/soldierBadge.png"
+    iconImg = "assets/itemIcons/soldierBadgeIcon.png"
 }
 
 StoryItems.gatePass = {
     displayName = "Gate Pass",
     description = "Pass to freely go through the castle gate.",
     itemName = "gatePass",
-    iconImg = "assets/itemIcons/gatePass.png"
+    iconImg = "assets/itemIcons/gatePassIcon.png"
 }
 
 return StoryItems

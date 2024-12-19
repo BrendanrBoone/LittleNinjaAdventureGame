@@ -19,10 +19,12 @@ local NPC = require("npc")
 local Ally = require("ally")
 local ScreenTransition = require("screenTransition")
 local Inventory = require("inventory")
+local LevelConfig = require("levelConfig")
 
 WorldPause = false
 
 function love.load()
+    LevelConfig:loadAssets()
     Inventory:load()
     Sounds:load()
     Portal.loadAssets()

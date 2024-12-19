@@ -12,29 +12,9 @@ local Categories = require("categories")
 local Ally = require("ally")
 local ScreenTransition = require("screenTransition")
 local Inventory = require("inventory")
-
-local oceanHighBackground = love.graphics.newImage("assets/oceanBackground.png")
-local skyBlueBackground = love.graphics.newImage("assets/background.png")
-local redBackground = love.graphics.newImage("assets/redBackground.png")
-local blackBackground = love.graphics.newImage("assets/blackBackground.jpg")
-local desertBackground = love.graphics.newImage("assets/desertBackground.png")
-local desertBackground2 = love.graphics.newImage("assets/desertBackground2.png")
-local desertBackground3 = love.graphics.newImage("assets/desertBackground3.png")
+local LevelConfig = require("levelConfig")
 
 function Map:load()
-    -- need to make some sort of way to make levels determinable by name
-    self.allLevels = {
-        level1 = {
-            next = nil,
-            prev = nil,
-            background = desertBackground
-        },
-        dragonDen = {
-            next = nil,
-            prev = nil,
-            background = blackBackground
-        }
-    }
 
     -- store transition variables so it can be desynced
     self.transitionDesync = {
@@ -95,7 +75,7 @@ end
 
 -- change background according to what level
 function Map:drawBackground()
-    local background = self.allLevels[self.currentLevel].background
+    local background = LevelConfig.levels[self.currentLevel].background
     love.graphics.draw(background)
 end
 
@@ -130,7 +110,7 @@ function Map:toDestination(destination, dX, dY)
 end
 
 function Map:next()
-    local nextLevel = self.allLevels[self.currentLevel].next
+    local nextLevel = LevelConfig.levels[self.currentLevel].next
     if nextLevel then
         self:clean()
         self:init(nextLevel)
@@ -139,7 +119,7 @@ function Map:next()
 end
 
 function Map:prev()
-    local prevLevel = self.allLevels[self.currentLevel].prev
+    local prevLevel = LevelConfig.levels[self.currentLevel].prev
     if prevLevel then
         self:clean()
         self:init(prevLevel)
@@ -150,6 +130,9 @@ end
 function Map.loadPlayer(x, y)
     Player:setPosition(x, y)
     --Hitbox.loadAllTargets(ActiveEnemys)
+    if Ally.alive then
+        Ally:setPosition(x, y)
+    end
 end
 
 function Map:clean()
@@ -157,6 +140,7 @@ function Map:clean()
     Portal.removeAll()
     NPC.removeAll()
     BackgroundObject.removeAll()
+    ForegroundObject.removeAll()
     PickupItem.removeAll()
 end
 

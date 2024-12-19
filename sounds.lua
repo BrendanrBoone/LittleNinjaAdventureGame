@@ -1,18 +1,14 @@
 local Sounds = {}
 
+local LevelConfig = require("levelConfig")
+
 function Sounds:load()
 
     self.soundToggle = true
 
+    -- bgm sources defined in LevelConfig.lua
     self.bgm = {}
     self.bgm.maxSound = 0.3
-    self.bgm.OathHeart = love.audio.newSource("assets/bgm/OathOfTheHeart_inazumaElevenOST.mp3", "stream")
-    self.bgm.NakamaNoShirushi = love.audio.newSource(
-        "assets/bgm/One Piece OST - Nakama no Shirushi da! Sign Of Friendship.mp3", "stream")
-    self.bgm.NarutoOst2 = love.audio.newSource("assets/bgm/Naruto OST 2 - Sasuke's Theme.mp3", "stream")
-    self.bgm.dragonTheme = love.audio.newSource("assets/bgm/dragonTheme.mp3", "stream")
-    self.bgm.dragonThemeSnore = love.audio.newSource("assets/bgm/dragonThemeSnore.mp3", "stream")
-    self.bgm.dragonThemeSnoreLouder = love.audio.newSource("assets/bgm/dragonThemeSnoreLouder.mp3", "stream")
 
     self.sfx = {}
     self.sfx.maxSound = 0.3
@@ -25,18 +21,7 @@ function Sounds:load()
     self.sfx.charge = love.audio.newSource("assets/sfx/NarutoCharge.mp3", "static")
     self.sfx.chargeLoop = love.audio.newSource("assets/sfx/NarutoChargeLoopLong.mp3", "static")
 
-    -- clear profiles necessary => {name, source}
-    self.bgmLevels = {
-        level1 = {
-            name = "NarutoOst2",
-            source = self.bgm.NarutoOst2
-        },
-        dragonDen = {
-            name = "dragonThemeSnoreLouder",
-            source = self.bgm.dragonThemeSnoreLouder
-        }
-    }
-    self.currentlyPlayingBgm = self.bgmLevels["level1"]
+    self.currentlyPlayingBgm = LevelConfig.levels["level1"].music
     self.currentlyPlayingBgm.source:play()
 
     if self.soundToggle then
@@ -78,13 +63,13 @@ end
 
 function Sounds:playMusic(level)
     if self.soundToggle then
-        if self.bgmLevels[level].name ~= self.currentlyPlayingBgm.name then
+        if LevelConfig.levels[level].name ~= self.currentlyPlayingBgm.name then
             self.currentlyPlayingBgm.source:stop()
-            self.playSound(self.bgmLevels[level].source)
+            self:playSound(LevelConfig.levels[level].music.source)
             if self.currentVolume == 0 then
-                self:muteSound(self.bgmLevels[level].source)
+                self:muteSound(LevelConfig.levels[level].music.source)
             end
-            self.currentlyPlayingBgm = self.bgmLevels[level]
+            self.currentlyPlayingBgm = LevelConfig.levels[level].music
         end
     end
 end
