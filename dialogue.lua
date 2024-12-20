@@ -38,6 +38,14 @@ Dialogue.soldier = {
         { "soldier", "Please have this GATE PASS and escort her inside" },
         { "Player", "ok!" },
         { nil, nil }
+    },
+    sequenceOpen = {
+        { "soldier", "OPENING THE GATE" },
+        { nil, nil }
+    },
+    sequenceClose = {
+        { "soldier", "CLOSING THE GATE" },
+        { nil, nil }
     }
 }
 

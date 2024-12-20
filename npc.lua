@@ -257,7 +257,13 @@ end
 function NPC:soldierStartEffects()
     if self.type == "soldier" then
         self.state = "idle"
-        if Inventory:check("storyItem", "princessPass") then
+        if Inventory:check("storyItem", "gatePass") then
+            if CastleGate.checkAllGatesOpen() then
+                self.dialogue = Dialogue.soldier.sequenceClose
+            else
+                self.dialogue = Dialogue.soldier.sequenceOpen
+            end
+        else
             self.dialogue = Dialogue.soldier.sequence2
         end
     end
@@ -287,10 +293,15 @@ end
 
 function NPC:soldierEndEffects()
     if self.type == "soldier" then
-        GUI:goNextLevelIndicatorAnimationStart()
         Inventory:add("storyItem", self.itemName)
-        if Inventory:check("storyItem", "princessPass") then
-            CastleGate.openAll()
+        if Inventory:check("storyItem", "gatePass") then
+            if CastleGate.checkAllGatesOpen() then
+                CastleGate.closeAll()
+            else
+                CastleGate.openAll()
+            end
+        else
+            GUI:goNextLevelIndicatorAnimationStart()
         end
     end
 end
