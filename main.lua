@@ -26,7 +26,6 @@ WorldPause = false
 
 function love.load()
     LevelConfig:loadAssets()
-    CastleGate.loadAssets()
     Inventory:load()
     Sounds:load()
     Portal.loadAssets()

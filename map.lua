@@ -188,11 +188,9 @@ function Map:spawnEntities()
         elseif v.type == "backgroundObject" then
             BackgroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
         elseif v.type == "foregroundObject" then
-            --ForegroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
+            ForegroundObject.new(v.properties.type, v.properties.anim, v.properties.level, v.x, v.y, v.width, v.height)
         elseif v.type == "castleGate" then
-            print("castleGate")
-            --CastleGate.new(v.x + v.width / 2, v.y + v.height / 2, v.width, v.height)
-            CastleGate.new(v.x + v.width, v.y + v.height, v.width, v.height)
+            CastleGate.new(v.x + v.width / 2, v.y + v.height / 2, v.width, v.height)
         else
             print("entity not spawned: "..v.type)
         end

@@ -121,13 +121,7 @@
    </properties>
    <point/>
   </object>
-  <object id="22" name="Castle Gate" type="castleGate" x="1557" y="-206" width="43" height="542">
-   <properties>
-    <property name="anim" type="bool" value="false"/>
-    <property name="level" type="int" value="1"/>
-    <property name="type" value="castle"/>
-   </properties>
-  </object>
+  <object id="22" name="Castle Gate" type="castleGate" x="1557" y="-206" width="43" height="542"/>
  </objectgroup>
  <objectgroup color="#f0f401" id="4" name="spawns">
   <object id="20" name="End" type="end" x="1546" y="304">

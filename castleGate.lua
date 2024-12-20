@@ -1,4 +1,4 @@
-local CastleGate = {}
+local CastleGate = {img = love.graphics.newImage("assets/castleGateLong.png")}
 CastleGate.__index = CastleGate
 
 local Categories = require("categories")
@@ -14,14 +14,14 @@ function CastleGate.new(x, y, width, height)
     instance.width = width
     instance.height = height
 
-    instance.open = false
+    instance.gateIsOpen = false
     instance.rotation = 0 -- radians
 
     instance.physics = {}
-    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "dynamic")
+    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "kinematic")
     instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
     instance.physics.fixture = love.physics.newFixture(instance.physics.body, instance.physics.shape)
-    instance.physics.body:setGravityScale(0)
+    --instance.physics.body:setGravityScale(0)
     instance.physics.fixture:setCategory(Categories.ground)
     instance.physics.fixture:setUserData("castleGate")
 
@@ -29,12 +29,8 @@ function CastleGate.new(x, y, width, height)
     return instance
 end
 
-function CastleGate.loadAssets()
-    CastleGate.img = love.graphics.newImage("assets/castleGate.png")
-end
-
 function CastleGate:open()
-    self.open = true
+    self.gateIsOpen = true
 end
 
 function CastleGate.openAll()
@@ -44,10 +40,11 @@ function CastleGate.openAll()
 end
 
 function CastleGate:moveGate()
-    if self.open and self.rotation > math.rad(-90) then
-        self.rotation = self.rotation - math.rad(1)
-    elseif not self.open and self.rotation < math.rad(0) then
-        self.rotation = self.rotation + math.rad(1)
+    local gateSpeed = 0.2 -- in degrees
+    if self.gateIsOpen and self.rotation < math.rad(90) then
+        self.rotation = self.rotation + math.rad(gateSpeed)
+    elseif not self.gateIsOpen and self.rotation > math.rad(0) then
+        self.rotation = self.rotation - math.rad(gateSpeed)
     end
     self.physics.body:setAngle(self.rotation)
 end
@@ -72,8 +69,8 @@ end
 
 function CastleGate:draw()
     -- IDK know why the position coordinates are like this with width and height but this works
-    --love.graphics.rectangle("fill", self.x - self.width, self.y - self.height, self.width, self.height)
-    love.graphics.draw(CastleGate.img, self.x, self.y, self.rotation, 1, 1, self.width, self.height)
+    --love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
+    love.graphics.draw(CastleGate.img, self.x, self.y, self.rotation, 1, 1, self.width/2, self.height/2)
 end
 
 function CastleGate.drawAll()

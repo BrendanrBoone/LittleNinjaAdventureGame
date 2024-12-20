@@ -347,11 +347,7 @@ return {
           height = 542,
           rotation = 0,
           visible = true,
-          properties = {
-            ["anim"] = false,
-            ["level"] = 1,
-            ["type"] = "castle"
-          }
+          properties = {}
         }
       }
     },
