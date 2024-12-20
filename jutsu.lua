@@ -1,5 +1,0 @@
-local Jutsu
-
-
-
-return Jutsu

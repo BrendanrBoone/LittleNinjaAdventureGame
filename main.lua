@@ -20,11 +20,13 @@ local Ally = require("ally")
 local ScreenTransition = require("screenTransition")
 local Inventory = require("inventory")
 local LevelConfig = require("levelConfig")
+local CastleGate = require("castleGate")
 
 WorldPause = false
 
 function love.load()
     LevelConfig:loadAssets()
+    CastleGate.loadAssets()
     Inventory:load()
     Sounds:load()
     Portal.loadAssets()
@@ -62,6 +64,7 @@ function love.update(dt)
         Anima.updateAll(dt)
         BackgroundObject.updateAll(dt)
         ForegroundObject.updateAll(dt)
+        CastleGate.updateAll(dt)
         NPC.updateAll(dt)
     end
 end
@@ -72,6 +75,7 @@ function love.draw()
     Camera:apply() -- between
     BackgroundObject.drawAll()
     Map.level:draw(-Camera.x, -Camera.y, Camera.scale, Camera.scale)
+    CastleGate.drawAll()
     Explosion.drawAll()
     Portal.drawAll()
     NPC.drawAll()

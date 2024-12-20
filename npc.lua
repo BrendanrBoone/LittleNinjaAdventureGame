@@ -10,6 +10,7 @@ local Helper = require("helper")
 local Categories = require("categories")
 local Ally = require("ally")
 local Inventory = require("inventory")
+local CastleGate = require("castleGate")
 
 --@param type: string "princess" or "nicoRobin"
 function NPC.new(x, y, type, itemName)
@@ -288,6 +289,9 @@ function NPC:soldierEndEffects()
     if self.type == "soldier" then
         GUI:goNextLevelIndicatorAnimationStart()
         Inventory:add("storyItem", self.itemName)
+        if Inventory:check("storyItem", "princessPass") then
+            CastleGate.openAll()
+        end
     end
 end
 

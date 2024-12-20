@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 22,
+  nextobjectid = 23,
   properties = {},
   tilesets = {
     {
@@ -334,6 +334,23 @@ return {
             ["prerequisiteStoryItem"] = "princessPass",
             ["storyItemName"] = "gatePass",
             ["type"] = "soldier"
+          }
+        },
+        {
+          id = 22,
+          name = "Castle Gate",
+          type = "castleGate",
+          shape = "rectangle",
+          x = 1557,
+          y = -206,
+          width = 43,
+          height = 542,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["anim"] = false,
+            ["level"] = 1,
+            ["type"] = "castle"
           }
         }
       }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="22">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="23">
  <editorsettings>
   <export target="../level1.lua" format="lua"/>
  </editorsettings>
@@ -120,6 +120,13 @@
     <property name="type" value="soldier"/>
    </properties>
    <point/>
+  </object>
+  <object id="22" name="Castle Gate" type="castleGate" x="1557" y="-206" width="43" height="542">
+   <properties>
+    <property name="anim" type="bool" value="false"/>
+    <property name="level" type="int" value="1"/>
+    <property name="type" value="castle"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup color="#f0f401" id="4" name="spawns">
