@@ -12,7 +12,7 @@ function Menu:load()
     self.tabFont = love.graphics.newFont("assets/ui/bit.ttf", 20)
 
     self.pausedTitle = {}
-    self.pausedTitle.x = love.graphics.getWidth() / 2 - 50
+    self.pausedTitle.x = love.graphics.getWidth() / 2
     self.pausedTitle.y = 100
 
     self.exitButton = {}
@@ -89,23 +89,25 @@ function Menu:displayItemFocus()
         self:displayScreenTint()
         local color = Colors.gray
         local displayNameWidth = self.font:getWidth(self.itemFocus.displayName)
-        local displayNameHeight = self.font:getHeight(self.itemFocus.displayName)
+        local displayNameX = self.itemFocus.displayNameX - displayNameWidth / 2
 
         local descriptionWidth = self.tabFont:getWidth(self.itemFocus.description)
         local descriptionHeight = self.tabFont:getHeight(self.itemFocus.description)
+        local descriptionX = self.itemFocus.descriptionX - descriptionWidth / 2
 
         local focusBoxWidth = math.max(displayNameWidth, descriptionWidth)
         local focusBoxHeight = self.itemFocus.descriptionY + descriptionHeight - self.itemFocus.displayNameY
+        local focusBoxX = math.min(displayNameX, descriptionX)
 
         love.graphics.setColor(color[1], color[2], color[3], 1)
-        love.graphics.rectangle("fill", self.itemFocus.displayNameX, self.itemFocus.displayNameY, focusBoxWidth, focusBoxHeight)
+        love.graphics.rectangle("fill", focusBoxX, self.itemFocus.displayNameY, focusBoxWidth, focusBoxHeight)
 
         Helper.resetDrawSettings()
         love.graphics.setFont(self.font)
-        love.graphics.print(self.itemFocus.displayName, self.itemFocus.displayNameX, self.itemFocus.displayNameY)
-        
+        love.graphics.print(self.itemFocus.displayName, displayNameX, self.itemFocus.displayNameY)
+
         love.graphics.setFont(self.tabFont)
-        love.graphics.print(self.itemFocus.description, self.itemFocus.descriptionX, self.itemFocus.descriptionY)
+        love.graphics.print(self.itemFocus.description, descriptionX, self.itemFocus.descriptionY)
     end
 end
 
@@ -187,8 +189,9 @@ function Menu:displayScreenTint()
 end
 
 function Menu:displayPauseTitle()
+    local x = self.pausedTitle.x - self.font:getWidth("Paused")/2
     love.graphics.setFont(self.font)
-    love.graphics.print("Paused", self.pausedTitle.x, self.pausedTitle.y)
+    love.graphics.print("Paused", x, self.pausedTitle.y)
 end
 
 function Menu:displayExitButton()
@@ -218,11 +221,12 @@ end
 function Menu:mousepressed(mx, my, button)
     if self.paused then
         if button == 1 then
-            self:exitButtonClicked(mx, my)
-            self:storyItemsTabClicked(mx, my)
-            self:itemsTabClicked(mx, my)
-            self:scrollsTabClicked(mx, my)
-            self:itemClicked(mx, my)
+            if self:exitFocus() then return end
+            if self:exitButtonClicked(mx, my) then return end
+            if self:storyItemsTabClicked(mx, my) then return end
+            if self:itemsTabClicked(mx, my) then return end
+            if self:scrollsTabClicked(mx, my) then return end
+            if self:itemClicked(mx, my) then return end
         end
     end
 end
@@ -231,6 +235,7 @@ function Menu:exitButtonClicked(mx, my)
     if mx >= self.exitButton.x and mx < self.exitButton.x + self.exitButton.width
         and my >= self.exitButton.y and my < self.exitButton.y + self.exitButton.height then
         self.quit()
+        return true
     end
 end
 
@@ -242,6 +247,7 @@ function Menu:storyItemsTabClicked(mx, my)
         self.inventoryBox.itemsTab.color = Colors.yellowDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
         self.inventoryBox.currentInventory = "storyItem"
+        return true
     end
 end
 
@@ -253,6 +259,7 @@ function Menu:itemsTabClicked(mx, my)
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
         self.inventoryBox.currentInventory = "item"
+        return true
     end
 end
 
@@ -264,6 +271,7 @@ function Menu:scrollsTabClicked(mx, my)
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.itemsTab.color = Colors.yellowDim
         self.inventoryBox.currentInventory = "scroll"
+        return true
     end
 end
 
@@ -275,8 +283,16 @@ function Menu:itemClicked(mx, my)
                 self.itemFocus.displayName = item.item.displayName
                 self.itemFocus.description = item.item.description
                 self.itemFocus.focused = true
+                return true
             end
         end
+    end
+end
+
+function Menu:exitFocus()
+    if self.itemFocus.focused then
+        self.itemFocus.focused = false
+        return true
     end
 end
 
