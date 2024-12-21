@@ -2,6 +2,7 @@ Inventory = {}
 
 local Item = require("item")
 local StoryItems = require("itemData/storyItems")
+local Scrolls = require("itemData/scrolls")
 
 --[[
 STORY:
@@ -13,7 +14,14 @@ REQUIREMENTS:
 ]]
 
 function Inventory:load()
-    self.scroll = {} -- what jutsus the player can use
+    self.scroll = { -- controls what jutsus the player can use, and shows the player their sequences in the menu
+        -- default scrolls to teach the player some of the controls
+        Item.newScroll(Scrolls.jutsuTutorial),
+        Item.newScroll(Scrolls.chakraTutorial),
+        Item.newScroll(Scrolls.fireRelease),
+        Item.newScroll(Scrolls.waterRelease),
+        Item.newScroll(Scrolls.windRelease)
+    }
     self.item = {}
     self.storyItem = {} -- items received for story progression to tell where player is in story
 end
@@ -25,9 +33,9 @@ function Inventory:add(type, itemName)
     if type == "storyItem" and not self:checkStoryItems(itemName) then
         item = Item.newStoryItem(StoryItems[itemName])
     elseif type == "item" then
-        item = Item.newItem(StoryItems[itemName])
-    elseif type == "scroll" then
-        item = self:newScroll(itemName)
+        --item = Item.newItem(StoryItems[itemName])
+    elseif type == "scroll" and not self:checkScrolls(itemName) then
+        item = self:newScroll(Scrolls[itemName])
     end
     table.insert(self[type], item)
 end

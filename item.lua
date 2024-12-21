@@ -24,7 +24,7 @@ function Item.newStoryItem(item)
     return storyItem
 end
 
---unfinished
+--@param item: table (itemData/scrolls.lua)
 function Item.newScroll(item)
     local storyItem = Item.new(item.displayName, item.description, item.itemName, item.iconImg, "scroll")
 

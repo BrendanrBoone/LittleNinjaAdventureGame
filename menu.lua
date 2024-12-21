@@ -34,6 +34,8 @@ function Menu:load()
     self.inventoryBox.x = self.exitButton.x + self.exitButton.width / 2 - self.inventoryBox.width / 2
     self.inventoryBox.y = self.exitButton.y + self.exitButton.height + 100
     self.inventoryBox.height = love.graphics.getHeight() - self.inventoryBox.y - 10
+    self.inventoryBox.items = {}   -- {itemData={x=x, y=y, item=item}}
+    self.inventoryBox.imgSize = 64 -- height and width because square
     self.inventoryBox.currentInventory = "storyItem"
 
     self.inventoryBox.storyItemsTab = {}
@@ -56,7 +58,15 @@ function Menu:load()
     self.inventoryBox.scrollsTab.y = self.inventoryBox.y
     self.inventoryBox.scrollsTab.width = self.inventoryBox.width / 3
     self.inventoryBox.scrollsTab.height = self.inventoryBox.height / 12
-    
+
+    self.itemFocus = {}
+    self.itemFocus.focused = false
+    self.itemFocus.displayName = ""
+    self.itemFocus.description = ""
+    self.itemFocus.displayNameX = self.pausedTitle.x
+    self.itemFocus.displayNameY = self.pausedTitle.y
+    self.itemFocus.descriptionX = self.pausedTitle.x
+    self.itemFocus.descriptionY = self.pausedTitle.y + 100
 end
 
 function Menu:update(dt)
@@ -69,13 +79,40 @@ function Menu:draw()
         self:displayPauseTitle()
         self:displayExitButton()
         self:displayInventoryBox()
+        self:displayItemFocus()
         Helper.resetDrawSettings()
+    end
+end
+
+function Menu:displayItemFocus()
+    if self.itemFocus.focused then
+        self:displayScreenTint()
+        local color = Colors.gray
+        local displayNameWidth = self.font:getWidth(self.itemFocus.displayName)
+        local displayNameHeight = self.font:getHeight(self.itemFocus.displayName)
+
+        local descriptionWidth = self.tabFont:getWidth(self.itemFocus.description)
+        local descriptionHeight = self.tabFont:getHeight(self.itemFocus.description)
+
+        local focusBoxWidth = math.max(displayNameWidth, descriptionWidth)
+        local focusBoxHeight = self.itemFocus.descriptionY + descriptionHeight - self.itemFocus.displayNameY
+
+        love.graphics.setColor(color[1], color[2], color[3], 1)
+        love.graphics.rectangle("fill", self.itemFocus.displayNameX, self.itemFocus.displayNameY, focusBoxWidth, focusBoxHeight)
+
+        Helper.resetDrawSettings()
+        love.graphics.setFont(self.font)
+        love.graphics.print(self.itemFocus.displayName, self.itemFocus.displayNameX, self.itemFocus.displayNameY)
+        
+        love.graphics.setFont(self.tabFont)
+        love.graphics.print(self.itemFocus.description, self.itemFocus.descriptionX, self.itemFocus.descriptionY)
     end
 end
 
 function Menu:displayInventoryBox()
     love.graphics.setColor(Colors.gray[1], Colors.gray[2], Colors.gray[3], 0.5)
-    love.graphics.rectangle("fill", self.inventoryBox.x, self.inventoryBox.y, self.inventoryBox.width, self.inventoryBox.height)
+    love.graphics.rectangle("fill", self.inventoryBox.x, self.inventoryBox.y, self.inventoryBox.width,
+        self.inventoryBox.height)
     self:displayStoryItemTab()
     self:displayItemsTab()
     self:displayScrollsTab()
@@ -84,18 +121,22 @@ function Menu:displayInventoryBox()
     local currentY = self.inventoryBox.y + self.inventoryBox.storyItemsTab.height + 10
     for _, item in ipairs(Inventory[self.inventoryBox.currentInventory]) do
         local img = love.graphics.newImage(item.iconImg)
-        local imgSize = img:getWidth() -- icon is a square so height and width are the same
+        local imgSize = self.inventoryBox.imgSize
+        local itemData = {}
         if not (currentX + imgSize > self.inventoryBox.x + self.inventoryBox.width) then
             love.graphics.setColor(Colors.gray)
             love.graphics.rectangle("fill", currentX, currentY, imgSize, imgSize)
             Helper.resetDrawSettings()
             love.graphics.draw(img, currentX, currentY, 0, 1, 1)
+            itemData.x, itemData.y, itemData.item = currentX, currentY, item
             currentX = currentX + imgSize + 10
         else
             currentX = self.inventoryBox.x + 10
             currentY = currentY + imgSize + 10
             love.graphics.draw(img, currentX, currentY, 0, 1, 1)
+            itemData.x, itemData.y, itemData.item = currentX, currentY, item
         end
+        table.insert(self.inventoryBox.items, itemData)
     end
 end
 
@@ -110,7 +151,7 @@ function Menu:displayStoryItemTab()
     local textLength = self.tabFont:getWidth(displayText)
     local textHeight = self.tabFont:getHeight(displayText)
     love.graphics.setFont(self.tabFont)
-    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
+    love.graphics.print(displayText, tab.x + tab.width / 2 - textLength / 2, tab.y + tab.height / 2 - textHeight / 2)
 end
 
 function Menu:displayItemsTab()
@@ -124,7 +165,7 @@ function Menu:displayItemsTab()
     local textLength = self.tabFont:getWidth(displayText)
     local textHeight = self.tabFont:getHeight(displayText)
     love.graphics.setFont(self.tabFont)
-    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
+    love.graphics.print(displayText, tab.x + tab.width / 2 - textLength / 2, tab.y + tab.height / 2 - textHeight / 2)
 end
 
 function Menu:displayScrollsTab()
@@ -138,7 +179,7 @@ function Menu:displayScrollsTab()
     local textLength = self.tabFont:getWidth(displayText)
     local textHeight = self.tabFont:getHeight(displayText)
     love.graphics.setFont(self.tabFont)
-    love.graphics.print(displayText, tab.x + tab.width/2 - textLength/2, tab.y + tab.height/2 - textHeight/2)
+    love.graphics.print(displayText, tab.x + tab.width / 2 - textLength / 2, tab.y + tab.height / 2 - textHeight / 2)
 end
 
 function Menu:displayScreenTint()
@@ -160,6 +201,10 @@ end
 
 function Menu:Escape(key)
     if key == "escape" then
+        if self.itemFocus.focused then
+            self.itemFocus.focused = false
+            return
+        end
         if WorldPause then
             WorldPause = false
             self.paused = false
@@ -177,13 +222,14 @@ function Menu:mousepressed(mx, my, button)
             self:storyItemsTabClicked(mx, my)
             self:itemsTabClicked(mx, my)
             self:scrollsTabClicked(mx, my)
+            self:itemClicked(mx, my)
         end
     end
 end
 
 function Menu:exitButtonClicked(mx, my)
     if mx >= self.exitButton.x and mx < self.exitButton.x + self.exitButton.width
-    and my >= self.exitButton.y and my < self.exitButton.y + self.exitButton.height then
+        and my >= self.exitButton.y and my < self.exitButton.y + self.exitButton.height then
         self.quit()
     end
 end
@@ -191,7 +237,7 @@ end
 function Menu:storyItemsTabClicked(mx, my)
     local tab = self.inventoryBox.storyItemsTab
     if mx >= tab.x and mx < tab.x + tab.width
-    and my >= tab.y and my < tab.y + tab.height then
+        and my >= tab.y and my < tab.y + tab.height then
         tab.color = Colors.red
         self.inventoryBox.itemsTab.color = Colors.yellowDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
@@ -202,7 +248,7 @@ end
 function Menu:itemsTabClicked(mx, my)
     local tab = self.inventoryBox.itemsTab
     if mx >= tab.x and mx < tab.x + tab.width
-    and my >= tab.y and my < tab.y + tab.height then
+        and my >= tab.y and my < tab.y + tab.height then
         tab.color = Colors.yellow
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.scrollsTab.color = Colors.orangeDim
@@ -213,11 +259,24 @@ end
 function Menu:scrollsTabClicked(mx, my)
     local tab = self.inventoryBox.scrollsTab
     if mx >= tab.x and mx < tab.x + tab.width
-    and my >= tab.y and my < tab.y + tab.height then
+        and my >= tab.y and my < tab.y + tab.height then
         tab.color = Colors.orange
         self.inventoryBox.storyItemsTab.color = Colors.redDim
         self.inventoryBox.itemsTab.color = Colors.yellowDim
         self.inventoryBox.currentInventory = "scroll"
+    end
+end
+
+function Menu:itemClicked(mx, my)
+    if not self.itemFocus.focused then
+        for _, item in ipairs(self.inventoryBox.items) do
+            if mx >= item.x and mx < item.x + self.inventoryBox.imgSize
+                and my >= item.y and my < item.y + self.inventoryBox.imgSize then
+                self.itemFocus.displayName = item.item.displayName
+                self.itemFocus.description = item.item.description
+                self.itemFocus.focused = true
+            end
+        end
     end
 end
 

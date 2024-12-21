@@ -263,7 +263,7 @@ function NPC:soldierStartEffects()
             else
                 self.dialogue = Dialogue.soldier.sequenceOpen
             end
-        else
+        elseif Inventory:check("storyItem", "princessPass") then
             self.dialogue = Dialogue.soldier.sequence2
         end
     end
