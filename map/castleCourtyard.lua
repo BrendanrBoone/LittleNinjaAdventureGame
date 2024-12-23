@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 21,
+  nextobjectid = 25,
   properties = {},
   tilesets = {
     {
@@ -245,6 +245,41 @@ return {
             ["anim"] = false,
             ["level"] = 3,
             ["type"] = "castleWallBackgroundObject"
+          }
+        },
+        {
+          id = 22,
+          name = "Princess",
+          type = "npc",
+          shape = "point",
+          x = 1420.67,
+          y = 303.45,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["completionStoryItem"] = "permanentNPC",
+            ["prerequisiteStoryItem"] = "marriageRing",
+            ["storyItemName"] = "",
+            ["type"] = "princess"
+          }
+        },
+        {
+          id = 24,
+          name = "Fountain",
+          type = "backgroundObject",
+          shape = "rectangle",
+          x = 1068.33,
+          y = 78.6667,
+          width = 468,
+          height = 257,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["anim"] = true,
+            ["level"] = 1,
+            ["type"] = "fountain"
           }
         }
       }

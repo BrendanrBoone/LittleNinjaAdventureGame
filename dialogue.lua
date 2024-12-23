@@ -18,6 +18,11 @@ Dialogue.princess = {
         { "princess", "Are you here to rescue me?" },
         { "Player",   "yup!" },
         { nil, nil }
+    },
+    sequenceMarriage = {
+        { "Player",   "Hey, you wuna get married?" },
+        { "princess", "sure" },
+        { nil, nil }
     }
 }
 
@@ -25,12 +30,12 @@ Dialogue.soldier = {
     message = "Hey",
     sequence = {
         { "soldier", "The princess is in danger!" },
-        { "Player",   "What happened?" },
+        { "Player",  "What happened?" },
         { "soldier", "She was kidnapped by a dragon!" },
         { "soldier", "But the entrance is protected by some fire. Please..." },
         { "soldier", "save the princess." },
         { "soldier", "The dragon went into the cave ahead." },
-        { "Player",   "I'm on it." },
+        { "Player",  "I'm on it." },
         { nil, nil }
     },
     sequence2 = {
@@ -40,11 +45,11 @@ Dialogue.soldier = {
         { nil, nil }
     },
     sequenceOpen = {
-        { "soldier", "OPENING THE GATE" },
+        { "soldier", "Open the gate!" },
         { nil, nil }
     },
     sequenceClose = {
-        { "soldier", "CLOSING THE GATE" },
+        { "soldier", "Close the gate!" },
         { nil, nil }
     }
 }

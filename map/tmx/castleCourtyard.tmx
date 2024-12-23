@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="21">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
  <editorsettings>
   <export target="../castleCourtyard.lua" format="lua"/>
  </editorsettings>
@@ -77,6 +77,22 @@
     <property name="anim" type="bool" value="false"/>
     <property name="level" type="int" value="3"/>
     <property name="type" value="castleWallBackgroundObject"/>
+   </properties>
+  </object>
+  <object id="22" name="Princess" type="npc" x="1420.67" y="303.45">
+   <properties>
+    <property name="completionStoryItem" value="permanentNPC"/>
+    <property name="prerequisiteStoryItem" value="marriageRing"/>
+    <property name="storyItemName" value=""/>
+    <property name="type" value="princess"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="24" name="Fountain" type="backgroundObject" x="1068.33" y="78.6667" width="468" height="257">
+   <properties>
+    <property name="anim" type="bool" value="true"/>
+    <property name="level" type="int" value="1"/>
+    <property name="type" value="fountain"/>
    </properties>
   </object>
  </objectgroup>

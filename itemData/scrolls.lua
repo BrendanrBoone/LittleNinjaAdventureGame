@@ -25,14 +25,14 @@ Scrolls.fireRelease = {
 
 Scrolls.waterRelease = {
     displayName = "Water Release",
-    description = "Protects caster from fire damage. Sequence = '2'",
+    description = "Protects caster from water damage. Sequence = '2'",
     itemName = "waterRelease",
     iconImg = "assets/itemIcons/waterReleaseScrollIcon.png"
 }
 
 Scrolls.windRelease = {
     displayName = "Wind Release",
-    description = "Protects caster from fire damage. Sequence = '3'",
+    description = "Protects caster from wind damage. Sequence = '3'",
     itemName = "windRelease",
     iconImg = "assets/itemIcons/windReleaseScrollIcon.png"
 }

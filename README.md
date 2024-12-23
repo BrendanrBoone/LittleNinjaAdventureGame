@@ -26,7 +26,6 @@ A little project to fulfill a request
 ## Things to do
 * make program more easily runable for increase accessability
 * etherial message function
-* add scrolls for release jutsus in scroll inventory
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
 * fireball rasengan: ```風``` -> ```風``` -> ```火```

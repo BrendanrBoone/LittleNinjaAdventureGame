@@ -35,6 +35,10 @@ function BackgroundObject.new(type, anim, level, x, y, width, height)
     instance.bgoX = 0
 
     table.insert(ActiveBackgroundObjects, instance)
+    -- activebackgroundobjects are sorted so they are drawn in the order of their levels
+    table.sort(ActiveBackgroundObjects, function(a, b)
+        return a.level > b.level
+    end)
 end
 
 function BackgroundObject.loadAssets()

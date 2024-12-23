@@ -23,4 +23,11 @@ StoryItems.gatePass = {
     iconImg = "assets/itemIcons/gatePassIcon.png"
 }
 
+StoryItems.marriageRing = {
+    displayName = "Marriage Ring",
+    description = "Ring for marriage.",
+    itemName = "marriageRing",
+    iconImg = "assets/itemIcons/marriageRingIcon.png"
+}
+
 return StoryItems
