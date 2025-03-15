@@ -90,7 +90,7 @@
   </object>
   <object id="24" name="Fountain" type="backgroundObject" x="1068.33" y="78.6667" width="468" height="257">
    <properties>
-    <property name="anim" type="bool" value="true"/>
+    <property name="anim" type="bool" value="false"/>
     <property name="level" type="int" value="1"/>
     <property name="type" value="fountain"/>
    </properties>

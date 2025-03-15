@@ -277,7 +277,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["anim"] = true,
+            ["anim"] = false,
             ["level"] = 1,
             ["type"] = "fountain"
           }

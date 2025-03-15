@@ -25,6 +25,7 @@ A little project to fulfill a request
 
 ## Things to do
 * make program more easily runable for increase accessability
+* fix menu bug with description
 * etherial message function
 * fireball jutsu: ```火``` -> ```火```
 * rasengan: ```風``` -> ```風```
