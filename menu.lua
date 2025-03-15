@@ -119,6 +119,7 @@ function Menu:displayInventoryBox()
     self:displayItemsTab()
     self:displayScrollsTab()
 
+    self.inventoryBox.items = {}
     local currentX = self.inventoryBox.x + 10
     local currentY = self.inventoryBox.y + self.inventoryBox.storyItemsTab.height + 10
     for _, item in ipairs(Inventory[self.inventoryBox.currentInventory]) do
