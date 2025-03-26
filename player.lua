@@ -13,7 +13,7 @@ local Inventory = require("inventory")
 local CharacterData = require("characterData")
 
 function Player:load()
-    self.data = CharacterData["Ninja"]
+    self.data = CharacterData["ninja"]
 
     self.x = 100
     self.y = 100
@@ -171,7 +171,7 @@ function Player:loadAssets()
         self.animation.seal.img[i] = love.graphics.newImage("assets/Naruto/seal/" .. current .. ".png")
     end
 
-    self.animation.draw = self.animation.idle.img[1]
+    self.animation.draw = self.animation.idleRight.img[1]
     self.animation.width = self.animation.draw:getWidth()
     self.animation.height = self.animation.draw:getHeight()
 
