@@ -10,12 +10,15 @@ local Anima = require("myTextAnima")
 local Recipes = require("recipes")
 local Categories = require("categories")
 local Inventory = require("inventory")
+local CharacterData = require("characterData")
 
 function Player:load()
+    self.data = CharacterData["Ninja"]
+
     self.x = 100
     self.y = 100
-    self.offsetY = -12
-    self.FrankyOffsetX = 3
+    self.offsetY = -12       -- arbitrary y axis offset to align Naruto character model
+    self.FrankyOffsetX = 3   -- arbitrary x axis offset to align hitboxes for Franky character model
     self.startX = self.x
     self.startY = self.y
     self.width = 25
@@ -101,7 +104,7 @@ function Player:load()
     self.grounded = false
     self.actionable = true
 
-    self.direction = "right"
+    self.direction = self.data.direction
     self.state = "idle"
     self.seal = ""
 
@@ -123,27 +126,10 @@ function Player:load()
 end
 
 function Player:loadAssets()
-    self.animation = {
-        timer = 0,
-        rate = 0.1
-    }
+    self.animation = self.data.animation.timer
 
-    self.animation.run = {
-        total = 6,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.run.total do
-        self.animation.run.img[i] = love.graphics.newImage("assets/Ninja/run/" .. i .. ".png")
-    end
-
-    self.animation.idle = {
-        total = 6,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.idle.total do
-        self.animation.idle.img[i] = love.graphics.newImage("assets/Ninja/idle/" .. i .. ".png")
+    if self.data.asymmetric then
+        
     end
 
     self.animation.airRising = {
@@ -382,10 +368,18 @@ function Player:setState()
                 elseif self.sealing then
                     self.state = "seal"
                 else
-                    self.state = "idle" --idle
+                    if self.direction == "right" then
+                        self.state = "idleRight"
+                    else
+                        self.state = "idleLeft"
+                    end
                 end
             else
-                self.state = "run"
+                if self.direction == "right" then
+                    self.state = "runRight"
+                else
+                    self.state = "runLeft"
+                end
             end
         end
     end
@@ -927,9 +921,6 @@ end
 
 function Player:draw()
     local scaleX = 1
-    if self.direction == "left" then
-        scaleX = -1
-    end
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(1, 1, 1)
