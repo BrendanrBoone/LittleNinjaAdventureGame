@@ -104,8 +104,8 @@ function Player:load()
     self.grounded = false
     self.actionable = true
 
-    self.direction = self.data.direction
-    self.state = "idle"
+    self.direction = "right"
+    self.state = "idleRight"
     self.seal = ""
 
     self.physics = {}
@@ -129,7 +129,15 @@ function Player:loadAssets()
     self.animation = self.data.animation.timer
 
     if self.data.asymmetric then
-        
+        self.animation.idleRight = self.data.animation.idleRight
+        self.animation.idleLeft = self.data.animation.idleLeft
+        self.animation.runRight = self.data.animation.runRight
+        self.animation.runLeft = self.data.animation.runLeft
+    else
+        self.animation.idleRight = self.data.animation.idle
+        self.animation.idleLeft = self.data.animation.idle
+        self.animation.runRight = self.data.animation.run
+        self.animation.runLeft = self.data.animation.run
     end
 
     self.animation.airRising = {
@@ -299,8 +307,8 @@ function Player:update(dt)
     -- print(self.x..", "..self.y)
     self:unTint(dt)
     self:respawn()
-    self:setState()
     self:setDirection()
+    self:setState()
     self:animate(dt)
     self:decreaseGraceTime(dt)
     self:syncPhysics() -- sets character position
@@ -921,6 +929,9 @@ end
 
 function Player:draw()
     local scaleX = 1
+    if self.direction == self.data.oppositeDirection then
+        scaleX = -1
+    end
     local width = self.animation.width / 2
     local height = self.animation.height / 2
     love.graphics.setColor(1, 1, 1)
