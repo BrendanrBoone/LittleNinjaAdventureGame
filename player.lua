@@ -134,7 +134,7 @@ function Player:loadAssets()
         img = {}
     }
     for i = 1, self.animation.run.total do
-        self.animation.run.img[i] = love.graphics.newImage("assets/Naruto/run/" .. i .. ".png")
+        self.animation.run.img[i] = love.graphics.newImage("assets/Ninja/run/" .. i .. ".png")
     end
 
     self.animation.idle = {
@@ -143,7 +143,7 @@ function Player:loadAssets()
         img = {}
     }
     for i = 1, self.animation.idle.total do
-        self.animation.idle.img[i] = love.graphics.newImage("assets/Naruto/idle/" .. i .. ".png")
+        self.animation.idle.img[i] = love.graphics.newImage("assets/Ninja/idle/" .. i .. ".png")
     end
 
     self.animation.airRising = {

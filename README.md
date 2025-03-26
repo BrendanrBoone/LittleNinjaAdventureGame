@@ -24,6 +24,8 @@ A little project to fulfill a request
 * backgroundObject.lua -> animated
 
 ## Things to do
+* character data files: player
+* implement data files to player.lua
 * make program more easily runable for increase accessability
 * etherial message function
 * fireball jutsu: ```火``` -> ```火```

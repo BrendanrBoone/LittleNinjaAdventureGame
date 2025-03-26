@@ -1,13 +1,13 @@
-local PrincessData = {}
+local NarutoData = {}
 
-function PrincessData:load()
-    self.direction = "left"
-    self.oppositeDirection = "right"
+function NarutoData:load()
+    self.direction = "right"
+    self.oppositeDirection = "left"
     self.asymmetric = false
     self:loadAssets()
 end
 
-function PrincessData:loadAssets()
+function NarutoData:loadAssets()
     self.animation = {}
 
     self.animation.timer = {
@@ -21,7 +21,7 @@ function PrincessData:loadAssets()
         img = {}
     }
     for i = 1, self.animation.run.total do
-        self.animation.run.img[i] = love.graphics.newImage("assets/princess/run/" .. i .. ".png")
+        self.animation.run.img[i] = love.graphics.newImage("assets/Naruto/run/" .. i .. ".png")
     end
 
     self.animation.idle = {
@@ -30,7 +30,7 @@ function PrincessData:loadAssets()
         img = {}
     }
     for i = 1, self.animation.idle.total do
-        self.animation.idle.img[i] = love.graphics.newImage("assets/princess/idle/" .. i .. ".png")
+        self.animation.idle.img[i] = love.graphics.newImage("assets/Naruto/idle/" .. i .. ".png")
     end
 
     self.animation.airRising = {
@@ -39,7 +39,7 @@ function PrincessData:loadAssets()
         img = {}
     }
     for i = 1, self.animation.airRising.total do
-        self.animation.airRising.img[i] = love.graphics.newImage("assets/princess/airRising/" .. i .. ".png")
+        self.animation.airRising.img[i] = love.graphics.newImage("assets/Naruto/airRising/" .. i .. ".png")
     end
 
     self.animation.airFalling = {
@@ -48,11 +48,11 @@ function PrincessData:loadAssets()
         img = {}
     }
     for i = 1, self.animation.airFalling.total do
-        self.animation.airFalling.img[i] = love.graphics.newImage("assets/princess/airFalling/" .. i .. ".png")
+        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
     end
 end
 
 -- Initialize the data immediately
-PrincessData:load()
+NarutoData:load()
 
-return PrincessData
+return NarutoData
