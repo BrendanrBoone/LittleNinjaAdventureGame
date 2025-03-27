@@ -1,5 +1,8 @@
-# PlatformerWithMechanic
+# Little Ninja Adventure Game
 A little project to fulfill a request
+
+## Requirements
+* Love2D
 
 ## Controls
 * ```w```, ```a```, ```s```, ```d``` -> move
