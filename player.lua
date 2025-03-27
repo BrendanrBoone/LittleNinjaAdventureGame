@@ -135,6 +135,8 @@ function Player:loadAssets()
         self.animation.runLeft = self.data.animation.runLeft
         self.animation.airRisingRight = self.data.animation.airRisingRight
         self.animation.airRisingLeft = self.data.animation.airRisingLeft
+        self.animation.airFallingRight = self.data.animation.airFallingRight
+        self.animation.airFallingLeft = self.data.animation.airFallingLeft
     else
         self.animation.idleRight = self.data.animation.idle
         self.animation.idleLeft = self.data.animation.idle
@@ -142,15 +144,8 @@ function Player:loadAssets()
         self.animation.runLeft = self.data.animation.run
         self.animation.airRisingRight = self.data.animation.airRising
         self.animation.airRisingLeft = self.data.animation.airRising
-    end
-
-    self.animation.airFalling = {
-        total = 2,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.airFalling.total do
-        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
+        self.animation.airFallingRight = self.data.animation.airFalling
+        self.animation.airFallingLeft = self.data.animation.airFalling
     end
 
     self.animation.seal = {
@@ -358,7 +353,11 @@ function Player:setState()
                     self.state = "airRisingLeft"
                 end
             else
-                self.state = "airFalling"
+                if self.direction == "right" then
+                    self.state = "airFallingRight"
+                else
+                    self.state = "airFallingLeft"
+                end
             end
         end
     else

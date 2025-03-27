@@ -69,13 +69,22 @@ function NinjaData:loadAssets()
         self.animation.airRisingLeft.img[i] = love.graphics.newImage("assets/Ninja/airRisingLeft/" .. i .. ".png")
     end
 
-    self.animation.airFalling = {
+    self.animation.airFallingRight = {
         total = 2,
         current = 1,
         img = {}
     }
-    for i = 1, self.animation.airFalling.total do
-        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
+    for i = 1, self.animation.airFallingRight.total do
+        self.animation.airFallingRight.img[i] = love.graphics.newImage("assets/Ninja/airFallingRight/" .. i .. ".png")
+    end
+
+    self.animation.airFallingLeft = {
+        total = 2,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.airFallingLeft.total do
+        self.animation.airFallingLeft.img[i] = love.graphics.newImage("assets/Ninja/airFallingLeft/" .. i .. ".png")
     end
 end
 
