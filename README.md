@@ -1,5 +1,5 @@
 # Little Ninja Adventure Game
-A little project to fulfill a request
+A little project to fulfill a request. * Finishing project at this point.
 
 ## Requirements
 * Love2D
@@ -27,7 +27,6 @@ A little project to fulfill a request
 * backgroundObject.lua -> animated
 
 ## Things to do
-* animate ninja jutsu seals
 * make program more easily runable for increase accessability
 * etherial message function
 * fireball jutsu: ```火``` -> ```火```
