@@ -4,6 +4,10 @@ A little project to fulfill a request. * Finishing project at this point.
 ## Requirements
 * Love2D
 
+## Usage
+```./run.bat```
+* run the program normally with Love2D or edit ```run.bat``` for your device
+
 ## Controls
 * ```w```, ```a```, ```s```, ```d``` -> move
 * ```space``` -> jump
