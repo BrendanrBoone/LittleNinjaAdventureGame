@@ -1,10 +1,15 @@
 # Little Ninja Adventure Game
-A little project to fulfill a request. * Finishing project at this point.
+A little project. * Finishing project at this point. Release is only made for Windows.
 
-## Requirements
+## With Release
+### Usage
+1. extract ```LNAG_distributable.zip```
+2. run ```LNAG_distributable/LittleNinjaAdventureGame.exe```
+
+## Without Release
+### Requirements
 * Love2D
-
-## Usage
+### Usage
 ```./run.bat```
 * run the program normally with Love2D or edit ```run.bat``` for your device
 
