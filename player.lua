@@ -137,6 +137,8 @@ function Player:loadAssets()
         self.animation.airRisingLeft = self.data.animation.airRisingLeft
         self.animation.airFallingRight = self.data.animation.airFallingRight
         self.animation.airFallingLeft = self.data.animation.airFallingLeft
+        self.animation.sealRight = self.data.animation.sealRight
+        self.animation.sealLeft = self.data.animation.sealLeft
     else
         self.animation.idleRight = self.data.animation.idle
         self.animation.idleLeft = self.data.animation.idle
@@ -146,19 +148,8 @@ function Player:loadAssets()
         self.animation.airRisingLeft = self.data.animation.airRising
         self.animation.airFallingRight = self.data.animation.airFalling
         self.animation.airFallingLeft = self.data.animation.airFalling
-    end
-
-    self.animation.seal = {
-        total = 6,
-        current = 1,
-        img = {}
-    }
-    for i = 1, self.animation.seal.total do
-        local current = i
-        if current > 1 then
-            current = 2
-        end
-        self.animation.seal.img[i] = love.graphics.newImage("assets/Naruto/seal/" .. current .. ".png")
+        self.animation.sealRight = self.data.animation.seal
+        self.animation.sealLeft = self.data.animation.seal
     end
 
     self.animation.draw = self.animation.idleRight.img[1]
@@ -337,6 +328,15 @@ function Player:unTint(dt)
     self.color.blue = math.min(self.color.blue + self.color.speed * dt, 1)
 end
 
+-- sets state to its direction
+function Player:stateWithDirection(state)
+    if self.direction == "right" then
+        self.state = state .. "Right"
+    else
+        self.state = state .. "Left"
+    end
+end
+
 function Player:setState()
     if self.dashing then
         self.state = "dash"
@@ -347,17 +347,9 @@ function Player:setState()
             end
         else
             if self.yVel < 0 then
-                if self.direction == "right" then
-                    self.state = "airRisingRight"
-                else
-                    self.state = "airRisingLeft"
-                end
+                self:stateWithDirection("airRising")
             else
-                if self.direction == "right" then
-                    self.state = "airFallingRight"
-                else
-                    self.state = "airFallingLeft"
-                end
+                self:stateWithDirection("airFalling")
             end
         end
     else
@@ -372,20 +364,12 @@ function Player:setState()
                 if self.emoting then
                     self.state = "emote"
                 elseif self.sealing then
-                    self.state = "seal"
+                    self:stateWithDirection("seal")
                 else
-                    if self.direction == "right" then
-                        self.state = "idleRight"
-                    else
-                        self.state = "idleLeft"
-                    end
+                    self:stateWithDirection("idle")
                 end
             else
-                if self.direction == "right" then
-                    self.state = "runRight"
-                else
-                    self.state = "runLeft"
-                end
+                self:stateWithDirection("run")
             end
         end
     end

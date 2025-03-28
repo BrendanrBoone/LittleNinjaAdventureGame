@@ -86,6 +86,32 @@ function NinjaData:loadAssets()
     for i = 1, self.animation.airFallingLeft.total do
         self.animation.airFallingLeft.img[i] = love.graphics.newImage("assets/Ninja/airFallingLeft/" .. i .. ".png")
     end
+
+    self.animation.sealRight = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.sealRight.total do
+        local current = i
+        if current > 1 then
+            current = 2
+        end
+        self.animation.sealRight.img[i] = love.graphics.newImage("assets/Ninja/seal/" .. current .. ".png")
+    end
+
+    self.animation.sealLeft = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.sealLeft.total do
+        local current = i
+        if current > 1 then
+            current = 2
+        end
+        self.animation.sealLeft.img[i] = love.graphics.newImage("assets/Ninja/seal/" .. current .. ".png")
+    end
 end
 
 -- Initialize the data immediately
