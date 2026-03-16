@@ -14,6 +14,7 @@ local ScreenTransition = require("screenTransition")
 local Inventory = require("inventory")
 local LevelConfig = require("levelConfig")
 local CastleGate = require("castleGate")
+local MgStarDropper = require("mgStarDropper")
 
 function Map:load()
 
@@ -180,6 +181,8 @@ function Map:spawnEntities()
             not Inventory:check("storyItem", v.properties.completionStoryItem) and
             Inventory:check("storyItem", v.properties.prerequisiteStoryItem) then
             NPC.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.type, v.properties.storyItemName)
+        elseif v.type == "mgStarDropper" then
+            MgStarDropper.new(v.x, v.y, v.width, v.height)
         elseif v.type == "portal" then
             Portal.new(v.x + v.width / 2, v.y + v.height / 2, v.properties.destination, v.properties.dX, v.properties.dY,
             v.properties.lock, v.properties.displayText)

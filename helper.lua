@@ -58,6 +58,20 @@ function Helper.checkCollDir(collision, dir)
     return false
 end
 
+--Check if two square objects are collided manually
+--@param a: table {x, y, width, height}
+--@param b: table {x, y, width, height}
+--@return boolean
+function Helper.checkIfCollided(a, b)
+    if a.x + a.width < b.x or
+    a.x > b.x + b.width or
+    a.y + a.height < b.y or
+    a.y > b.y + b.width then
+        return false
+    end
+    return true
+end
+
 function Helper.resetDrawSettings()
     love.graphics.setColor(1, 1, 1, 1)
 end

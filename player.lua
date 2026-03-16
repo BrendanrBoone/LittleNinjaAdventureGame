@@ -10,15 +10,12 @@ local Anima = require("myTextAnima")
 local Recipes = require("recipes")
 local Categories = require("categories")
 local Inventory = require("inventory")
-local CharacterData = require("characterData")
 
 function Player:load()
-    self.data = CharacterData["ninja"]
-
     self.x = 100
     self.y = 100
-    self.offsetY = -12       -- arbitrary y axis offset to align Naruto character model
-    self.FrankyOffsetX = 3   -- arbitrary x axis offset to align hitboxes for Franky character model
+    self.offsetY = -12
+    self.FrankyOffsetX = 3
     self.startX = self.x
     self.startY = self.y
     self.width = 25
@@ -105,7 +102,7 @@ function Player:load()
     self.actionable = true
 
     self.direction = "right"
-    self.state = "idleRight"
+    self.state = "idle"
     self.seal = ""
 
     self.physics = {}
@@ -126,33 +123,61 @@ function Player:load()
 end
 
 function Player:loadAssets()
-    self.animation = self.data.animation.timer
+    self.animation = {
+        timer = 0,
+        rate = 0.1
+    }
 
-    if self.data.asymmetric then
-        self.animation.idleRight = self.data.animation.idleRight
-        self.animation.idleLeft = self.data.animation.idleLeft
-        self.animation.runRight = self.data.animation.runRight
-        self.animation.runLeft = self.data.animation.runLeft
-        self.animation.airRisingRight = self.data.animation.airRisingRight
-        self.animation.airRisingLeft = self.data.animation.airRisingLeft
-        self.animation.airFallingRight = self.data.animation.airFallingRight
-        self.animation.airFallingLeft = self.data.animation.airFallingLeft
-        self.animation.sealRight = self.data.animation.sealRight
-        self.animation.sealLeft = self.data.animation.sealLeft
-    else
-        self.animation.idleRight = self.data.animation.idle
-        self.animation.idleLeft = self.data.animation.idle
-        self.animation.runRight = self.data.animation.run
-        self.animation.runLeft = self.data.animation.run
-        self.animation.airRisingRight = self.data.animation.airRising
-        self.animation.airRisingLeft = self.data.animation.airRising
-        self.animation.airFallingRight = self.data.animation.airFalling
-        self.animation.airFallingLeft = self.data.animation.airFalling
-        self.animation.sealRight = self.data.animation.seal
-        self.animation.sealLeft = self.data.animation.seal
+    self.animation.run = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.run.total do
+        self.animation.run.img[i] = love.graphics.newImage("assets/Naruto/run/" .. i .. ".png")
     end
 
-    self.animation.draw = self.animation.idleRight.img[1]
+    self.animation.idle = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.idle.total do
+        self.animation.idle.img[i] = love.graphics.newImage("assets/Naruto/idle/" .. i .. ".png")
+    end
+
+    self.animation.airRising = {
+        total = 2,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.airRising.total do
+        self.animation.airRising.img[i] = love.graphics.newImage("assets/Naruto/airRising/" .. i .. ".png")
+    end
+
+    self.animation.airFalling = {
+        total = 2,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.airFalling.total do
+        self.animation.airFalling.img[i] = love.graphics.newImage("assets/Naruto/airFalling/" .. i .. ".png")
+    end
+
+    self.animation.seal = {
+        total = 6,
+        current = 1,
+        img = {}
+    }
+    for i = 1, self.animation.seal.total do
+        local current = i
+        if current > 1 then
+            current = 2
+        end
+        self.animation.seal.img[i] = love.graphics.newImage("assets/Naruto/seal/" .. current .. ".png")
+    end
+
+    self.animation.draw = self.animation.idle.img[1]
     self.animation.width = self.animation.draw:getWidth()
     self.animation.height = self.animation.draw:getHeight()
 
@@ -288,8 +313,8 @@ function Player:update(dt)
     -- print(self.x..", "..self.y)
     self:unTint(dt)
     self:respawn()
-    self:setDirection()
     self:setState()
+    self:setDirection()
     self:animate(dt)
     self:decreaseGraceTime(dt)
     self:syncPhysics() -- sets character position
@@ -328,15 +353,6 @@ function Player:unTint(dt)
     self.color.blue = math.min(self.color.blue + self.color.speed * dt, 1)
 end
 
--- sets state to its direction
-function Player:stateWithDirection(state)
-    if self.direction == "right" then
-        self.state = state .. "Right"
-    else
-        self.state = state .. "Left"
-    end
-end
-
 function Player:setState()
     if self.dashing then
         self.state = "dash"
@@ -347,9 +363,9 @@ function Player:setState()
             end
         else
             if self.yVel < 0 then
-                self:stateWithDirection("airRising")
+                self.state = "airRising"
             else
-                self:stateWithDirection("airFalling")
+                self.state = "airFalling"
             end
         end
     else
@@ -364,12 +380,12 @@ function Player:setState()
                 if self.emoting then
                     self.state = "emote"
                 elseif self.sealing then
-                    self:stateWithDirection("seal")
+                    self.state = "seal"
                 else
-                    self:stateWithDirection("idle")
+                    self.state = "idle" --idle
                 end
             else
-                self:stateWithDirection("run")
+                self.state = "run"
             end
         end
     end
@@ -911,7 +927,7 @@ end
 
 function Player:draw()
     local scaleX = 1
-    if self.direction == self.data.oppositeDirection then
+    if self.direction == "left" then
         scaleX = -1
     end
     local width = self.animation.width / 2

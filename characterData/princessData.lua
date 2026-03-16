@@ -3,7 +3,6 @@ local PrincessData = {}
 function PrincessData:load()
     self.direction = "left"
     self.oppositeDirection = "right"
-    self.asymmetric = false
     self:loadAssets()
 end
 

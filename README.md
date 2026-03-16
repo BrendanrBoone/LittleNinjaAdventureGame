@@ -1,17 +1,5 @@
-# Little Ninja Adventure Game
-A little project. * Finishing project at this point. Release is only made for Windows.
-
-## With Release
-### Usage
-1. extract ```LNAG_distributable.zip```
-2. run ```LNAG_distributable/LittleNinjaAdventureGame.exe```
-
-## Without Release
-### Requirements
-* Love2D
-### Usage
-```./run.bat```
-* run the program normally with Love2D or edit ```run.bat``` for your device
+# PlatformerWithMechanic
+A little project to fulfill a request
 
 ## Controls
 * ```w```, ```a```, ```s```, ```d``` -> move

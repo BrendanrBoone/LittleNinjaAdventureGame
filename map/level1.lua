@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 23,
+  nextobjectid = 25,
   properties = {},
   tilesets = {
     {
@@ -345,6 +345,19 @@ return {
           y = -206,
           width = 43,
           height = 542,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 23,
+          name = "Mini Game Star Dropper",
+          type = "mgStarDropper",
+          shape = "rectangle",
+          x = 1040.6,
+          y = 100,
+          width = 300,
+          height = 236,
           rotation = 0,
           visible = true,
           properties = {}

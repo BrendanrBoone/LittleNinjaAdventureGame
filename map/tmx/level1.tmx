@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="23">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
  <editorsettings>
   <export target="../level1.lua" format="lua"/>
  </editorsettings>
@@ -122,6 +122,7 @@
    <point/>
   </object>
   <object id="22" name="Castle Gate" type="castleGate" x="1557" y="-206" width="43" height="542"/>
+  <object id="23" name="Mini Game Star Dropper" type="mgStarDropper" x="1040.6" y="100" width="300" height="236"/>
  </objectgroup>
  <objectgroup color="#f0f401" id="4" name="spawns">
   <object id="20" name="End" type="end" x="1546" y="304">

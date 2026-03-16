@@ -6,6 +6,8 @@ local Map = require("map")
 local Sounds = require("sounds")
 local Explosion = require("explosion")
 local Smoke = require("smoke")
+local MgStar = require("mgStar")
+local MgStarDropper = require("mgStarDropper")
 local Aura = require("aura")
 local Menu = require("menu")
 local Hitbox = require("hitbox")
@@ -60,6 +62,8 @@ function love.update(dt)
         Map:update(dt)
         Menu:update(dt)
         Hitbox.updateAll(dt)
+        MgStar.updateAll(dt)
+        MgStarDropper.updateAll(dt)
         Anima.updateAll(dt)
         BackgroundObject.updateAll(dt)
         ForegroundObject.updateAll(dt)
@@ -85,6 +89,8 @@ function love.draw()
     Smoke.drawAll()
     ForegroundObject.drawAll()
     Hitbox.drawAll()
+    MgStarDropper.drawAll()
+    MgStar.drawAll()
     Anima.drawAll()
     Camera:clear() -- these
 
@@ -97,6 +103,7 @@ function love.keypressed(key)
     if not WorldPause then
         if Map:moveThroughPortal(key) then return end
         if NPC.keypressed(key) then return end
+        if MgStarDropper.keypressed(key) then return end
         Player:keypressed(key)
         Ally:keypressed(key)
     end
@@ -114,6 +121,8 @@ function beginContact(a, b, collision)
     if Hitbox.beginContact(a, b, collision) then return end
     if Portal.beginContact(a, b, collision) then return end
     if NPC.beginContact(a, b, collision) then return end
+    --if MgStarDropper.beginContact(a, b, collision) then return end
+    if MgStar.beginContact(a, b, collision) then return end
     Player:beginContact(a, b, collision)
     Ally:beginContact(a, b, collision)
 end
@@ -122,6 +131,7 @@ function endContact(a, b, collision)
     if Hitbox.endContact(a, b, collision) then return end
     if Portal.endContact(a, b, collision) then return end
     if NPC.endContact(a, b, collision) then return end
+    --if MgStarDropper.endContact(a, b, collision) then return end
     Player:endContact(a, b, collision)
     Ally:endContact(a, b, collision)
 end
